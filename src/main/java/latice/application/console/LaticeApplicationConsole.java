@@ -1,4 +1,4 @@
-package latice.application;
+package latice.application.console;
 
 public class LaticeApplicationConsole {
 
