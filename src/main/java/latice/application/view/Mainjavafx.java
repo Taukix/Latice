@@ -36,6 +36,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import latice.application.controller.ButtonControllerParametersMenu;
+import latice.application.controller.ButtonControllerShadowOff;
+import latice.application.controller.ButtonControllerShadowOn;
 
 public class Mainjavafx extends Application {
 	
@@ -96,14 +99,14 @@ public class Mainjavafx extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		root = new BorderPane();
 		
-		// Ajout du fond d'�cran
-		File fileBg = new File("C:\\Users\\tommy\\eclipse-workspace\\latice\\src\\FOND.jpg");
+		// Ajout du fond d'écran
+		File fileBg = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\FOND.jpg");
 		Image imgBg = new Image(new FileInputStream(fileBg));
 		ImageView imgVBg = new ImageView(imgBg);
 		BackgroundImage bgi = new BackgroundImage(imgBg, null, null, null, null);
 		root.setBackground(new Background(bgi));
 			
-		// Impl�mentation du TOP
+		// Implémentation du TOP
 		lblTopText1 = new Label("Bienvenue dans le jeu");
 		lblTopText1.setTextFill(Color.WHITESMOKE);
 		lblTopText1.setFont(new Font("Calibri", 100));
@@ -137,53 +140,16 @@ public class Mainjavafx extends Application {
         vbCenter.getChildren().addAll(buttonPlay,buttonRules,buttonParameters,buttonQuitMenu);
         vbCenter.setAlignment(Pos.CENTER);
         vbCenter.setSpacing(30);
-        
-        		//SHADOWS BUTTONS
-        		DropShadow shadow = new DropShadow();
-        		shadow.setRadius(20);
-        		shadow.setColor(Color.WHITESMOKE);
 
-        		// Ajoute l'ombre quand le curseur est dessus
-        		buttonPlay.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonPlay.setEffect(shadow);}});
-
-        		// Enleve l'ombre quand le curseur n est plus dessus
-        		buttonPlay.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonPlay.setEffect(null);}});
-        
-        		buttonRules.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonRules.setEffect(shadow);}});
-
-        		buttonRules.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonRules.setEffect(null);}});
-        
-        		buttonParameters.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonParameters.setEffect(shadow);}});
-
-        		buttonParameters.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonParameters.setEffect(null);}});
-        		
-        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonQuitMenu.setEffect(shadow);}});
-
-        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-        			@Override
-        			public void handle(MouseEvent e) {
-        				buttonQuitMenu.setEffect(null);}});
+        		// Ajoute l'ombre quand le curseur est dessus + Enleve l'ombre quand le curseur n est plus dessus
+        		buttonPlay.addEventHandler(MouseEvent.MOUSE_ENTERED, new ButtonControllerShadowOn(buttonPlay));
+        		buttonPlay.addEventHandler(MouseEvent.MOUSE_EXITED, new ButtonControllerShadowOff(buttonPlay));
+        		buttonRules.addEventHandler(MouseEvent.MOUSE_ENTERED, new ButtonControllerShadowOn(buttonRules));
+        		buttonRules.addEventHandler(MouseEvent.MOUSE_EXITED, new ButtonControllerShadowOff(buttonRules));
+        		buttonParameters.addEventHandler(MouseEvent.MOUSE_ENTERED, new ButtonControllerShadowOn(buttonParameters));
+        		buttonParameters.addEventHandler(MouseEvent.MOUSE_EXITED, new ButtonControllerShadowOff(buttonParameters));
+        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_ENTERED, new ButtonControllerShadowOn(buttonQuitMenu));
+        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_EXITED, new ButtonControllerShadowOff(buttonQuitMenu));
         		
         		// Action des BOUTONS
         		buttonRules.setOnAction(new EventHandler<ActionEvent>() {
@@ -279,29 +245,9 @@ public class Mainjavafx extends Application {
         	gpParametersAudio.setVisible(false);
         
         		// Action des boutons de la zone PARAMETRE
-        		buttonGeneralParameters.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				buttonGeneralParameters.setStyle("-fx-background-color: #DCDCDC");
-        				buttonAudioParameters.setStyle("-fx-background-color: #FFF");
-        				buttonLangueParameters.setStyle("-fx-background-color: #FFF");
-        				gpParametersAudio.setVisible(false);}});
-        		
-        		buttonAudioParameters.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				buttonAudioParameters.setStyle("-fx-background-color: #DCDCDC");
-        				buttonGeneralParameters.setStyle("-fx-background-color: #FFF");
-        				buttonLangueParameters.setStyle("-fx-background-color: #FFF");
-        				gpParametersAudio.setVisible(true);}});
-        		
-        		buttonLangueParameters.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				buttonLangueParameters.setStyle("-fx-background-color: #DCDCDC");
-        				buttonGeneralParameters.setStyle("-fx-background-color: #FFF");
-        				buttonAudioParameters.setStyle("-fx-background-color: #FFF");
-        				gpParametersAudio.setVisible(false);}});
+        		buttonGeneralParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonGeneralParameters, buttonAudioParameters, buttonLangueParameters, gpParametersAudio, false));
+        		buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonGeneralParameters, buttonLangueParameters, gpParametersAudio, true));
+        		buttonLangueParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonLangueParameters, buttonAudioParameters, buttonGeneralParameters, gpParametersAudio, false));
         				
         		buttonQuitParameters.setOnAction(new EventHandler<ActionEvent>() {
         			@Override
@@ -361,12 +307,12 @@ public class Mainjavafx extends Application {
 		vbRulesCenter = new VBox();
 		
 				//Image du livre vierge ouvert
-		File fileBook = new File("C:\\Users\\tommy\\eclipse-workspace\\latice\\src\\LIVRE.png");
+		File fileBook = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\LIVRE.png");
 		Image imgBook = new Image(new FileInputStream(fileBook));
 		ImageView imgVBook = new ImageView(imgBook);
 		
 				// Image du plateau sur le livre
-		File fileRulesPlate = new File("C:\\Users\\tommy\\eclipse-workspace\\latice\\src\\PlateauLatice.jpg");
+		File fileRulesPlate = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\PlateauLatice.jpg");
 		Image imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
 		ImageView imgVRulesPlate = new ImageView(imgRulesPlate);
 		imgVRulesPlate.setFitHeight(150);
@@ -437,7 +383,7 @@ public class Mainjavafx extends Application {
 		vbRulesCenter.setSpacing(20);
 		
 		// Mise en place de la musique de fond
-		String uriString = new File("C:\\Users\\tommy\\eclipse-workspace\\latice\\Music\\Oneeva  Platform 9 NCS Release.mp3").toURI().toString();
+		String uriString = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Music\\Oneeva  Platform 9 NCS Release.mp3").toURI().toString();
 		media = new MediaPlayer( new Media(uriString));
 		media.setVolume(0.7);
 		media.play();
