@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,7 +28,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -36,9 +36,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import latice.application.controller.ButtonControllerCloseApplication;
 import latice.application.controller.ButtonControllerParametersMenu;
+import latice.application.controller.ButtonControllerProgressBarDown;
+import latice.application.controller.ButtonControllerProgressBarUp;
 import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
+import latice.application.controller.ButtonControllerSoundOff;
 
 public class Mainjavafx extends Application {
 	
@@ -79,7 +83,7 @@ public class Mainjavafx extends Application {
 	private Button btnProgressBarMusicDown;
 	private Button btnProgressBarMusicUp;
 	private Label lblProgressBarMusic;
-	private MediaPlayer media;
+	private MediaPlayer mediaMusic;
 	private CheckBox chbxMusic;
 	private static double VOLUME;
 	
@@ -88,6 +92,7 @@ public class Mainjavafx extends Application {
 	private Button btnProgressBarSoundEffectUp;
 	private Label lblProgressBarSoundEffect;
 	private CheckBox chbxEffect;
+	private MediaPlayer mediaEffects;
 	
 	// REGLES
 	private Text txtRulesTitle;
@@ -164,12 +169,9 @@ public class Mainjavafx extends Application {
 		                root.setMargin(vbParametersCenter, new Insets(0,0,100,0));
 		                buttonGeneralParameters.setStyle("-fx-background-color: #DCDCDC");}});
         		
-        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-		        	@Override
-		        	public void handle(MouseEvent e) {
-		        		((Stage) root.getScene().getWindow()).close();;}});
+        		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
         		
-        // Impl�mentation du GROUP PARAMETRE et de ses composants
+        // Implémentation du GROUP PARAMETRE et de ses composants
         groupParameters = new Group();
         vbParametersCenter = new VBox();
         
@@ -205,6 +207,7 @@ public class Mainjavafx extends Application {
         	pgbMusic = new ProgressBar(0.7);
         	pgbMusic.setPrefHeight(15);
         	pgbMusic.setPrefWidth(200);
+        	
         	
         	btnProgressBarMusicUp = new Button("Augmenter");
         	btnProgressBarMusicDown = new Button("Diminuer");
@@ -248,61 +251,27 @@ public class Mainjavafx extends Application {
         		buttonGeneralParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonGeneralParameters, buttonAudioParameters, buttonLangueParameters, gpParametersAudio, false));
         		buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonGeneralParameters, buttonLangueParameters, gpParametersAudio, true));
         		buttonLangueParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonLangueParameters, buttonAudioParameters, buttonGeneralParameters, gpParametersAudio, false));
-        				
         		buttonQuitParameters.setOnAction(new EventHandler<ActionEvent>() {
         			@Override
         			public void handle(ActionEvent arg0) {
-        				root.setCenter(vbCenter);}});
-        		
-        		// Action des boutons AUDIO
-        		btnProgressBarMusicDown.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				if (pgbMusic.getProgress() > 0) {
-        				pgbMusic.setProgress(pgbMusic.getProgress() - 0.1);
-        				media.setVolume(media.getVolume() - 0.1);}}});
-        		
-        		btnProgressBarMusicUp.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				if (chbxMusic.isSelected()) {
-        					return;
-        				} else if (pgbMusic.getProgress() < 1) {
-        				pgbMusic.setProgress(pgbMusic.getProgress() + 0.1);
-        				media.setVolume(media.getVolume() + 0.1);}}});
-        		
-        		chbxMusic.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				if (chbxMusic.isSelected()) {
-        					VOLUME = pgbMusic.getProgress();
-        					pgbMusic.setProgress(0);
-        					media.setVolume(0);
-        				} else {
-        					pgbMusic.setProgress(VOLUME);
-        					media.setVolume(VOLUME);
-        				}
+        				root.setCenter(vbCenter);
         			}
         		});
         		
-        		btnProgressBarSoundEffectDown.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				if (pgbSoundEffect.getProgress() > 0) {
-        					pgbSoundEffect.setProgress(pgbSoundEffect.getProgress() - 0.05);}}});
-        		
-        		btnProgressBarSoundEffectUp.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				if (pgbSoundEffect.getProgress() < 1) {
-        					pgbSoundEffect.setProgress(pgbSoundEffect.getProgress() + 0.05);}}});
+        		// Action des boutons AUDIO
+        		btnProgressBarMusicDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbMusic, mediaMusic));
+        		btnProgressBarMusicUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbMusic, mediaMusic, chbxMusic));
+        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbMusic, mediaMusic, chbxMusic));
+        		btnProgressBarSoundEffectDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbSoundEffect, mediaEffects));
+        		btnProgressBarSoundEffectUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbSoundEffect, mediaEffects, chbxEffect));
+        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbSoundEffect, mediaEffects, chbxEffect));
         		
         groupParameters.getChildren().addAll(recParameters,buttonGeneralParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio);
 		vbParametersCenter.getChildren().addAll(groupParameters,buttonQuitParameters);
 		vbParametersCenter.setAlignment(Pos.CENTER);
 		vbParametersCenter.setSpacing(20);
 		
-		// Impl�mentation du GROUP REGLES et de ses composants
+		// Implémentation du GROUP REGLES et de ses composants
 		groupRules = new Group();
 		vbRulesCenter = new VBox();
 		
@@ -373,9 +342,11 @@ public class Mainjavafx extends Application {
 		
 				// Actions des boutons
 				buttonQuitRules.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						root.setCenter(vbCenter);}});
+        			@Override
+        			public void handle(ActionEvent arg0) {
+        				root.setCenter(vbCenter);
+        			}
+        		});
 		
 		groupRules.getChildren().addAll(imgVBook,imgVRulesPlate,txtRulesTitle, txtRulesBodyPage1,txtRulesBodyPage2);
 		vbRulesCenter.getChildren().addAll(groupRules,buttonQuitRules);
@@ -383,18 +354,23 @@ public class Mainjavafx extends Application {
 		vbRulesCenter.setSpacing(20);
 		
 		// Mise en place de la musique de fond
-		String uriString = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Music\\Oneeva  Platform 9 NCS Release.mp3").toURI().toString();
-		media = new MediaPlayer( new Media(uriString));
-		media.setVolume(0.7);
-		media.play();
+		String uriString = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();
+		mediaMusic = new MediaPlayer( new Media(uriString));
+		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
+		mediaMusic.play();
 		
-		// Mise en place des �l�ments dans le BorderPane 
+		// Mise en place des effets sonore
+		String uriStringEffects = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();
+		mediaEffects = new MediaPlayer( new Media(uriStringEffects));
+		mediaEffects.volumeProperty().bind(pgbSoundEffect.progressProperty());
+		
+		// Mise en place des éléments dans le BorderPane 
 		root.setTop(vbTop);
 		root.setMargin(vbTop, new Insets(20,0,0,0));
 		
 		root.setCenter(vbCenter);
 		
-		// Mise en place de la sc�ne
+		// Mise en place de la scène
 		Scene scene = new Scene(root, 1920, 1010);
 		primaryStage.setTitle("Application Latice");
 		primaryStage.setScene(scene);
