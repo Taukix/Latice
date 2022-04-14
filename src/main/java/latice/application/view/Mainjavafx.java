@@ -105,7 +105,8 @@ public class Mainjavafx extends Application {
 		root = new BorderPane();
 		
 		// Ajout du fond d'écran
-		File fileBg = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\FOND.jpg");
+		File fileBg = new File(new File("").getAbsolutePath().concat("/Image/FOND.jpg"));
+		System.out.println(fileBg);
 		Image imgBg = new Image(new FileInputStream(fileBg));
 		ImageView imgVBg = new ImageView(imgBg);
 		BackgroundImage bgi = new BackgroundImage(imgBg, null, null, null, null);
@@ -276,12 +277,12 @@ public class Mainjavafx extends Application {
 		vbRulesCenter = new VBox();
 		
 				//Image du livre vierge ouvert
-		File fileBook = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\LIVRE.png");
+		File fileBook = new File(new File("").getAbsolutePath().concat("/Image/LIVRE.png"));
 		Image imgBook = new Image(new FileInputStream(fileBook));
 		ImageView imgVBook = new ImageView(imgBook);
 		
 				// Image du plateau sur le livre
-		File fileRulesPlate = new File("C:\\Users\\tommy\\eclipse-SaeBut1-Latice\\latice\\Image\\PlateauLatice.jpg");
+		File fileRulesPlate = new File(new File("").getAbsolutePath().concat("/Image/PlateauLatice.jpg"));
 		Image imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
 		ImageView imgVRulesPlate = new ImageView(imgRulesPlate);
 		imgVRulesPlate.setFitHeight(150);
