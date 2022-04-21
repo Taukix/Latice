@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
