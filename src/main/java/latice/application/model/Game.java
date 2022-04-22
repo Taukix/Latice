@@ -11,6 +11,7 @@ public class Game {
 	private Game(Player p1, Player p2) {
 		this.player1 = p1;
 		this.player2 = p2;
-		Board = new Board();
+		// Need to make the board constructor
+		//this.board = new Board();
 	}
 }
