@@ -5,10 +5,11 @@ public class Cell {
 	private Boolean bonus;
 	
 	
-	// Par défaut une cellule du plateau n'a pas de tuile
-	private Cell(Boolean bonus) {
+	// By default a board's cell has no tile	
+	// And it doesn't have any bonus
+	private Cell() {
 		this.tile = null;
-		this.bonus = bonus;
+		this.bonus = false;
 	}
 	
 	private Boolean isEmpty() {
