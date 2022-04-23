@@ -3,6 +3,8 @@ package latice.application.view;
 import java.io.File;
 import java.io.FileInputStream;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +28,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -34,6 +37,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import latice.application.controller.AnimationPoint;
 import latice.application.controller.ButtonControllerCloseApplication;
 import latice.application.controller.ButtonControllerParametersMenu;
 import latice.application.controller.ButtonControllerProgressBarDown;
@@ -41,6 +46,8 @@ import latice.application.controller.ButtonControllerProgressBarUp;
 import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
+import latice.application.controller.ButtonControllerSoundOn;
+import latice.application.controller.ProgressBarAnimation;
 
 public class Mainjavafx extends Application {
 	
@@ -68,6 +75,27 @@ public class Mainjavafx extends Application {
 	private Button buttonParameters;
 	private Button buttonQuitMenu;
 	
+	// JOUER
+		// SCENE DE CHARGEMENT
+	private ProgressBar pgbLoadingScene;
+	private Timeline tlLoadingScene;
+	private Timeline tlPgbBarLoadingScene;
+	private HBox hbLoadingScene;
+	private VBox vbLoadingScene;
+	private Label lblLoadingScene;
+	private Label lblPoint1;
+	private Label lblPoint2;
+	private Label lblPoint3;
+	private VBox vbTopLeftLoadingScene;
+	private Label lblLaticeLoadingScene;
+	private Label lblSimpleGameLoadingScene;
+	
+		// JEU
+	private VBox vbPlateGame;
+	private Group gpPlate;
+	private Button btnQuitGame;
+	private Timeline tlPlaySceneChange;
+	
 	// PARAMETRES
 	private Button buttonAudioParameters;
 	private Button buttonLangueParameters;
@@ -83,7 +111,6 @@ public class Mainjavafx extends Application {
 	private Label lblProgressBarMusic;
 	private MediaPlayer mediaMusic;
 	private CheckBox chbxMusic;
-	private static double VOLUME;
 	
 	private ProgressBar pgbSoundEffect;
 	private Button btnProgressBarSoundEffectDown;
@@ -104,11 +131,57 @@ public class Mainjavafx extends Application {
 		
 		// Ajout du fond d'écran
 		File fileBg = new File(new File("").getAbsolutePath().concat("/Image/FOND.jpg"));
-		System.out.println(fileBg);
 		Image imgBg = new Image(new FileInputStream(fileBg));
-		ImageView imgVBg = new ImageView(imgBg);
 		BackgroundImage bgi = new BackgroundImage(imgBg, null, null, null, null);
 		root.setBackground(new Background(bgi));
+		
+			// Image de chargement
+			vbTopLeftLoadingScene = new VBox();
+			lblLaticeLoadingScene = new Label("LATICE");
+			lblLaticeLoadingScene.setFont(new Font("Calibri", 20));
+			lblLaticeLoadingScene.setTextFill(Color.WHITESMOKE);
+			lblLaticeLoadingScene.setStyle("-fx-font-weight: bold;");
+			lblLaticeLoadingScene.setUnderline(true);
+			lblSimpleGameLoadingScene = new Label("Partie Simple");
+			lblSimpleGameLoadingScene.setFont(new Font("Calibri", 20));
+			lblSimpleGameLoadingScene.setTextFill(Color.WHITESMOKE);
+			lblSimpleGameLoadingScene.setStyle("-fx-font-weight: bold;");
+			lblSimpleGameLoadingScene.setUnderline(true);
+			
+			vbTopLeftLoadingScene.getChildren().addAll(lblLaticeLoadingScene,lblSimpleGameLoadingScene);
+			vbTopLeftLoadingScene.setSpacing(20);
+			vbTopLeftLoadingScene.setAlignment(Pos.TOP_LEFT);
+			
+			
+			hbLoadingScene = new HBox();
+			lblLoadingScene = new Label("CHARGEMENT");
+			lblLoadingScene.setFont(new Font("Calibri", 60));
+			lblLoadingScene.setTextFill(Color.WHITESMOKE);
+			lblPoint1 = new Label(".");
+			lblPoint1.setFont(new Font("Calibri", 60));
+			lblPoint1.setTextFill(Color.WHITESMOKE);
+			lblPoint1.setVisible(false);
+			lblPoint2 = new Label(".");
+			lblPoint2.setFont(new Font("Calibri", 60));
+			lblPoint2.setTextFill(Color.WHITESMOKE);
+			lblPoint2.setVisible(false);
+			lblPoint3 = new Label(".");
+			lblPoint3.setFont(new Font("Calibri", 60));
+			lblPoint3.setTextFill(Color.WHITESMOKE);
+			lblPoint3.setVisible(false);
+			
+			hbLoadingScene.getChildren().addAll(lblLoadingScene,lblPoint1,lblPoint2,lblPoint3);
+			hbLoadingScene.setSpacing(20);
+			hbLoadingScene.setAlignment(Pos.CENTER_RIGHT);
+			
+			vbLoadingScene = new VBox();
+			pgbLoadingScene = new ProgressBar(0);
+			pgbLoadingScene.setPrefWidth(1800);
+			pgbLoadingScene.setPrefHeight(20);
+			
+			vbLoadingScene.getChildren().addAll(hbLoadingScene,pgbLoadingScene);
+			vbLoadingScene.setMargin(pgbLoadingScene, new Insets(0,0,30,50));
+			vbLoadingScene.setMargin(hbLoadingScene, new Insets(0,80,20,0));
 			
 		// Implémentation du TOP
 		lblTopText1 = new Label("Bienvenue dans le jeu");
@@ -128,15 +201,15 @@ public class Mainjavafx extends Application {
 		buttonPlay.setPadding(new Insets(7,300,7,300));
 		buttonPlay.setStyle("-fx-background-color: #FFF; ");
 		
-		Button buttonRules = new Button("REGLES");
+		buttonRules = new Button("REGLES");
 		buttonRules.setPadding(new Insets(7,297,7,297));
 		buttonRules.setStyle("-fx-background-color: #FFF; ");
         
-        Button buttonParameters = new Button("PARAMETRES");
+        buttonParameters = new Button("PARAMETRES");
         buttonParameters.setPadding(new Insets(7,281,7,281));
         buttonParameters.setStyle("-fx-background-color: #FFF; ");
         
-        Button buttonQuitMenu = new Button("QUITTER");
+        buttonQuitMenu = new Button("QUITTER");
         buttonQuitMenu.setPadding(new Insets(7,294,7,294));
         buttonQuitMenu.setStyle("-fx-background-color: #FFF; ");
         
@@ -155,7 +228,39 @@ public class Mainjavafx extends Application {
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_ENTERED, new ButtonControllerShadowOn(buttonQuitMenu));
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_EXITED, new ButtonControllerShadowOff(buttonQuitMenu));
         		
-        		// Action des BOUTONS
+        		// Action des BOUTONS du menu principal
+        		buttonPlay.setOnAction(new EventHandler<ActionEvent>() {
+		            @Override
+		            public void handle(ActionEvent arg0) {
+		            	// Chargement
+		            	root.setCenter(null);
+		            	root.setBottom(vbLoadingScene);
+		            	root.setTop(vbTopLeftLoadingScene);
+		            	root.setMargin(vbTopLeftLoadingScene, new Insets(100,0,0,100));
+		            	
+		            	// Timeline pour les 3 petits points
+		            	tlLoadingScene = new Timeline(new KeyFrame(Duration.seconds(1), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,true)),
+		            			new KeyFrame(Duration.seconds(1.25), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint2,true)),
+		            			new KeyFrame(Duration.seconds(1.5), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint3,true)),
+		            			new KeyFrame(Duration.seconds(2), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,false)),
+		            			new KeyFrame(Duration.seconds(2.25), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint2,false)),
+		            			new KeyFrame(Duration.seconds(2.5), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint3,false)));
+		            	tlLoadingScene.setCycleCount(3);
+		            	
+		            	// Timeline pour la barre fluide
+		            	tlPgbBarLoadingScene = new Timeline(new KeyFrame(Duration.seconds(0.01), e -> ProgressBarAnimation.increaseProgress(pgbLoadingScene)));
+		            	tlPgbBarLoadingScene.setCycleCount(750);
+		            	
+		            	// Timeline pour le changement de scène à la fin du timing de la barre
+		            	tlPlaySceneChange = new Timeline(new KeyFrame(Duration.seconds(7.5), e -> root.setCenter(vbPlateGame)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setBottom(null)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setTop(null)),
+		            			new KeyFrame(Duration.seconds(7.6), e -> pgbLoadingScene.setProgress(0)));
+		            	
+		            	tlPgbBarLoadingScene.play();
+		            	tlLoadingScene.play();
+		            	tlPlaySceneChange.play();}});
+		            	
         		buttonRules.setOnAction(new EventHandler<ActionEvent>() {
 		            @Override
 		            public void handle(ActionEvent arg0) {
@@ -169,6 +274,36 @@ public class Mainjavafx extends Application {
 		                buttonGeneralParameters.setStyle("-fx-background-color: #DCDCDC");}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
+        		
+        // Implémentation du GROUP PLAY et de ses composants
+        vbPlateGame = new VBox();
+        gpPlate = new Group();
+        
+        File filePlate = new File(new File("").getAbsolutePath().concat("/Image/Plateau.png"));
+		Image imgPlate = new Image(new FileInputStream(filePlate));
+		ImageView imgVPlate = new ImageView(imgPlate);
+		
+		imgVPlate.setFitHeight(700);
+		imgVPlate.setFitWidth(700);
+		
+		gpPlate.getChildren().add(imgVPlate);
+        
+        btnQuitGame = new Button("REVENIR AU MENU PRINCIPAL");
+        btnQuitGame.setPadding(new Insets(7,100,7,100));
+        btnQuitGame.setStyle("-fx-background-color: #FFF; ");
+        
+        	// Action du bouton
+        	btnQuitGame.setOnAction(new EventHandler<ActionEvent>() {
+        		@Override
+        		public void handle(ActionEvent arg0) {
+        			root.setCenter(vbCenter);
+        			root.setTop(vbTop);
+        		}
+        	});
+        
+        vbPlateGame.getChildren().addAll(gpPlate,btnQuitGame);
+        vbPlateGame.setAlignment(Pos.CENTER);
+        vbPlateGame.setSpacing(50);
         		
         // Implémentation du GROUP PARAMETRE et de ses composants
         groupParameters = new Group();
@@ -261,9 +396,11 @@ public class Mainjavafx extends Application {
         		btnProgressBarMusicDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbMusic, mediaMusic));
         		btnProgressBarMusicUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbMusic, mediaMusic, chbxMusic));
         		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbMusic, mediaMusic, chbxMusic));
+        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(pgbMusic, mediaMusic, chbxMusic));
         		btnProgressBarSoundEffectDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbSoundEffect, mediaEffects));
         		btnProgressBarSoundEffectUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbSoundEffect, mediaEffects, chbxEffect));
         		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbSoundEffect, mediaEffects, chbxEffect));
+        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(pgbSoundEffect, mediaEffects, chbxEffect));
         		
         groupParameters.getChildren().addAll(recParameters,buttonGeneralParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio);
 		vbParametersCenter.getChildren().addAll(groupParameters,buttonQuitParameters);
@@ -370,9 +507,9 @@ public class Mainjavafx extends Application {
 		root.setCenter(vbCenter);
 		
 		// Mise en place de la scène
-		Scene scene = new Scene(root, 1920, 1010);
+		Scene MainScene = new Scene(root, 1920, 1010);
 		primaryStage.setTitle("Application Latice");
-		primaryStage.setScene(scene);
+		primaryStage.setScene(MainScene);
 		primaryStage.show();
 	}
 
