@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -41,8 +42,6 @@ import javafx.util.Duration;
 import latice.application.controller.AnimationPoint;
 import latice.application.controller.ButtonControllerCloseApplication;
 import latice.application.controller.ButtonControllerParametersMenu;
-import latice.application.controller.ButtonControllerProgressBarDown;
-import latice.application.controller.ButtonControllerProgressBarUp;
 import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
@@ -106,18 +105,16 @@ public class Mainjavafx extends Application {
 		// GROUP AUDIO
 	private GridPane gpParametersAudio;
 	private ProgressBar pgbMusic;
-	private Button btnProgressBarMusicDown;
-	private Button btnProgressBarMusicUp;
 	private Label lblProgressBarMusic;
 	private MediaPlayer mediaMusic;
 	private CheckBox chbxMusic;
+	private Slider sliderMusic;
 	
 	private ProgressBar pgbSoundEffect;
-	private Button btnProgressBarSoundEffectDown;
-	private Button btnProgressBarSoundEffectUp;
 	private Label lblProgressBarSoundEffect;
 	private CheckBox chbxEffect;
 	private MediaPlayer mediaEffects;
+	private Slider sliderEffect;
 	
 	// REGLES
 	private Text txtRulesTitle;
@@ -342,9 +339,8 @@ public class Mainjavafx extends Application {
         	pgbMusic.setPrefHeight(15);
         	pgbMusic.setPrefWidth(200);
         	
-        	
-        	btnProgressBarMusicUp = new Button("Augmenter");
-        	btnProgressBarMusicDown = new Button("Diminuer");
+        	sliderMusic = new Slider(0, 1, 0.7);
+        	pgbMusic.progressProperty().bind(sliderMusic.valueProperty());
         	
         	chbxMusic = new CheckBox("Sourdine");
         		
@@ -356,29 +352,28 @@ public class Mainjavafx extends Application {
         	pgbSoundEffect.setPrefHeight(15);
         	pgbSoundEffect.setPrefWidth(200);
         	
-        	btnProgressBarSoundEffectUp = new Button("Augmenter");
-        	btnProgressBarSoundEffectDown = new Button("Diminuer");
+        	sliderEffect = new Slider(0, 1, 0.7);
+        	sliderEffect.setPrefWidth(200);
+        	pgbSoundEffect.progressProperty().bind(sliderEffect.valueProperty());
 
         	chbxEffect = new CheckBox("Sourdine");
         	
         	gpParametersAudio = new GridPane();
         	gpParametersAudio.add(lblProgressBarMusic, 0, 0);
         	gpParametersAudio.add(pgbMusic, 0, 1);
-        	gpParametersAudio.add(btnProgressBarMusicDown, 1, 1);
-        	gpParametersAudio.add(btnProgressBarMusicUp, 2, 1);
-        	gpParametersAudio.add(chbxMusic, 3, 1);
+        	gpParametersAudio.add(sliderMusic, 1, 1);
+        	gpParametersAudio.add(chbxMusic, 2, 1);
         	gpParametersAudio.add(lblProgressBarSoundEffect, 0, 2);
         	gpParametersAudio.add(pgbSoundEffect, 0, 3);
-        	gpParametersAudio.add(btnProgressBarSoundEffectDown, 1, 3);
-        	gpParametersAudio.add(btnProgressBarSoundEffectUp, 2, 3);
-        	gpParametersAudio.add(chbxEffect, 3, 3);
+        	gpParametersAudio.add(sliderEffect, 1, 3);
+        	gpParametersAudio.add(chbxEffect, 2, 3);
         	gpParametersAudio.setLayoutX(60);
         	gpParametersAudio.setLayoutY(80);
         	gpParametersAudio.setMargin(pgbMusic, new Insets(0,20,0,0));
         	gpParametersAudio.setMargin(lblProgressBarMusic, new Insets(0,0,20,0));
         	gpParametersAudio.setMargin(lblProgressBarSoundEffect, new Insets(80,0,20,0));
-        	gpParametersAudio.setMargin(chbxMusic, new Insets(0,0,0,60));
-        	gpParametersAudio.setMargin(chbxEffect, new Insets(0,0,0,60));
+        	gpParametersAudio.setMargin(sliderMusic, new Insets(0,60,0,30));
+        	gpParametersAudio.setMargin(sliderEffect, new Insets(0,60,0,30));
         	gpParametersAudio.setVisible(false);
         
         		// Action des boutons de la zone PARAMETRE
@@ -393,14 +388,10 @@ public class Mainjavafx extends Application {
         		});
         		
         		// Action des boutons AUDIO
-        		btnProgressBarMusicDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbMusic, mediaMusic));
-        		btnProgressBarMusicUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbMusic, mediaMusic, chbxMusic));
-        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbMusic, mediaMusic, chbxMusic));
-        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(pgbMusic, mediaMusic, chbxMusic));
-        		btnProgressBarSoundEffectDown.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarDown(pgbSoundEffect, mediaEffects));
-        		btnProgressBarSoundEffectUp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerProgressBarUp(pgbSoundEffect, mediaEffects, chbxEffect));
-        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(pgbSoundEffect, mediaEffects, chbxEffect));
-        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(pgbSoundEffect, mediaEffects, chbxEffect));
+        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderMusic, mediaMusic, chbxMusic));
+        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderMusic, mediaMusic, chbxMusic));
+        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderEffect, mediaEffects, chbxEffect));
+        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderEffect, mediaEffects, chbxEffect));
         		
         groupParameters.getChildren().addAll(recParameters,buttonGeneralParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio);
 		vbParametersCenter.getChildren().addAll(groupParameters,buttonQuitParameters);
@@ -491,7 +482,7 @@ public class Mainjavafx extends Application {
 		
 		// Mise en place de la musique de fond
 		String uriString = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();
-		mediaMusic = new MediaPlayer( new Media(uriString));
+		mediaMusic = new MediaPlayer(new Media(uriString));
 		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
 		mediaMusic.play();
 		
