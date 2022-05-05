@@ -1,17 +1,57 @@
 package latice.application.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class Game {
 	private Player player1;
 	private Player player2;
 	private Board board;
-	private ArrayList<Tile> gameTileList;
+	private List<Tile> gameTileList;
 	
-	private Game(Player p1, Player p2) {
+	public Game(Player p1, Player p2) {
+
+		
+		generateNewGameTileList();
+		
+		giveEachPlayerStack();
+		
+		Collections.shuffle(gameTileList);
+		
 		this.player1 = p1;
 		this.player2 = p2;
-		// Need to make the board constructor
-		//this.board = new Board();
+		board = new Board();
 	}
+
+
+	private void giveEachPlayerStack() {
+		// TODO 
+	}
+
+
+	private void generateNewGameTileList() {
+		//Put in a list every elements of the Color Enum class
+		List<Color> colors = new ArrayList<>();
+		Collections.addAll(colors, EnumSet.allOf(Color.class).toArray(new Color[0]));
+		
+		//Put in a list every elements of the Shape Enum class
+		List<Shape> shapes = new ArrayList<>();
+		Collections.addAll(shapes, EnumSet.allOf(Shape.class).toArray(new Shape[0]));
+		
+		//
+		gameTileList = new ArrayList<>();
+		for (Iterator iterator = shapes.iterator(); iterator.hasNext();) {
+			Shape shape = (Shape) iterator.next();
+			for (Iterator iterator2 = colors.iterator(); iterator2.hasNext();) {
+				Color color = (Color) iterator2.next();
+				gameTileList.add(new Tile(color, shape));
+				gameTileList.add(new Tile(color, shape));
+
+			}
+		}
+	}
+	
 }
