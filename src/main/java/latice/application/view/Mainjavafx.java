@@ -17,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -46,6 +47,7 @@ import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
 import latice.application.controller.ButtonControllerSoundOn;
+import latice.application.controller.ImageViewControllerShadow;
 import latice.application.controller.ProgressBarAnimation;
 
 public class Mainjavafx extends Application {
@@ -53,13 +55,22 @@ public class Mainjavafx extends Application {
 	// Initilisation des conteneurs
 	private BorderPane root;
 	
+		// MENU
 	private VBox vbCenter;
-	
 	private VBox vbTop;
 	
-	private Group groupParameters;
-	private VBox vbParametersCenter;
+		// LOADING SCENE
+	private VBox vbLoadingScene;
+	private VBox vbTopLeftLoadingScene;
 	
+		// GAME
+	private VBox vbPlateGame;
+	
+		// AUDIO PARAMETERS
+	private Group groupParameters;
+	private VBox vbParameters;
+	
+		// RULES
 	private Group groupRules;
 	private VBox vbRulesCenter;
 
@@ -74,35 +85,80 @@ public class Mainjavafx extends Application {
 	private Button buttonParameters;
 	private Button buttonQuitMenu;
 	
+	// IMAGES
+	private File fileLeague;
+	private Image imgLeague;
+	private BackgroundImage bgiLeague;
+	private ImageView imgVLeague;
+	
+	private File fileBeach;
+	private Image imgBeach;
+	private BackgroundImage bgiBeach;
+	private ImageView imgVBeach;
+	
+	private File fileIndian;
+	private Image imgIndian;
+	private BackgroundImage bgiIndian;
+	private ImageView imgVIndian;
+	
+	private File fileHp;
+	private Image imgHp;
+	private ImageView imgVHp;
+	private BackgroundImage bgiHp;
+	
+	private File fileBook;
+	private Image imgBook;
+	private ImageView imgVBook;
+	
+	private File fileRulesPlate;
+	private Image imgRulesPlate;
+	private ImageView imgVRulesPlate;
+	
+	private File filePlate;
+	private Image imgPlate;
+	private ImageView imgVPlate;
+	
+	
 	// JOUER
 		// SCENE DE CHARGEMENT
 	private ProgressBar pgbLoadingScene;
 	private Timeline tlLoadingScene;
 	private Timeline tlPgbBarLoadingScene;
 	private HBox hbLoadingScene;
-	private VBox vbLoadingScene;
 	private Label lblLoadingScene;
 	private Label lblPoint1;
 	private Label lblPoint2;
 	private Label lblPoint3;
-	private VBox vbTopLeftLoadingScene;
 	private Label lblLaticeLoadingScene;
 	private Label lblSimpleGameLoadingScene;
 	
 		// JEU
-	private VBox vbPlateGame;
 	private Group gpPlate;
 	private Button btnQuitGame;
 	private Timeline tlPlaySceneChange;
+
+	// REGLES
+	private Text txtRulesTitle;
+	private Text txtRulesBodyPage1;
+	private Text txtRulesBodyPage2;
+	private Button buttonQuitRules;
 	
 	// PARAMETRES
 	private Button buttonAudioParameters;
 	private Button buttonLangueParameters;
-	private Button buttonGeneralParameters;
+	private Button buttonThemeParameters;
 	private Button buttonQuitParameters;
 	private Rectangle recParameters;
+		
+		// GENERAL
+	private Label lblTopGeneralParameters;
+	private GridPane gpThemeParameters;
+	private Label lblUnderLeague;
+	private Label lblUnderBeach;
+	private Label lblUnderIndian;
+	private Label lblUnderHp;
 	
-		// GROUP AUDIO
+		// AUDIO
 	private GridPane gpParametersAudio;
 	private ProgressBar pgbMusic;
 	private Label lblProgressBarMusic;
@@ -116,21 +172,15 @@ public class Mainjavafx extends Application {
 	private MediaPlayer mediaEffects;
 	private Slider sliderEffect;
 	
-	// REGLES
-	private Text txtRulesTitle;
-	private Text txtRulesBodyPage1;
-	private Text txtRulesBodyPage2;
-	private Button buttonQuitRules;
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		root = new BorderPane();
 		
-		// Ajout du fond d'écran
-		File fileBg = new File(new File("").getAbsolutePath().concat("/Image/FOND.jpg"));
-		Image imgBg = new Image(new FileInputStream(fileBg));
-		BackgroundImage bgi = new BackgroundImage(imgBg, null, null, null, null);
-		root.setBackground(new Background(bgi));
+		// Ajout du fond d'écran par défault
+		fileLeague = new File(new File("").getAbsolutePath().concat("/Image/FOND.jpg"));
+		imgLeague = new Image(new FileInputStream(fileLeague));
+		bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
+		root.setBackground(new Background(bgiLeague));
 		
 			// Image de chargement
 			vbTopLeftLoadingScene = new VBox();
@@ -266,9 +316,9 @@ public class Mainjavafx extends Application {
         		buttonParameters.setOnAction(new EventHandler<ActionEvent>() {
 		            @Override
 		            public void handle(ActionEvent arg0) {
-		                root.setCenter(vbParametersCenter);
-		                root.setMargin(vbParametersCenter, new Insets(0,0,100,0));
-		                buttonGeneralParameters.setStyle("-fx-background-color: #DCDCDC");}});
+		                root.setCenter(vbParameters);
+		                root.setMargin(vbParameters, new Insets(0,0,100,0));
+		                buttonThemeParameters.setStyle("-fx-background-color: #DCDCDC");}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
         		
@@ -276,9 +326,9 @@ public class Mainjavafx extends Application {
         vbPlateGame = new VBox();
         gpPlate = new Group();
         
-        File filePlate = new File(new File("").getAbsolutePath().concat("/Image/Plateau.png"));
-		Image imgPlate = new Image(new FileInputStream(filePlate));
-		ImageView imgVPlate = new ImageView(imgPlate);
+        filePlate = new File(new File("").getAbsolutePath().concat("/Image/Plateau.png"));
+		imgPlate = new Image(new FileInputStream(filePlate));
+		imgVPlate = new ImageView(imgPlate);
 		
 		imgVPlate.setFitHeight(700);
 		imgVPlate.setFitWidth(700);
@@ -301,18 +351,100 @@ public class Mainjavafx extends Application {
         vbPlateGame.getChildren().addAll(gpPlate,btnQuitGame);
         vbPlateGame.setAlignment(Pos.CENTER);
         vbPlateGame.setSpacing(50);
+        
+        // Implémentation du GROUP REGLES et de ses composants
+        groupRules = new Group();
+        vbRulesCenter = new VBox();
+        
+        //Image du livre vierge ouvert
+        File fileBook = new File(new File("").getAbsolutePath().concat("/Image/LIVRE.png"));
+        Image imgBook = new Image(new FileInputStream(fileBook));
+        ImageView imgVBook = new ImageView(imgBook);
+        
+        // Image du plateau sur le livre
+        File fileRulesPlate = new File(new File("").getAbsolutePath().concat("/Image/PlateauLatice.jpg"));
+        Image imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
+        ImageView imgVRulesPlate = new ImageView(imgRulesPlate);
+        imgVRulesPlate.setFitHeight(150);
+        imgVRulesPlate.setFitWidth(150);
+        imgVRulesPlate.setX(312);
+        imgVRulesPlate.setY(220);
+        
+        txtRulesTitle = new Text("R�gles du jeu :");
+        txtRulesTitle.setStyle("-fx-font-weight: bold;");
+        txtRulesTitle.setX(100);
+        txtRulesTitle.setY(50);
+        txtRulesTitle.setUnderline(true);
+        
+        txtRulesBodyPage1 = new Text("Le jeu d�bute lorsqu'un des deux joueurs (choisi al�atoirement) pose"
+        		+ "\nsa premi�re tuile sur la lune au centre du plateau de jeu."
+        		+ "\n\nEn effet, tout au long de la partie, chaque joueur poss�de un rack avec"
+        		+ "\nun maximumde 5 tuiles qui devront vider le plus vite possible."
+        		+ "\n\nLa suite se d�roule en posant une tuile poss�dant la m�me couleur"
+        		+ "\nou le m�me dessin que la tuile d�j� en place."
+        		+ "\n\nVous ne pourrez en aucun cas jouer"
+        		+ "\nen diagonal, le jeu s�effectue toujours"
+        		+ "\nde haut en bas ou de droite � gauche."
+        		+ "\n\nIl y a tout de m�me quelques "
+        		+ "\nsubtilit�s, sinon cela serait trop facile,"
+        		+ "\nsi sur le plateau vous avez par"
+        		+ "\nexemple un dauphin vert, vous ne"
+        		+ "\npouvez accoler une tortue bleu ou"
+        		+ "\nun oiseau rouge. "
+        		+ "\n\nEn revanche, toujours avec notre"
+        		+ "\ndauphin vert, vous pourrez tout �"
+        		+ "\nfait accoler une tortue vert ou un"
+        		+ "\ndauphin bleu, je m�explique, la tortue poss�de la bonne couleur, et le"
+        		+ "\ndauphin le bon dessin."
+        		+ "\n\nUne fois toutes les tuiles d'un joueur pos�es sur le plateau, ce dernier"
+        		+ "\nsera d�sign� vainqueur !");
+        txtRulesBodyPage1.setX(100);
+        txtRulesBodyPage1.setY(90);
+        
+        txtRulesBodyPage2 = new Text("Ce jeu Latice allie la strat�gie et le hasard, ce qui vous permettra de"
+        		+ "\npasser d�excellent moment entre strat�ges avertis ou au sein de votre"
+        		+ "\nfamille."
+        		+ "\n\nLes enfants encadr�s pouvant jouer ais�ment."
+        		+ "\n\nIl vous sera n�cessaire de faire une partie ou deux pour assimiler"
+        		+ "\ntoutes les petites subtilit�s des r�gles du jeu."
+        		+ "\n\nLes parties peuvent �tre assez rapide, ce qui est un avantage car"
+        		+ "\ncontrairement � beaucoup de jeu, il ne n�cessite pas un long moment"
+        		+ "\nde disponibilit�, ce qui �vited�abandonner une partie en cours de jeu"
+        		+ "\npar manque de temps."
+        		+ "\n\nEn conclusion, c�est un jeu ludique, toutes les finitions sont parfaites"
+        		+ "\net il vous octroiera des heures de rigolade, ou de crises de nerfs"
+        		+ "\npour trouver la bonne combinaison !");
+        txtRulesBodyPage2.setX(510);
+        txtRulesBodyPage2.setY(90);
+        
+        buttonQuitRules = new Button("REVENIR AU MENU PRINCIPAL");
+        buttonQuitRules.setPadding(new Insets(7,100,7,100));
+        buttonQuitRules.setStyle("-fx-background-color: #FFF; ");
+        
+        // Actions des boutons
+        buttonQuitRules.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override
+        	public void handle(ActionEvent arg0) {
+        		root.setCenter(vbCenter);
+        	}
+        });
+        
+        groupRules.getChildren().addAll(imgVBook,imgVRulesPlate,txtRulesTitle, txtRulesBodyPage1,txtRulesBodyPage2);
+        vbRulesCenter.getChildren().addAll(groupRules,buttonQuitRules);
+        vbRulesCenter.setAlignment(Pos.CENTER);
+        vbRulesCenter.setSpacing(20);
         		
         // Implémentation du GROUP PARAMETRE et de ses composants
         groupParameters = new Group();
-        vbParametersCenter = new VBox();
+        vbParameters = new VBox();
         
         recParameters = new Rectangle(800,400);
         recParameters.setFill(Color.WHITESMOKE);
         
-        buttonGeneralParameters = new Button("GENERAL");
-        buttonGeneralParameters.setPadding(new Insets(7,110,7,110));
-        buttonGeneralParameters.setStyle("-fx-background-color: #FFF; ");
-        buttonGeneralParameters.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        buttonThemeParameters = new Button("THEME");
+        buttonThemeParameters.setPadding(new Insets(7,116,7,116));
+        buttonThemeParameters.setStyle("-fx-background-color: #FFF; ");
+        buttonThemeParameters.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         
         buttonAudioParameters = new Button("AUDIO");
         buttonAudioParameters.setPadding(new Insets(7,115,7,115));
@@ -330,155 +462,136 @@ public class Mainjavafx extends Application {
         buttonQuitParameters.setPadding(new Insets(7,100,7,100));
         buttonQuitParameters.setStyle("-fx-background-color: #FFF; ");
         
-        	// GRIDPANE AUDIO PARAMETRE
-        		// MUSIQUE
-        	lblProgressBarMusic = new Label("Musique :");
-        	lblProgressBarMusic.setStyle("-fx-font: 18 arial;");
+        	
+        // GRIDPANE GENERAL PARAMETRE
+        lblTopGeneralParameters = new Label("THEMES");
+        lblTopGeneralParameters.setStyle("-fx-font: 30 arial;");
         
-        	pgbMusic = new ProgressBar(0.7);
-        	pgbMusic.setPrefHeight(15);
-        	pgbMusic.setPrefWidth(200);
+        imgVLeague = new ImageView(imgLeague);
+        imgVLeague.setFitHeight(125);
+        imgVLeague.setFitWidth(175);
+		imgVLeague.setEffect(new DropShadow(20, Color.BLACK));
+        
+        fileBeach = new File(new File("").getAbsolutePath().concat("/Image/BEACH.jpg"));
+		imgBeach = new Image(new FileInputStream(fileBeach));
+		imgVBeach = new ImageView(imgBeach);
+		imgVBeach.setFitHeight(125);
+		imgVBeach.setFitWidth(175);
+		
+		fileIndian = new File(new File("").getAbsolutePath().concat("/Image/INDIAN.jpg"));
+		imgIndian = new Image(new FileInputStream(fileIndian));
+		imgVIndian = new ImageView(imgIndian);
+		imgVIndian.setFitHeight(125);
+		imgVIndian.setFitWidth(175);
+		
+		fileHp = new File(new File("").getAbsolutePath().concat("/Image/HP.jpg"));
+		imgHp = new Image(new FileInputStream(fileHp));
+		imgVHp = new ImageView(imgHp);
+		imgVHp.setFitHeight(125);
+		imgVHp.setFitWidth(175);
+		
+		lblUnderLeague = new Label("League of Legends");
+		lblUnderLeague.setStyle("-fx-font-weight: bold;");
+		lblUnderBeach = new Label("Plage");
+		lblUnderBeach.setStyle("-fx-font-weight: bold;");
+		lblUnderIndian = new Label("Indien");
+		lblUnderIndian.setStyle("-fx-font-weight: bold;");
+		lblUnderHp = new Label("Harry Potter");
+		lblUnderHp.setStyle("-fx-font-weight: bold;");
+		
+		gpThemeParameters = new GridPane();
+		gpThemeParameters.add(lblTopGeneralParameters, 1, 0);
+		gpThemeParameters.add(imgVLeague, 0, 1);
+		gpThemeParameters.add(imgVBeach, 1, 1);
+		gpThemeParameters.add(imgVIndian, 2, 1);
+		gpThemeParameters.add(imgVHp, 3, 1);
+		gpThemeParameters.add(lblUnderLeague, 0, 2);
+		gpThemeParameters.add(lblUnderBeach, 1, 2);
+		gpThemeParameters.add(lblUnderIndian, 2, 2);
+		gpThemeParameters.add(lblUnderHp, 3, 2);
+		gpThemeParameters.setLayoutX(20);
+       	gpThemeParameters.setLayoutY(80);
+       	gpThemeParameters.setMargin(imgVLeague, new Insets(0,20,0,0));
+       	gpThemeParameters.setMargin(imgVIndian, new Insets(0,20,0,20));
+       	gpThemeParameters.setMargin(lblUnderLeague, new Insets(30,0,0,40));
+       	gpThemeParameters.setMargin(lblUnderBeach, new Insets(30,0,0,75));
+       	gpThemeParameters.setMargin(lblUnderIndian, new Insets(30,0,0,90));
+       	gpThemeParameters.setMargin(lblUnderHp, new Insets(30,0,0,55));
+       	gpThemeParameters.setMargin(lblTopGeneralParameters, new Insets(10,0,40,0));
+		
+        // GRIDPANE AUDIO PARAMETRE
+       		// MUSIQUE
+       	lblProgressBarMusic = new Label("Musique :");
+       	lblProgressBarMusic.setStyle("-fx-font: 18 arial;");
+       
+       	pgbMusic = new ProgressBar(0.7);
+       	pgbMusic.setPrefHeight(15);
+       	pgbMusic.setPrefWidth(200);
         	
-        	sliderMusic = new Slider(0, 1, 0.7);
-        	pgbMusic.progressProperty().bind(sliderMusic.valueProperty());
+       	sliderMusic = new Slider(0, 1, 0.7);
+       	pgbMusic.progressProperty().bind(sliderMusic.valueProperty());
         	
-        	chbxMusic = new CheckBox("Sourdine");
+       	chbxMusic = new CheckBox("Sourdine");
         		
-        		// EFFETS
-        	lblProgressBarSoundEffect = new Label("Effets :");
-        	lblProgressBarSoundEffect.setStyle("-fx-font: 18 arial;");
+       		// EFFETS
+       	lblProgressBarSoundEffect = new Label("Effets :");
+       	lblProgressBarSoundEffect.setStyle("-fx-font: 18 arial;");
         	
-        	pgbSoundEffect = new ProgressBar(0.5);
-        	pgbSoundEffect.setPrefHeight(15);
-        	pgbSoundEffect.setPrefWidth(200);
+        pgbSoundEffect = new ProgressBar(0.5);
+       	pgbSoundEffect.setPrefHeight(15);
+       	pgbSoundEffect.setPrefWidth(200);
         	
-        	sliderEffect = new Slider(0, 1, 0.7);
-        	sliderEffect.setPrefWidth(200);
-        	pgbSoundEffect.progressProperty().bind(sliderEffect.valueProperty());
+       	sliderEffect = new Slider(0, 1, 0.7);
+       	sliderEffect.setPrefWidth(200);
+       	pgbSoundEffect.progressProperty().bind(sliderEffect.valueProperty());
 
-        	chbxEffect = new CheckBox("Sourdine");
+       	chbxEffect = new CheckBox("Sourdine");
         	
-        	gpParametersAudio = new GridPane();
-        	gpParametersAudio.add(lblProgressBarMusic, 0, 0);
-        	gpParametersAudio.add(pgbMusic, 0, 1);
-        	gpParametersAudio.add(sliderMusic, 1, 1);
-        	gpParametersAudio.add(chbxMusic, 2, 1);
-        	gpParametersAudio.add(lblProgressBarSoundEffect, 0, 2);
-        	gpParametersAudio.add(pgbSoundEffect, 0, 3);
-        	gpParametersAudio.add(sliderEffect, 1, 3);
-        	gpParametersAudio.add(chbxEffect, 2, 3);
-        	gpParametersAudio.setLayoutX(60);
-        	gpParametersAudio.setLayoutY(80);
-        	gpParametersAudio.setMargin(pgbMusic, new Insets(0,20,0,0));
-        	gpParametersAudio.setMargin(lblProgressBarMusic, new Insets(0,0,20,0));
-        	gpParametersAudio.setMargin(lblProgressBarSoundEffect, new Insets(80,0,20,0));
-        	gpParametersAudio.setMargin(sliderMusic, new Insets(0,60,0,30));
-        	gpParametersAudio.setMargin(sliderEffect, new Insets(0,60,0,30));
-        	gpParametersAudio.setVisible(false);
+       	gpParametersAudio = new GridPane();
+       	gpParametersAudio.add(lblProgressBarMusic, 0, 0);
+       	gpParametersAudio.add(pgbMusic, 0, 1);
+       	gpParametersAudio.add(sliderMusic, 1, 1);
+       	gpParametersAudio.add(chbxMusic, 2, 1);
+       	gpParametersAudio.add(lblProgressBarSoundEffect, 0, 2);
+       	gpParametersAudio.add(pgbSoundEffect, 0, 3);
+       	gpParametersAudio.add(sliderEffect, 1, 3);
+       	gpParametersAudio.add(chbxEffect, 2, 3);
+       	gpParametersAudio.setLayoutX(60);
+       	gpParametersAudio.setLayoutY(80);
+       	gpParametersAudio.setMargin(pgbMusic, new Insets(0,20,0,0));
+       	gpParametersAudio.setMargin(lblProgressBarMusic, new Insets(0,0,20,0));
+       	gpParametersAudio.setMargin(lblProgressBarSoundEffect, new Insets(80,0,20,0));
+       	gpParametersAudio.setMargin(sliderMusic, new Insets(0,60,0,30));
+       	gpParametersAudio.setMargin(sliderEffect, new Insets(0,60,0,30));
+       	gpParametersAudio.setVisible(false);
         
-        		// Action des boutons de la zone PARAMETRE
-        		buttonGeneralParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonGeneralParameters, buttonAudioParameters, buttonLangueParameters, gpParametersAudio, false));
-        		buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonGeneralParameters, buttonLangueParameters, gpParametersAudio, true));
-        		buttonLangueParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonLangueParameters, buttonAudioParameters, buttonGeneralParameters, gpParametersAudio, false));
-        		buttonQuitParameters.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				root.setCenter(vbCenter);
-        			}
-        		});
-        		
-        		// Action des boutons AUDIO
-        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderMusic, mediaMusic, chbxMusic));
-        		chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderMusic, mediaMusic, chbxMusic));
-        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderEffect, mediaEffects, chbxEffect));
-        		chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderEffect, mediaEffects, chbxEffect));
-        		
-        groupParameters.getChildren().addAll(recParameters,buttonGeneralParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio);
-		vbParametersCenter.getChildren().addAll(groupParameters,buttonQuitParameters);
-		vbParametersCenter.setAlignment(Pos.CENTER);
-		vbParametersCenter.setSpacing(20);
+        groupParameters.getChildren().addAll(recParameters,buttonThemeParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio, gpThemeParameters);
+        vbParameters.getChildren().addAll(groupParameters,buttonQuitParameters);
+        vbParameters.setAlignment(Pos.CENTER);
+        vbParameters.setSpacing(20);
 		
-		// Implémentation du GROUP REGLES et de ses composants
-		groupRules = new Group();
-		vbRulesCenter = new VBox();
-		
-				//Image du livre vierge ouvert
-		File fileBook = new File(new File("").getAbsolutePath().concat("/Image/LIVRE.png"));
-		Image imgBook = new Image(new FileInputStream(fileBook));
-		ImageView imgVBook = new ImageView(imgBook);
-		
-				// Image du plateau sur le livre
-		File fileRulesPlate = new File(new File("").getAbsolutePath().concat("/Image/PlateauLatice.jpg"));
-		Image imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
-		ImageView imgVRulesPlate = new ImageView(imgRulesPlate);
-		imgVRulesPlate.setFitHeight(150);
-		imgVRulesPlate.setFitWidth(150);
-		imgVRulesPlate.setX(312);
-		imgVRulesPlate.setY(220);
-		
-		txtRulesTitle = new Text("R�gles du jeu :");
-		txtRulesTitle.setStyle("-fx-font-weight: bold;");
-		txtRulesTitle.setX(100);
-		txtRulesTitle.setY(50);
-		txtRulesTitle.setUnderline(true);
-		
-		txtRulesBodyPage1 = new Text("Le jeu d�bute lorsqu'un des deux joueurs (choisi al�atoirement) pose"
-				+ "\nsa premi�re tuile sur la lune au centre du plateau de jeu."
-				+ "\n\nEn effet, tout au long de la partie, chaque joueur poss�de un rack avec"
-				+ "\nun maximumde 5 tuiles qui devront vider le plus vite possible."
-				+ "\n\nLa suite se d�roule en posant une tuile poss�dant la m�me couleur"
-				+ "\nou le m�me dessin que la tuile d�j� en place."
-				+ "\n\nVous ne pourrez en aucun cas jouer"
-				+ "\nen diagonal, le jeu s�effectue toujours"
-				+ "\nde haut en bas ou de droite � gauche."
-				+ "\n\nIl y a tout de m�me quelques "
-				+ "\nsubtilit�s, sinon cela serait trop facile,"
-				+ "\nsi sur le plateau vous avez par"
-				+ "\nexemple un dauphin vert, vous ne"
-				+ "\npouvez accoler une tortue bleu ou"
-				+ "\nun oiseau rouge. "
-				+ "\n\nEn revanche, toujours avec notre"
-				+ "\ndauphin vert, vous pourrez tout �"
-				+ "\nfait accoler une tortue vert ou un"
-				+ "\ndauphin bleu, je m�explique, la tortue poss�de la bonne couleur, et le"
-				+ "\ndauphin le bon dessin."
-				+ "\n\nUne fois toutes les tuiles d'un joueur pos�es sur le plateau, ce dernier"
-				+ "\nsera d�sign� vainqueur !");
-		txtRulesBodyPage1.setX(100);
-		txtRulesBodyPage1.setY(90);
-		
-		txtRulesBodyPage2 = new Text("Ce jeu Latice allie la strat�gie et le hasard, ce qui vous permettra de"
-				+ "\npasser d�excellent moment entre strat�ges avertis ou au sein de votre"
-				+ "\nfamille."
-				+ "\n\nLes enfants encadr�s pouvant jouer ais�ment."
-				+ "\n\nIl vous sera n�cessaire de faire une partie ou deux pour assimiler"
-				+ "\ntoutes les petites subtilit�s des r�gles du jeu."
-				+ "\n\nLes parties peuvent �tre assez rapide, ce qui est un avantage car"
-				+ "\ncontrairement � beaucoup de jeu, il ne n�cessite pas un long moment"
-				+ "\nde disponibilit�, ce qui �vited�abandonner une partie en cours de jeu"
-				+ "\npar manque de temps."
-				+ "\n\nEn conclusion, c�est un jeu ludique, toutes les finitions sont parfaites"
-				+ "\net il vous octroiera des heures de rigolade, ou de crises de nerfs"
-				+ "\npour trouver la bonne combinaison !");
-		txtRulesBodyPage2.setX(510);
-		txtRulesBodyPage2.setY(90);
-		
-		buttonQuitRules = new Button("REVENIR AU MENU PRINCIPAL");
-		buttonQuitRules.setPadding(new Insets(7,100,7,100));
-		buttonQuitRules.setStyle("-fx-background-color: #FFF; ");
-		
-				// Actions des boutons
-				buttonQuitRules.setOnAction(new EventHandler<ActionEvent>() {
-        			@Override
-        			public void handle(ActionEvent arg0) {
-        				root.setCenter(vbCenter);
-        			}
-        		});
-		
-		groupRules.getChildren().addAll(imgVBook,imgVRulesPlate,txtRulesTitle, txtRulesBodyPage1,txtRulesBodyPage2);
-		vbRulesCenter.getChildren().addAll(groupRules,buttonQuitRules);
-		vbRulesCenter.setAlignment(Pos.CENTER);
-		vbRulesCenter.setSpacing(20);
+        	// Action des boutons de la zone PARAMETRE
+        	buttonThemeParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonThemeParameters, buttonAudioParameters, buttonLangueParameters, gpThemeParameters, gpParametersAudio, gpParametersAudio));
+        	buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonThemeParameters, buttonLangueParameters, gpParametersAudio, gpThemeParameters, gpThemeParameters));
+        	buttonLangueParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonLangueParameters, buttonAudioParameters, buttonThemeParameters, gpThemeParameters, gpThemeParameters, gpParametersAudio));
+        	buttonQuitParameters.setOnAction(new EventHandler<ActionEvent>() {
+        		@Override
+        		public void handle(ActionEvent arg0) {
+        			root.setCenter(vbCenter);
+        		}
+        	});
+			
+        	// Action des boutons AUDIO
+			chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderMusic, mediaMusic, chbxMusic));
+			chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderMusic, mediaMusic, chbxMusic));
+			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderEffect, mediaEffects, chbxEffect));
+			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderEffect, mediaEffects, chbxEffect));
+			
+			// Actions des images THEME
+			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVLeague, imgVBeach, imgVIndian, imgVHp));
+			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVBeach, imgVLeague, imgVIndian, imgVHp));
+			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVIndian, imgVBeach, imgVLeague, imgVHp));
+			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVHp, imgVBeach, imgVIndian, imgVLeague));
 		
 		// Mise en place de la musique de fond
 		String uriString = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();

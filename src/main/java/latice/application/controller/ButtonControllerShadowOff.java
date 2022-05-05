@@ -17,11 +17,6 @@ public class ButtonControllerShadowOff implements EventHandler<MouseEvent> {
 	
 	@Override
 	public void handle(MouseEvent event) {
-		//SHADOWS BUTTONS
-		DropShadow shadow = new DropShadow();
-		shadow.setRadius(20);
-		shadow.setColor(Color.WHITESMOKE);
-		
 		btnShadow.setEffect(null);
 	}
 
