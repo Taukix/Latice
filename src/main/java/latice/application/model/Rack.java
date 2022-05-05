@@ -1,5 +1,12 @@
 package latice.application.model;
 
-public class Rack {
+import java.util.Map;
 
+public class Rack {
+	private Map<Integer, Tile> tiles;
+	
+	Rack(){
+	}
+	
+	
 }
