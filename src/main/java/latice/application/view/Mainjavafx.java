@@ -583,15 +583,10 @@ public class Mainjavafx extends Application {
 		mediaMusic = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3")).toURI().toString()));
 		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
 		mediaMusic.play();
-		
-		// Mise en place des effets sonore
-		/*String uriStringEffects = new File(new File("").getAbsolutePath().concat("/Theme/Harry Potter/Harry Potter Theme Song.mp3")).toURI().toString();
-		mediaEffects = new MediaPlayer( new Media(uriStringEffects));
-		mediaEffects.volumeProperty().bind(pgbSoundEffect.progressProperty());*/
 			
 			// Actions des images THEME
 			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, bgiLeague, imgLeague, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic));
-			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Official Video.mp3", pgbMusic, mediaMusic));
+			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Audio.mp3", pgbMusic, mediaMusic));
 			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic));
 			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic));
 		
