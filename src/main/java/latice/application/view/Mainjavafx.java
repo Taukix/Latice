@@ -50,6 +50,8 @@ import latice.application.controller.ButtonControllerSoundOff;
 import latice.application.controller.ButtonControllerSoundOn;
 import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
+import latice.application.controller.SliderProgressBarDown;
+import latice.application.controller.SourdineOffWhenSliderProgress;
 
 public class Mainjavafx extends Application {
 	
@@ -577,6 +579,9 @@ public class Mainjavafx extends Application {
 			chbxMusic.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderMusic, mediaMusic, chbxMusic));
 			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderEffect, mediaEffects, chbxEffect));
 			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderEffect, mediaEffects, chbxEffect));
+			
+			sliderMusic.addEventHandler(MouseEvent.DRAG_DETECTED, new SourdineOffWhenSliderProgress(chbxMusic));
+			sliderEffect.addEventHandler(MouseEvent.DRAG_DETECTED, new SourdineOffWhenSliderProgress(chbxEffect));
 			
 		
 		// Mise en place de la musique de fond
