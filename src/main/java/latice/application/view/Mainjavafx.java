@@ -7,6 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -47,7 +48,7 @@ import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
 import latice.application.controller.ButtonControllerSoundOn;
-import latice.application.controller.ImageViewControllerShadow;
+import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
 
 public class Mainjavafx extends Application {
@@ -103,8 +104,8 @@ public class Mainjavafx extends Application {
 	
 	private File fileHp;
 	private Image imgHp;
-	private ImageView imgVHp;
 	private BackgroundImage bgiHp;
+	private ImageView imgVHp;
 	
 	private File fileBook;
 	private Image imgBook;
@@ -145,7 +146,6 @@ public class Mainjavafx extends Application {
 	
 	// PARAMETRES
 	private Button buttonAudioParameters;
-	private Button buttonLangueParameters;
 	private Button buttonThemeParameters;
 	private Button buttonQuitParameters;
 	private Rectangle recParameters;
@@ -159,7 +159,7 @@ public class Mainjavafx extends Application {
 	private Label lblUnderHp;
 	
 		// AUDIO
-	private GridPane gpParametersAudio;
+	private GridPane gpAudioParameters;
 	private ProgressBar pgbMusic;
 	private Label lblProgressBarMusic;
 	private MediaPlayer mediaMusic;
@@ -177,7 +177,7 @@ public class Mainjavafx extends Application {
 		root = new BorderPane();
 		
 		// Ajout du fond d'écran par défault
-		fileLeague = new File(new File("").getAbsolutePath().concat("/Image/FOND.jpg"));
+		fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/FOND.jpg"));
 		imgLeague = new Image(new FileInputStream(fileLeague));
 		bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
 		root.setBackground(new Background(bgiLeague));
@@ -317,8 +317,7 @@ public class Mainjavafx extends Application {
 		            @Override
 		            public void handle(ActionEvent arg0) {
 		                root.setCenter(vbParameters);
-		                root.setMargin(vbParameters, new Insets(0,0,100,0));
-		                buttonThemeParameters.setStyle("-fx-background-color: #DCDCDC");}});
+		                root.setMargin(vbParameters, new Insets(0,0,100,0));}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
         		
@@ -326,7 +325,7 @@ public class Mainjavafx extends Application {
         vbPlateGame = new VBox();
         gpPlate = new Group();
         
-        filePlate = new File(new File("").getAbsolutePath().concat("/Image/Plateau.png"));
+        filePlate = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
 		imgPlate = new Image(new FileInputStream(filePlate));
 		imgVPlate = new ImageView(imgPlate);
 		
@@ -357,14 +356,14 @@ public class Mainjavafx extends Application {
         vbRulesCenter = new VBox();
         
         //Image du livre vierge ouvert
-        File fileBook = new File(new File("").getAbsolutePath().concat("/Image/LIVRE.png"));
-        Image imgBook = new Image(new FileInputStream(fileBook));
-        ImageView imgVBook = new ImageView(imgBook);
+        fileBook = new File(new File("").getAbsolutePath().concat("/Theme/ImagePourRegles/LIVRE.png"));
+        imgBook = new Image(new FileInputStream(fileBook));
+        imgVBook = new ImageView(imgBook);
         
         // Image du plateau sur le livre
-        File fileRulesPlate = new File(new File("").getAbsolutePath().concat("/Image/PlateauLatice.jpg"));
-        Image imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
-        ImageView imgVRulesPlate = new ImageView(imgRulesPlate);
+        fileRulesPlate = new File(new File("").getAbsolutePath().concat("/Theme/ImagePourRegles/PlateauLatice.jpg"));
+        imgRulesPlate = new Image(new FileInputStream(fileRulesPlate));
+        imgVRulesPlate = new ImageView(imgRulesPlate);
         imgVRulesPlate.setFitHeight(150);
         imgVRulesPlate.setFitWidth(150);
         imgVRulesPlate.setX(312);
@@ -442,27 +441,20 @@ public class Mainjavafx extends Application {
         recParameters.setFill(Color.WHITESMOKE);
         
         buttonThemeParameters = new Button("THEME");
-        buttonThemeParameters.setPadding(new Insets(7,116,7,116));
-        buttonThemeParameters.setStyle("-fx-background-color: #FFF; ");
+        buttonThemeParameters.setPadding(new Insets(7,185,7,185));
+        buttonThemeParameters.setStyle("-fx-background-color: #DCDCDC");
         buttonThemeParameters.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         
         buttonAudioParameters = new Button("AUDIO");
-        buttonAudioParameters.setPadding(new Insets(7,115,7,115));
+        buttonAudioParameters.setPadding(new Insets(7,181,7,181));
         buttonAudioParameters.setStyle("-fx-background-color: #FFF; ");
-        buttonAudioParameters.setLayoutX(270);
+        buttonAudioParameters.setLayoutX(400);
         buttonAudioParameters.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        
-        buttonLangueParameters = new Button("LANGUE");
-        buttonLangueParameters.setPadding(new Insets(7,110,7,110));
-        buttonLangueParameters.setStyle("-fx-background-color: #FFF; ");
-        buttonLangueParameters.setLayoutX(533);
-        buttonLangueParameters.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        
+            
         buttonQuitParameters = new Button("REVENIR AU MENU PRINCIPAL");
         buttonQuitParameters.setPadding(new Insets(7,100,7,100));
         buttonQuitParameters.setStyle("-fx-background-color: #FFF; ");
         
-        	
         // GRIDPANE GENERAL PARAMETRE
         lblTopGeneralParameters = new Label("THEMES");
         lblTopGeneralParameters.setStyle("-fx-font: 30 arial;");
@@ -472,19 +464,19 @@ public class Mainjavafx extends Application {
         imgVLeague.setFitWidth(175);
 		imgVLeague.setEffect(new DropShadow(20, Color.BLACK));
         
-        fileBeach = new File(new File("").getAbsolutePath().concat("/Image/BEACH.jpg"));
+        fileBeach = new File(new File("").getAbsolutePath().concat("/Theme/Plage/BEACH.jpg"));
 		imgBeach = new Image(new FileInputStream(fileBeach));
 		imgVBeach = new ImageView(imgBeach);
 		imgVBeach.setFitHeight(125);
 		imgVBeach.setFitWidth(175);
 		
-		fileIndian = new File(new File("").getAbsolutePath().concat("/Image/INDIAN.jpg"));
+		fileIndian = new File(new File("").getAbsolutePath().concat("/Theme/Indien/INDIAN.jpg"));
 		imgIndian = new Image(new FileInputStream(fileIndian));
 		imgVIndian = new ImageView(imgIndian);
 		imgVIndian.setFitHeight(125);
 		imgVIndian.setFitWidth(175);
 		
-		fileHp = new File(new File("").getAbsolutePath().concat("/Image/HP.jpg"));
+		fileHp = new File(new File("").getAbsolutePath().concat("/Theme/Harry Potter/HP.jpg"));
 		imgHp = new Image(new FileInputStream(fileHp));
 		imgVHp = new ImageView(imgHp);
 		imgVHp.setFitHeight(125);
@@ -547,33 +539,32 @@ public class Mainjavafx extends Application {
 
        	chbxEffect = new CheckBox("Sourdine");
         	
-       	gpParametersAudio = new GridPane();
-       	gpParametersAudio.add(lblProgressBarMusic, 0, 0);
-       	gpParametersAudio.add(pgbMusic, 0, 1);
-       	gpParametersAudio.add(sliderMusic, 1, 1);
-       	gpParametersAudio.add(chbxMusic, 2, 1);
-       	gpParametersAudio.add(lblProgressBarSoundEffect, 0, 2);
-       	gpParametersAudio.add(pgbSoundEffect, 0, 3);
-       	gpParametersAudio.add(sliderEffect, 1, 3);
-       	gpParametersAudio.add(chbxEffect, 2, 3);
-       	gpParametersAudio.setLayoutX(60);
-       	gpParametersAudio.setLayoutY(80);
-       	gpParametersAudio.setMargin(pgbMusic, new Insets(0,20,0,0));
-       	gpParametersAudio.setMargin(lblProgressBarMusic, new Insets(0,0,20,0));
-       	gpParametersAudio.setMargin(lblProgressBarSoundEffect, new Insets(80,0,20,0));
-       	gpParametersAudio.setMargin(sliderMusic, new Insets(0,60,0,30));
-       	gpParametersAudio.setMargin(sliderEffect, new Insets(0,60,0,30));
-       	gpParametersAudio.setVisible(false);
+       	gpAudioParameters = new GridPane();
+       	gpAudioParameters.add(lblProgressBarMusic, 0, 0);
+       	gpAudioParameters.add(pgbMusic, 0, 1);
+       	gpAudioParameters.add(sliderMusic, 1, 1);
+       	gpAudioParameters.add(chbxMusic, 2, 1);
+       	gpAudioParameters.add(lblProgressBarSoundEffect, 0, 2);
+       	gpAudioParameters.add(pgbSoundEffect, 0, 3);
+       	gpAudioParameters.add(sliderEffect, 1, 3);
+       	gpAudioParameters.add(chbxEffect, 2, 3);
+       	gpAudioParameters.setLayoutX(60);
+       	gpAudioParameters.setLayoutY(80);
+       	gpAudioParameters.setMargin(pgbMusic, new Insets(0,20,0,0));
+       	gpAudioParameters.setMargin(lblProgressBarMusic, new Insets(0,0,20,0));
+       	gpAudioParameters.setMargin(lblProgressBarSoundEffect, new Insets(80,0,20,0));
+       	gpAudioParameters.setMargin(sliderMusic, new Insets(0,60,0,30));
+       	gpAudioParameters.setMargin(sliderEffect, new Insets(0,60,0,30));
+       	gpAudioParameters.setVisible(false);
         
-        groupParameters.getChildren().addAll(recParameters,buttonThemeParameters,buttonAudioParameters,buttonLangueParameters, gpParametersAudio, gpThemeParameters);
+        groupParameters.getChildren().addAll(recParameters,buttonThemeParameters, buttonAudioParameters, gpAudioParameters, gpThemeParameters);
         vbParameters.getChildren().addAll(groupParameters,buttonQuitParameters);
         vbParameters.setAlignment(Pos.CENTER);
         vbParameters.setSpacing(20);
 		
         	// Action des boutons de la zone PARAMETRE
-        	buttonThemeParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonThemeParameters, buttonAudioParameters, buttonLangueParameters, gpThemeParameters, gpParametersAudio, gpParametersAudio));
-        	buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonThemeParameters, buttonLangueParameters, gpParametersAudio, gpThemeParameters, gpThemeParameters));
-        	buttonLangueParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonLangueParameters, buttonAudioParameters, buttonThemeParameters, gpThemeParameters, gpThemeParameters, gpParametersAudio));
+        	buttonThemeParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonThemeParameters, buttonAudioParameters, gpThemeParameters, gpAudioParameters));
+        	buttonAudioParameters.addEventHandler(MouseEvent.MOUSE_CLICKED,new ButtonControllerParametersMenu(buttonAudioParameters, buttonThemeParameters, gpAudioParameters, gpThemeParameters));       	
         	buttonQuitParameters.setOnAction(new EventHandler<ActionEvent>() {
         		@Override
         		public void handle(ActionEvent arg0) {
@@ -587,24 +578,24 @@ public class Mainjavafx extends Application {
 			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOff(sliderEffect, mediaEffects, chbxEffect));
 			chbxEffect.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerSoundOn(sliderEffect, mediaEffects, chbxEffect));
 			
-			// Actions des images THEME
-			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVLeague, imgVBeach, imgVIndian, imgVHp));
-			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVBeach, imgVLeague, imgVIndian, imgVHp));
-			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVIndian, imgVBeach, imgVLeague, imgVHp));
-			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewControllerShadow(imgVHp, imgVBeach, imgVIndian, imgVLeague));
 		
 		// Mise en place de la musique de fond
-		String uriString = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();
-		mediaMusic = new MediaPlayer(new Media(uriString));
+		mediaMusic = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3")).toURI().toString()));
 		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
 		mediaMusic.play();
 		
 		// Mise en place des effets sonore
-		String uriStringEffects = new File(new File("").getAbsolutePath().concat("/Music/Jerk it out  Lets go fixed remix.mp3")).toURI().toString();
+		/*String uriStringEffects = new File(new File("").getAbsolutePath().concat("/Theme/Harry Potter/Harry Potter Theme Song.mp3")).toURI().toString();
 		mediaEffects = new MediaPlayer( new Media(uriStringEffects));
-		mediaEffects.volumeProperty().bind(pgbSoundEffect.progressProperty());
+		mediaEffects.volumeProperty().bind(pgbSoundEffect.progressProperty());*/
+			
+			// Actions des images THEME
+			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, bgiLeague, imgLeague, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic));
+			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Official Video.mp3", pgbMusic, mediaMusic));
+			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic));
+			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic));
 		
-		// Mise en place des éléments dans le BorderPane 
+		// Mise en place des éléments dans le BorderPane
 		root.setTop(vbTop);
 		root.setMargin(vbTop, new Insets(20,0,0,0));
 		
