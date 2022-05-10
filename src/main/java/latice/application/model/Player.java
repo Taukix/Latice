@@ -35,6 +35,10 @@ public class Player {
 		this.rack = new Rack();
 		this.rack.FillRack(stack);
 	}
+	
+	public Integer countTilesInStack() {
+		return stack.size();
+	}
 
 	public String getUsername() {
 		return username;
