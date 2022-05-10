@@ -33,9 +33,7 @@ public class Player {
 	}
 	
 	public void generateRack() {
-		for(int i = 0; i < Constants.RACK_SIZE; i++) {
-			this.rack = new Rack(stack);
-		}
+		this.rack = new Rack(stack);
 	}
 
 	public String getUsername() {
