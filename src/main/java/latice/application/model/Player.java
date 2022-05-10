@@ -13,7 +13,6 @@ public class Player {
 		this.username = username;
 		this.score = 0;
 		this.stack = new ArrayList<>();
-		generateRack();
 	}
 	
 	public void changeTile(final Integer tileNum) {
@@ -33,7 +32,8 @@ public class Player {
 	}
 	
 	public void generateRack() {
-		this.rack = new Rack(stack);
+		this.rack = new Rack();
+		this.rack.FillRack(stack);
 	}
 
 	public String getUsername() {

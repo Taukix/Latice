@@ -24,7 +24,7 @@ public class Game {
 		giveEachPlayerStack();
 		generateEachPlayerRack();
 		
-		board = new Board();
+		//board = new Board();
 	}
 
 	private void generateEachPlayerRack() {
@@ -51,9 +51,9 @@ public class Game {
 		
 		//Add every combination of color and shape 2 times
 		gameTileList = new ArrayList<>();
-		for (Iterator iterator = shapes.iterator(); iterator.hasNext();) {
+		for (Iterator<Shape> iterator = shapes.iterator(); iterator.hasNext();) {
 			Shape shape = (Shape) iterator.next();
-			for (Iterator iterator2 = colors.iterator(); iterator2.hasNext();) {
+			for (Iterator<Color> iterator2 = colors.iterator(); iterator2.hasNext();) {
 				Color color = (Color) iterator2.next();
 				gameTileList.add(new Tile(color, shape));
 				gameTileList.add(new Tile(color, shape));

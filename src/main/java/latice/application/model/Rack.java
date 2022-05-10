@@ -1,5 +1,6 @@
 package latice.application.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,19 @@ public class Rack {
 		this.tiles = tiles;
 	}
 	
-	Rack(final List<Tile> tiles){
-		int i = 0;
-		while(!tiles.isEmpty() && i < Constants.RACK_SIZE) {
-			this.tiles.put(i, tiles.remove(0));
-		}
+	Rack() {
+		this.tiles = new HashMap<>();
 	}
 	
-	
+	public void FillRack(final List<Tile> tiles){
+		int i = 0;
+		while(i < Constants.RACK_SIZE) {
+			this.tiles.put(i, tiles.remove(0));
+			i++;
+		}
+	}
+
+	public Map<Integer, Tile> getTiles() {
+		return tiles;
+	}
 }
