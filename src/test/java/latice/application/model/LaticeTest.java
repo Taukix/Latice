@@ -1,6 +1,8 @@
 package latice.application.model;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LaticeTest {
 	Game game;
@@ -15,5 +17,10 @@ public class LaticeTest {
 	@BeforeEach
 	public void cleanGame() {
 		game = new Game(player1, player2);
+	}
+	
+	@Test
+	public void PlayerGotHisTilesWhenTheGameStarts() {
+		assertEquals(5, player1.getRack().countTilesInRack());
 	}
 }

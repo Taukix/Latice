@@ -26,4 +26,8 @@ public class Rack {
 	public Map<Integer, Tile> getTiles() {
 		return tiles;
 	}
+	
+	public Integer countTilesInRack() {
+		return tiles.size();
+	}
 }
