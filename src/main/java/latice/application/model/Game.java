@@ -14,21 +14,29 @@ public class Game {
 	
 	public Game(Player p1, Player p2) {
 
+		this.player1 = p1;
+		this.player2 = p2;
 		
 		generateNewGameTileList();
 		
-		giveEachPlayerStack();
-		
 		Collections.shuffle(gameTileList);
+
+		giveEachPlayerStack();
+		generateEachPlayerRack();
 		
-		this.player1 = p1;
-		this.player2 = p2;
 		board = new Board();
 	}
 
-
+	private void generateEachPlayerRack() {
+		this.player1.generateRack();
+		this.player2.generateRack();
+	}
+	
 	private void giveEachPlayerStack() {
-		// TODO 
+		while(!this.gameTileList.isEmpty()) {
+			this.player1.stack.add(this.gameTileList.remove(0));
+			this.player2.stack.add(this.gameTileList.remove(0));
+		}
 	}
 
 
@@ -41,7 +49,7 @@ public class Game {
 		List<Shape> shapes = new ArrayList<>();
 		Collections.addAll(shapes, EnumSet.allOf(Shape.class).toArray(new Shape[0]));
 		
-		//
+		//Add every combination of color and shape 2 times
 		gameTileList = new ArrayList<>();
 		for (Iterator iterator = shapes.iterator(); iterator.hasNext();) {
 			Shape shape = (Shape) iterator.next();
@@ -49,9 +57,20 @@ public class Game {
 				Color color = (Color) iterator2.next();
 				gameTileList.add(new Tile(color, shape));
 				gameTileList.add(new Tile(color, shape));
-
 			}
 		}
 	}
+
+
+	public Player getPlayer1() {
+		return player1;
+	}
+
+
+	public Player getPlayer2() {
+		return player2;
+	}
+	
+	
 	
 }

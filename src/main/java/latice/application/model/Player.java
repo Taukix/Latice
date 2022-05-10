@@ -1,30 +1,56 @@
 package latice.application.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
-	private String username;
-	private Integer score;
-	private Map<Integer, Tile> stack;
-	private Rack rack;
+	public String username;
+	public Integer score;
+	public List<Tile> stack;
+	public Rack rack;
 	
 	public Player(String username){
 		this.username = username;
 		this.score = 0;
-		this.stack = new HashMap<>();
-		this.rack = new Rack();
+		this.stack = new ArrayList<>();
+		generateRack();
 	}
 	
-	private void changeTile(final Integer tileNum) {
+	public void changeTile(final Integer tileNum) {
 		//TODO
 	}
 	
-	private void changeRack() {
+	public void changeRack() {
 		//TODO
 	}
 	
-	private void placeTile() {
+	public void placeTile() {
 		//TODO
+	}
+
+	public void addTileToStack(final Tile tile){
+		this.stack.add(tile);
+	}
+	
+	public void generateRack() {
+		for(int i = 0; i < Constants.RACK_SIZE; i++) {
+			this.rack = new Rack(stack);
+		}
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public Integer getScore() {
+		return score;
+	}
+
+	public List<Tile> getStack() {
+		return stack;
+	}
+
+	public Rack getRack() {
+		return rack;
 	}
 }
