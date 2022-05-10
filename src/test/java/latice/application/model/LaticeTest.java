@@ -27,5 +27,6 @@ public class LaticeTest {
 	@Test
 	public void NumberOfTilesInStackOfEachPlayerWhenGameStartsShouldBe31() {
 		assertEquals(31, player1.countTilesInStack());
+		assertEquals(31, player2.countTilesInStack());
 	}
 }
