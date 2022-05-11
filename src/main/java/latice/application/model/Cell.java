@@ -22,7 +22,15 @@ public class Cell {
 		this.bonus = false;
 	}
 	
-	private Boolean isEmpty() {
+	public Boolean isEmpty() {
 		return tile.equals(null);
+	}
+	
+	public boolean isBonus() {
+		return bonus;
+	}
+	
+	public Tile getTile() {
+		return this.tile;
 	}
 }
