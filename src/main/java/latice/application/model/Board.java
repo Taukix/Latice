@@ -1,15 +1,18 @@
 package latice.application.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
-	public ArrayList<ArrayList<Cell>> cells;
+	public Map<Position, Cell> cells;
 	
-	private Board() {
-		//TODO
-		// Need to find the right formula to find bonus cells
-		// First guess would be : i + j % 2 && i != 3 && i !=5 && j != 3 && j !=5 && i + j != 6
-		// but need confirmation
+	public Board() {
+		this.cells = new HashMap<>();
+	}
+
+
+	public Map<Position, Cell> getCells() {
+		return cells;
 	}
 }
+ 
