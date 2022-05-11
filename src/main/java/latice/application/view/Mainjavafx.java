@@ -201,7 +201,6 @@ public class Mainjavafx extends Application {
 			vbTopLeftLoadingScene.setSpacing(20);
 			vbTopLeftLoadingScene.setAlignment(Pos.TOP_LEFT);
 			
-			
 			hbLoadingScene = new HBox();
 			lblLoadingScene = new Label("CHARGEMENT");
 			lblLoadingScene.setFont(new Font("Calibri", 60));
@@ -327,14 +326,40 @@ public class Mainjavafx extends Application {
         vbPlateGame = new VBox();
         gpPlate = new Group();
         
-        filePlate = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
-		imgPlate = new Image(new FileInputStream(filePlate));
-		imgVPlate = new ImageView(imgPlate);
-		
-		imgVPlate.setFitHeight(700);
-		imgVPlate.setFitWidth(700);
-		
-		gpPlate.getChildren().add(imgVPlate);
+        fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
+        imgLeague = new Image(new FileInputStream(fileLeague));
+        bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
+        
+        ImageView imgTuile = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinRouge.png")).toURI().toURL().toString())));
+        ImageView imgTuile2 = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinBleuClair.png")).toURI().toURL().toString())));
+        ImageView imgTuile3 = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinJaune.png")).toURI().toURL().toString())));
+        imgTuile.setFitWidth(59);
+        imgTuile.setFitHeight(60);
+        imgTuile2.setFitWidth(59);
+        imgTuile2.setFitHeight(60);
+        imgTuile3.setFitWidth(59);
+        imgTuile3.setFitHeight(60);
+        
+        GridPane gpGame = new GridPane();
+        gpGame.setBackground(new Background(bgiLeague));
+        gpGame.setPrefSize(600, 600); 
+        gpGame.setPadding(new Insets(15,17,15,18));
+        gpGame.setHgap(4);
+        gpGame.setVgap(3);
+        
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+
+                Rectangle tile = new Rectangle(59, 60);
+                tile.setVisible(false);
+
+                GridPane.setRowIndex(tile, i);
+                GridPane.setColumnIndex(tile, j);
+                
+                gpGame.getChildren().addAll(tile);
+            }}
+        
+        gpPlate.getChildren().add(gpGame);
         
         btnQuitGame = new Button("REVENIR AU MENU PRINCIPAL");
         btnQuitGame.setPadding(new Insets(7,100,7,100));
