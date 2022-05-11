@@ -1,6 +1,9 @@
 package latice.application.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Iterator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,5 +31,12 @@ public class LaticeTest {
 	public void NumberOfTilesInStackOfEachPlayerWhenGameStartsShouldBe31() {
 		assertEquals(31, player1.countTilesInStack());
 		assertEquals(31, player2.countTilesInStack());
+	}
+
+	@Test
+	public void player1PutHisFirstTileOn_1_1() {
+		Tile placedTile = player1.getRack().getTiles().get(1);
+		player1.placeTile(game, _1_1, 1);
+		assertEquals(placedTile, game.getBoard().cells.get(_1_1).getTile());
 	}
 }
