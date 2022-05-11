@@ -24,8 +24,9 @@ public class Player {
 		//TODO
 	}
 	
-	public void placeTile(Game game, int x, int y, int tileOfRack) {
-		Position inGamePos = new Position(x, y);
+	public void placeTile(Game game, Position pos, int tileOfRack) {
+		int x = pos.x();
+		int y = pos.y();
 		Tile tile = rack.getTiles().get(tileOfRack);
 		if(!tile.equals(null)) {
 			if(x > 0 && x <= Constants.BOARD_SIZE && y > 0 && y <= Constants.BOARD_SIZE) {				
@@ -36,7 +37,7 @@ public class Player {
 				//Check if bonus is in on the border of the map
 				bonus = bonus || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9)) ;
 				
-				game.getBoard().cells.put(inGamePos, new Cell(tile, bonus));
+				game.getBoard().cells.put(pos, new Cell(tile, bonus));
 			}
 		}
 	}
