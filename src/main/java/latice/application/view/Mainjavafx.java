@@ -330,16 +330,6 @@ public class Mainjavafx extends Application {
         imgLeague = new Image(new FileInputStream(fileLeague));
         bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
         
-        ImageView imgTuile = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinRouge.png")).toURI().toURL().toString())));
-        ImageView imgTuile2 = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinBleuClair.png")).toURI().toURL().toString())));
-        ImageView imgTuile3 = new ImageView(new Image(new String(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/TuileDauphinJaune.png")).toURI().toURL().toString())));
-        imgTuile.setFitWidth(59);
-        imgTuile.setFitHeight(60);
-        imgTuile2.setFitWidth(59);
-        imgTuile2.setFitHeight(60);
-        imgTuile3.setFitWidth(59);
-        imgTuile3.setFitHeight(60);
-        
         GridPane gpGame = new GridPane();
         gpGame.setBackground(new Background(bgiLeague));
         gpGame.setPrefSize(600, 600); 
