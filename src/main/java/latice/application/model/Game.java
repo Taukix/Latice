@@ -16,6 +16,7 @@ public class Game {
 
 		this.player1 = p1;
 		this.player2 = p2;
+		this.board = new Board();
 		
 		generateNewGameTileList();
 		
@@ -23,8 +24,6 @@ public class Game {
 
 		giveEachPlayerStack();
 		generateEachPlayerRack();
-		
-		//board = new Board();
 	}
 
 	private void generateEachPlayerRack() {
@@ -63,12 +62,16 @@ public class Game {
 
 
 	public Player getPlayer1() {
-		return player1;
+		return this.player1;
 	}
 
 
 	public Player getPlayer2() {
-		return player2;
+		return this.player2;
+	}
+	
+	public Board getBoard() {
+		return this.board;
 	}
 	
 	
