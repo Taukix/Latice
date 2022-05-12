@@ -1,30 +1,32 @@
 package latice.application.model;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Rack {
-	private Map<Integer, Tile> tiles;
+	private List<Tile> tiles;
 	
-	Rack(final Map<Integer, Tile> tiles){
+	Rack(final List<Tile> tiles){
 		this.tiles = tiles;
 	}
 	
 	Rack() {
-		this.tiles = new HashMap<>();
+		this.tiles = new ArrayList<>();
 	}
 	
-	public void FillRack(final List<Tile> tiles){
-		int i = 0;
-		while(i < Constants.RACK_SIZE) {
-			this.tiles.put(i, tiles.remove(0));
-			i++;
+	public void fillRackWithTiles(final List<Tile> tiles){
+		while(!tiles.isEmpty() && this.tiles.size() < Constants.RACK_SIZE) {
+			this.tiles.add(tiles.remove(0));
 		}
 	}
 
-	public Map<Integer, Tile> getTiles() {
+	public List<Tile> getTiles() {
 		return tiles;
+	}
+	
+	public boolean isFull() {
+		return tiles.size() == 9;
 	}
 	
 	public Integer countTilesInRack() {
