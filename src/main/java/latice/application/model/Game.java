@@ -60,11 +60,13 @@ public class Game {
 		}
 	}
 
-
+	public void startPlayerTurn(Player p) {
+		p.refreshRack();
+	}
+	
 	public Player getPlayer1() {
 		return this.player1;
 	}
-
 
 	public Player getPlayer2() {
 		return this.player2;
