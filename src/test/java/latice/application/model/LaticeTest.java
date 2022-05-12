@@ -1,8 +1,8 @@
 package latice.application.model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Iterator;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,8 +35,18 @@ public class LaticeTest {
 
 	@Test
 	public void player1PutHisFirstTileOn_1_1() {
+		player1.startTurn();
 		Tile placedTile = player1.getRack().getTiles().get(1);
-		player1.placeTile(game, _1_1, 1);
-		assertEquals(placedTile, game.getBoard().cells.get(_1_1).getTile());
+		assertTrue(player1.placeTile(game, _1_1, 1));
+		assertNotEquals(placedTile, player1.getRack().getTiles().get(1));
+		assertEquals(2, player1.getScore());
+	}
+	
+	@Test
+	public void player1EndHisTurnAndPlayer2PlaceATileOn_2_4() {
+		player1.endTurn();
+		player2.startTurn();
+		assertEquals(false,player1.placeTile(game, _1_1, 1));
+		assertEquals(true,player2.placeTile(game, _1_1, 1));
 	}
 }
