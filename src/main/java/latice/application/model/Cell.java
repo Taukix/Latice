@@ -5,14 +5,32 @@ public class Cell {
 	private Boolean bonus;
 	
 	
-	// By default a board's cell has no tile	
-	// And it doesn't have any bonus
-	private Cell() {
+
+	public Cell(Tile tile, Boolean bonus) {
+		this.tile = tile;
+		this.bonus = bonus;
+	}
+	
+	public Cell(Tile tile) {
+		this.tile = tile;
+		this.bonus = false;
+	}
+
+	
+	public Cell() {
 		this.tile = null;
 		this.bonus = false;
 	}
 	
-	private Boolean isEmpty() {
+	public Boolean isEmpty() {
 		return tile.equals(null);
+	}
+	
+	public boolean isBonus() {
+		return bonus;
+	}
+	
+	public Tile getTile() {
+		return this.tile;
 	}
 }
