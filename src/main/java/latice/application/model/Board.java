@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
-	public Map<Position, Cell> cells;
+	public Map<Position, Tile> tiles;
 	
 	public Board() {
-		this.cells = new HashMap<>();
+		this.tiles = new HashMap<>();
 	}
 
 
-	public Map<Position, Cell> getCells() {
-		return cells;
+	public Map<Position, Tile> getTiles() {
+		return tiles;
 	}
 }
  
