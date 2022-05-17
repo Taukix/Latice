@@ -156,7 +156,8 @@ public class Mainjavafx extends Application {
 	public static int floorX;
 	public static int floorY;
 	private Button btnEndTurn;
-	
+	public static Label nbrTilesInStack1;
+	public static Label nbrTilesInStack2;
 
 	// REGLES
 	private Text txtRulesTitle;
@@ -321,6 +322,8 @@ public class Mainjavafx extends Application {
 		            	tlPlaySceneChange = new Timeline(new KeyFrame(Duration.seconds(7.5), e -> root.setCenter(vbPlateGame)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setBottom(null)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setTop(null)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setLeft(nbrTilesInStack1)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setRight(nbrTilesInStack2)),
 		            			new KeyFrame(Duration.seconds(7.6), e -> pgbLoadingScene.setProgress(0)));
 		            	
 		            	tlPgbBarLoadingScene.play();
@@ -343,6 +346,16 @@ public class Mainjavafx extends Application {
         // Implémentation du GROUP PLAY et de ses composants
         vbPlateGame = new VBox();
         gpPlate = new Group();
+        
+        nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
+        nbrTilesInStack1.setFont(new Font("Calibri", 40));
+		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
+		root.setMargin(nbrTilesInStack1, new Insets(200,0,0,0));
+		
+        nbrTilesInStack2 = new Label("Nombre de tuiles restantes: 31");
+        nbrTilesInStack2.setFont(new Font("Calibri", 40));
+		nbrTilesInStack2.setTextFill(Color.WHITESMOKE);
+		root.setMargin(nbrTilesInStack2, new Insets(200,0,0,0));
         
         fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
         imgLeague = new Image(new FileInputStream(fileLeague));
@@ -459,7 +472,6 @@ public class Mainjavafx extends Application {
 								break;
 							}
 						}
-							game.playerWon(game.getPlayer1(), game.getPlayer2());
 					}
 				}
 			}});
@@ -475,11 +487,9 @@ public class Mainjavafx extends Application {
 								ArrayOfTilesOnRackOnPlayer2.remove(i);
 							
 								game.getPlayer2().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
-
 								break;
 							}
 						}
-							game.playerWon(game.getPlayer1(), game.getPlayer2());
 					}
 				}
 			}});
