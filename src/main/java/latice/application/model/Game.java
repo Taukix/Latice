@@ -6,9 +6,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-import latice.application.view.Mainjavafx;
-import latice.application.view.TileFx;
-
 public class Game {
 	private Player player1;
 	private Player player2;
@@ -36,8 +33,8 @@ public class Game {
 	
 	private void giveEachPlayerStack() {
 		while(!this.gameTileList.isEmpty()) {
-			this.player1.stack.add(this.gameTileList.remove(0));
-			this.player2.stack.add(this.gameTileList.remove(0));
+			this.player1.getStack().add(this.gameTileList.remove(0));
+			this.player2.getStack().add(this.gameTileList.remove(0));
 		}
 	}
 
@@ -79,7 +76,7 @@ public class Game {
 	}
 	
 	public void nextTurn(Player p1, Player p2) {
-		if (p1.turn == true) {
+		if (p1.getTurn() == true) {
 			p1.endTurn();
 			p2.startTurn();
 		} else {
@@ -87,7 +84,7 @@ public class Game {
 			p1.startTurn();
 		}
 	}
-	
+	/*
 	public boolean playerWon(Player p1, Player p2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
 		if (p1.getStack().size() == 0 && list1.size() == 0) {
 			System.out.println(p1.getUsername() + " won !");
@@ -98,5 +95,5 @@ public class Game {
 		}
 		return false;
 	}
-	
+	*/
 }
