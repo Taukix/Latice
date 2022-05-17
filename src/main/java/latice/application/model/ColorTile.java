@@ -1,5 +1,5 @@
 package latice.application.model;
 
-public enum Color {
+public enum ColorTile {
 	RED, YELLOW, GREEN, MAGENTA, CYAN, BLUE;
 }

@@ -2,6 +2,8 @@ package latice.application.view;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,7 +23,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Border;
@@ -43,6 +49,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import latice.application.controller.AnimationPoint;
 import latice.application.controller.ButtonControllerCloseApplication;
+import latice.application.controller.ButtonControllerEndTurn;
 import latice.application.controller.ButtonControllerParametersMenu;
 import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
@@ -50,8 +57,14 @@ import latice.application.controller.ButtonControllerSoundOff;
 import latice.application.controller.ButtonControllerSoundOn;
 import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
-import latice.application.controller.SliderProgressBarDown;
 import latice.application.controller.SourdineOffWhenSliderProgress;
+import latice.application.model.ColorTile;
+import latice.application.model.Game;
+import latice.application.model.Player;
+import latice.application.model.Position;
+import latice.application.model.Rack;
+import latice.application.model.Shape;
+import latice.application.model.Tile;
 
 public class Mainjavafx extends Application {
 	
@@ -117,11 +130,6 @@ public class Mainjavafx extends Application {
 	private Image imgRulesPlate;
 	private ImageView imgVRulesPlate;
 	
-	private File filePlate;
-	private Image imgPlate;
-	private ImageView imgVPlate;
-	
-	
 	// JOUER
 		// SCENE DE CHARGEMENT
 	private ProgressBar pgbLoadingScene;
@@ -137,8 +145,18 @@ public class Mainjavafx extends Application {
 	
 		// JEU
 	private Group gpPlate;
-	private Button btnQuitGame;
+	private GridPane gpGame;
+	private HBox hbRacks;
+	private GridPane gpRackOfPlayer1;
+	private GridPane gpRackOfPlayer2;
+	private ArrayList<TileFx> ArrayOfTilesOnRackOnPlayer1;
+	private ArrayList<TileFx> ArrayOfTilesOnRackOnPlayer2;
 	private Timeline tlPlaySceneChange;
+	public static Image imgWhereDragStart;
+	public static int floorX;
+	public static int floorY;
+	private Button btnEndTurn;
+	
 
 	// REGLES
 	private Text txtRulesTitle;
@@ -330,41 +348,149 @@ public class Mainjavafx extends Application {
         imgLeague = new Image(new FileInputStream(fileLeague));
         bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
         
-        GridPane gpGame = new GridPane();
+        btnEndTurn = new Button("Fin du tour");
+        btnEndTurn.setPadding(new Insets(7,100,7,100));
+        btnEndTurn.setStyle("-fx-background-color: #FFF; ");
+        
+        gpGame = new GridPane();
         gpGame.setBackground(new Background(bgiLeague));
         gpGame.setPrefSize(600, 600); 
         gpGame.setPadding(new Insets(15,17,15,18));
         gpGame.setHgap(4);
         gpGame.setVgap(3);
         
+        hbRacks = new HBox();
+        hbRacks.setAlignment(Pos.CENTER);
+        gpRackOfPlayer1 = new GridPane();
+        gpRackOfPlayer2 = new GridPane();
+        
+        ArrayOfTilesOnRackOnPlayer1 = new ArrayList<TileFx>();
+        ArrayOfTilesOnRackOnPlayer2 = new ArrayList<TileFx>();
+        
+        
+        // Début de la partie
+        Game game = new Game(new Player("alexandre"), new Player("toto"));
+        
+        // Mise en place de chaque Rack avec leurs tuiles
+        for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
+        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
+        	ArrayOfTilesOnRackOnPlayer1.add(tileFxOfPlayer1);
+        	gpRackOfPlayer1.add(ArrayOfTilesOnRackOnPlayer1.get(i).getImageView(), i, 0);
+        	
+        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
+        	ArrayOfTilesOnRackOnPlayer2.add(tileFxofPlayer2);
+        	gpRackOfPlayer2.add(ArrayOfTilesOnRackOnPlayer2.get(i).getImageView(), i, 0);
+        }
+        
+        // Définition des cases du plateau dans le GridPane
         for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-
-                Rectangle tile = new Rectangle(59, 60);
-                tile.setVisible(false);
-
-                GridPane.setRowIndex(tile, i);
-                GridPane.setColumnIndex(tile, j);
-                
-                gpGame.getChildren().addAll(tile);
-            }}
+        	for (int j = 0; j < 9; j++) {
+        		
+        		Tile tile = new Tile(null, null);
+        		TileFx defaulttilefx = new TileFx(tile, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
+        		defaulttilefx.getImageView().setStyle("-fx-background-color: white;");
+        		
+        		defaulttilefx.getImageView().setOnDragOver(new EventHandler<DragEvent>() {
+        			@Override
+        			public void handle(DragEvent event) {
+        				Dragboard db = event.getDragboard();
+        				
+        				if (db.hasImage()) {
+        					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        				}
+        				event.consume();
+        			}
+        		});
+        		
+        		gpGame.setOnDragDropped(new EventHandler<DragEvent>() {
+        			@Override
+        			public void handle(DragEvent event) {
+        				Dragboard db = event.getDragboard();
+        				boolean success = false;
+        				
+        				if (db.hasImage()) {
+        					floorX = (int) Math.floor((event.getX()-18)/62);
+        					floorY = (int) Math.floor((event.getY()-18)/62);
+        					
+        					ImageView imageViewOnPlate = new ImageView(db.getImage());
+        					imageViewOnPlate.setFitWidth(59);
+        					imageViewOnPlate.setFitHeight(60);
+        					imageViewOnPlate.setVisible(true);
+        					
+        					gpGame.getChildren().remove(floorY*9+floorX);
+        					gpGame.getChildren().add(floorY*9+floorX, imageViewOnPlate);
+        					gpGame.setColumnIndex(imageViewOnPlate, floorX);
+        					gpGame.setRowIndex(imageViewOnPlate, floorY);
+        					
+        					success = true;
+        				}
+        				event.setDropCompleted(success);
+        				event.consume();
+        			}	
+        		});
+        		
+        		GridPane.setRowIndex(defaulttilefx.getImageView(), i);
+        		GridPane.setColumnIndex(defaulttilefx.getImageView(), j);
+        		
+        		gpGame.getChildren().add(defaulttilefx.getImageView());
+        	}}
         
+        
+        DropShadow shadow = new DropShadow();
+		shadow.setRadius(40);
+		shadow.setColor(Color.YELLOW);
+		
+		gpRackOfPlayer1.setEffect(shadow);
+        
+        // Le player 1 commence à chaque fois
+        game.getPlayer1().startTurn();
+        
+        gpRackOfPlayer1.setOnDragDone(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				if (event.getTransferMode() == TransferMode.MOVE) {
+					if (game.getPlayer1().turn == true) {
+						for (int i=0;i<game.getPlayer1().getRack().getTiles().size();i++) {
+							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer1.get(i).getImage()) {
+								gpRackOfPlayer1.getChildren().remove(i);
+								ArrayOfTilesOnRackOnPlayer1.remove(i);
+							
+								game.getPlayer1().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
+								break;
+							}
+						}
+							game.playerWon(game.getPlayer1(), game.getPlayer2());
+					}
+				}
+			}});
+ 
+        gpRackOfPlayer2.setOnDragDone(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				if (event.getTransferMode() == TransferMode.MOVE) {
+					if (game.getPlayer2().turn == true) {
+						for (int i=0;i<game.getPlayer2().getRack().getTiles().size();i++) {
+							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer2.get(i).getImage()) {
+								gpRackOfPlayer2.getChildren().remove(i);
+								ArrayOfTilesOnRackOnPlayer2.remove(i);
+							
+								game.getPlayer2().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
+
+								break;
+							}
+						}
+							game.playerWon(game.getPlayer1(), game.getPlayer2());
+					}
+				}
+			}});
+        
+        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(btnEndTurn, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, gpRackOfPlayer1, gpRackOfPlayer2));
+		
         gpPlate.getChildren().add(gpGame);
+        hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);
+        hbRacks.setSpacing(200);
         
-        btnQuitGame = new Button("REVENIR AU MENU PRINCIPAL");
-        btnQuitGame.setPadding(new Insets(7,100,7,100));
-        btnQuitGame.setStyle("-fx-background-color: #FFF; ");
-        
-        	// Action du bouton
-        	btnQuitGame.setOnAction(new EventHandler<ActionEvent>() {
-        		@Override
-        		public void handle(ActionEvent arg0) {
-        			root.setCenter(vbCenter);
-        			root.setTop(vbTop);
-        		}
-        	});
-        
-        vbPlateGame.getChildren().addAll(gpPlate,btnQuitGame);
+        vbPlateGame.getChildren().addAll(gpPlate,hbRacks, btnEndTurn);
         vbPlateGame.setAlignment(Pos.CENTER);
         vbPlateGame.setSpacing(50);
         

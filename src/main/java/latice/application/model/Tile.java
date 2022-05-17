@@ -7,10 +7,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Tile {
-	private Color color;
+	private ColorTile color;
 	private Shape shape;
 
-	public Tile(Color color, Shape shape) {
+	public Tile(ColorTile color, Shape shape) {
 		this.color = color;
 		this.shape = shape;
 	}
@@ -20,15 +20,11 @@ public class Tile {
 		return "Tile [color=" + color + ", shape=" + shape + "]";
 	}
 
-	public Color getColor() {
+	public ColorTile getColor() {
 		return color;
 	}
 
 	public Shape getShape() {
 		return shape;
 	}
-
-	
-	
-	
 }

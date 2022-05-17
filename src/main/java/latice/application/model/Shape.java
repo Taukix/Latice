@@ -1,7 +1,7 @@
 package latice.application.model;
 
 public enum Shape {
-	BIRD("BI"), FEATHER("FE"), TURTLE("T"), DOLPHIN("D"), FLOWER("FL"), LIZARD("L");
+	BIRD("BIRD"), FEATHER("FEATHER"), TURTLE("TURTLE"), DOLPHIN("DOLPHIN"), FLOWER("FLOWER"), LIZARD("LIZARD");
 	
 	private String symbol;
 	

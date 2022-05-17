@@ -41,8 +41,8 @@ public class Game {
 
 	private void generateNewGameTileList() {
 		//Put in a list every elements of the Color Enum class
-		List<Color> colors = new ArrayList<>();
-		Collections.addAll(colors, EnumSet.allOf(Color.class).toArray(new Color[0]));
+		List<ColorTile> colors = new ArrayList<>();
+		Collections.addAll(colors, EnumSet.allOf(ColorTile.class).toArray(new ColorTile[0]));
 		
 		//Put in a list every elements of the Shape Enum class
 		List<Shape> shapes = new ArrayList<>();
@@ -52,8 +52,8 @@ public class Game {
 		gameTileList = new ArrayList<>();
 		for (Iterator<Shape> iterator = shapes.iterator(); iterator.hasNext();) {
 			Shape shape = (Shape) iterator.next();
-			for (Iterator<Color> iterator2 = colors.iterator(); iterator2.hasNext();) {
-				Color color = (Color) iterator2.next();
+			for (Iterator<ColorTile> iterator2 = colors.iterator(); iterator2.hasNext();) {
+				ColorTile color = (ColorTile) iterator2.next();
 				gameTileList.add(new Tile(color, shape));
 				gameTileList.add(new Tile(color, shape));
 			}
@@ -76,6 +76,22 @@ public class Game {
 		return this.board;
 	}
 	
+	public void nextTurn(Player p1, Player p2) {
+		if (p1.turn == true) {
+			p1.endTurn();
+			p2.startTurn();
+		} else {
+			p2.endTurn();
+			p1.startTurn();
+		}
+	}
 	
+	public void playerWon(Player p1, Player p2) {
+		if (p1.getStack().size() == 0 && p1.getRack().getTiles().size() == 0) {
+			System.out.println("Player1 won");
+		} else if (p2.getStack().size() == 0 && p2.getRack().getTiles().size() == 0){
+			System.out.println("Player2 won");
+		}
+	}
 	
 }
