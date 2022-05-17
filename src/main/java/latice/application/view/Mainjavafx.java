@@ -484,7 +484,7 @@ public class Mainjavafx extends Application {
 				}
 			}});
         
-        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(btnEndTurn, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, gpRackOfPlayer1, gpRackOfPlayer2));
+        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2));
 		
         gpPlate.getChildren().add(gpGame);
         hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);

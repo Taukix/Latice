@@ -11,20 +11,21 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import latice.application.model.ColorTile;
 import latice.application.model.Constants;
 import latice.application.model.Game;
+import latice.application.model.Shape;
+import latice.application.model.Tile;
 import latice.application.view.TileFx;
 
 public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
-	private Button btn;
 	private Game game;
 	private GridPane gp1;
 	private GridPane gp2;
 	private ArrayList<TileFx> list1;
 	private ArrayList<TileFx> list2;
 	
-	public ButtonControllerEndTurn(Button btn, Game game, GridPane gp1, GridPane gp2, ArrayList<TileFx> list1, ArrayList<TileFx> list2, GridPane gpRackOfPlayer1, GridPane gpRackOfPlayer2) {
-		this.btn = btn;
+	public ButtonControllerEndTurn(Game game, GridPane gp1, GridPane gp2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
 		this.game = game;
 		this.gp1 = gp1;
 		this.gp2 = gp2;
@@ -34,16 +35,62 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 
 	@Override
 	public void handle(MouseEvent event) {
-		game.nextTurn(game.getPlayer1(), game.getPlayer2());
+		this.game.nextTurn(this.game.getPlayer1(), this.game.getPlayer2());
 		
-		System.out.println(list1);
-		System.out.println(game.getPlayer1().getRack().getTiles());
-
 		DropShadow shadow = new DropShadow();
 		shadow.setRadius(40);
 		shadow.setColor(Color.YELLOW);
+		
+		
+		if (this.game.getPlayer1().turn == false) {
+			this.game.getPlayer1().refreshRack();
 			
-		if (game.getPlayer1().turn == false) {
-			game.getPlayer1().refreshRack();
+			for (int i=gp1.getChildren().size()-1;i>=0;i--) {
+				gp1.getChildren().remove(i);
+			}
+			
+			if (this.list1.size() != Constants.RACK_SIZE) {
+				for (int i=this.list1.size();i<Constants.RACK_SIZE;i++) {
+					try {
+						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.list1, this.list2, this.game);
+						this.list1.add(tileOfRack1);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			for (int k=0;k<Constants.RACK_SIZE;k++) {
+				gp1.add(list1.get(k).getImageView(), k, 0);
+			}
+			
+			gp1.setEffect(null);
+			gp2.setEffect(shadow);
+				
+		} else {
+			this.game.getPlayer2().refreshRack();
+			
+			for (int i=gp2.getChildren().size()-1;i>=0;i--) {
+				gp2.getChildren().remove(i);
+			}
+				
+			if (this.list2.size() != Constants.RACK_SIZE) {
+				for (int i=this.list2.size();i<Constants.RACK_SIZE;i++) {
+					try {
+						TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i), this.list1, this.list2, this.game);
+						this.list2.add(tileOfRack2);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+				}
+			
+			for (int k=0;k<Constants.RACK_SIZE;k++) {
+				gp2.add(list2.get(k).getImageView(), k, 0);
+			}
+			
+			gp2.setEffect(null);
+			gp1.setEffect(shadow);
+			}
 		}
-}}
+}
