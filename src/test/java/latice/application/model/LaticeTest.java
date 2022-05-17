@@ -8,17 +8,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class LaticeTest {
-	Game game;
+	private Game game;
+	private static Player player1;
+	private static Player player2;
 	
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
 	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE, Constants.BOARD_SIZE);
-	private static final Player player1 = new Player("Player1");
-	private static final Player player2 = new Player("Player2");
-
 	
 	@BeforeEach
 	public void cleanGame() {
+		player1 = new Player("Player1");
+		player2 = new Player("Player2");
 		game = new Game(player1, player2);
 	}
 	
@@ -74,14 +75,15 @@ public class LaticeTest {
 	public void player1GotVictoryWhenHeHasNoTilesLeftInStackAndRack() {
 		System.out.println(player1.countTilesInStack());
 		player1.startTurn();
-		for (int i=0;i<6;i++) {
+		for (int i=0;i<7;i++) {
 			for (int j=4;j>=0;j--) {
 				player1.placeTile(game, new Position(j,i), j);
 			}
 			player1.refreshRack();
 		}
 		player1.placeTile(game, LAST_POSITION, 0);
-		assertEquals(true, game.playerWon(player1, player2, null, null));
+		System.out.println(player1.getRack().getTiles().size());
+		assertEquals(true, game.playerWon(player1, player2));
 	}
 	
 	@Test
@@ -99,4 +101,11 @@ public class LaticeTest {
 		assertEquals(5,player2.getRack().getTiles().size());
 	}
 	
+	@Test
+	public void playerWhoCanPlayChangeAfterEachTurn() {
+		player1.startTurn();
+		game.nextTurn(player1, player2);
+		assertEquals(false,player1.turn);
+		assertEquals(true,player2.turn);
+	}
 }

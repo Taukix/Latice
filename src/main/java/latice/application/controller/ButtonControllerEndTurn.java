@@ -1,21 +1,15 @@
 package latice.application.controller;
 
 import java.io.FileNotFoundException;
-import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import latice.application.model.ColorTile;
 import latice.application.model.Constants;
 import latice.application.model.Game;
-import latice.application.model.Shape;
-import latice.application.model.Tile;
 import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
 
@@ -114,5 +108,5 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			gp1.setEffect(shadow);
 			}
 		
-		game.playerWon(game.getPlayer1(), game.getPlayer2(), list1, list2);
+		game.playerWon(game.getPlayer1(), game.getPlayer2());
 }}

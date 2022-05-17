@@ -10,7 +10,6 @@ public class Board {
 		this.tiles = new HashMap<>();
 	}
 
-
 	public Map<Position, Tile> getTiles() {
 		return tiles;
 	}
