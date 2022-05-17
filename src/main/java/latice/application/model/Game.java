@@ -6,6 +6,9 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import latice.application.view.Mainjavafx;
+import latice.application.view.TileFx;
+
 public class Game {
 	private Player player1;
 	private Player player2;
@@ -86,10 +89,10 @@ public class Game {
 		}
 	}
 	
-	public void playerWon(Player p1, Player p2) {
-		if (p1.getStack().size() == 0 && p1.getRack().getTiles().size() == 0) {
+	public void playerWon(Player p1, Player p2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
+		if (p1.getStack().size() == 0 && list1.size() == 0) {
 			System.out.println("Player1 won");
-		} else if (p2.getStack().size() == 0 && p2.getRack().getTiles().size() == 0){
+		} else if (p2.getStack().size() == 0 && list2.size() == 0){
 			System.out.println("Player2 won");
 		}
 	}
