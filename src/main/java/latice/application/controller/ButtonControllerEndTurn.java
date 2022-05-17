@@ -61,7 +61,6 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 					}
 				}
 			} else if (this.game.getPlayer1().getStack().size() < 5) {
-				System.out.println(list1.size());
 				for (int l=0;l<this.game.getPlayer1().getStack().size();l++) {
 					try {
 						TileFx tileOfRack2 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(l), this.list1, this.list2, this.game);
@@ -114,7 +113,8 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			gp2.setEffect(null);
 			gp1.setEffect(shadow);
 			}
-		game.playerWon(game.getPlayer1(), game.getPlayer2(), list1, list2);
 		
+		if (game.playerWon(game.getPlayer1(), game.getPlayer2(), list1, list2)) {
+			
 		}
-}
+}}

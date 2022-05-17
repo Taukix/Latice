@@ -89,12 +89,15 @@ public class Game {
 		}
 	}
 	
-	public void playerWon(Player p1, Player p2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
+	public boolean playerWon(Player p1, Player p2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
 		if (p1.getStack().size() == 0 && list1.size() == 0) {
-			System.out.println("Player1 won");
+			System.out.println(p1.getUsername() + " won !");
+			return true;
 		} else if (p2.getStack().size() == 0 && list2.size() == 0){
-			System.out.println("Player2 won");
+			System.out.println(p2.getUsername() + " won !");
+			return true;
 		}
+		return false;
 	}
 	
 }
