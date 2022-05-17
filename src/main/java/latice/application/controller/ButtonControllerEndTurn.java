@@ -37,7 +37,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 		shadow.setColor(Color.YELLOW);
 		
 		
-		if (this.game.getPlayer1().turn == false) {
+		if (this.game.getPlayer1().getTurn() == false) {
 			this.game.getPlayer1().refreshRack();
 			Mainjavafx.nbrTilesInStack1.setText("Nombre de tuiles restantes: " + game.getPlayer1().getStack().size());
 			

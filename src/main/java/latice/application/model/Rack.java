@@ -2,7 +2,6 @@ package latice.application.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Rack {
 	private List<Tile> tiles;
@@ -26,7 +25,7 @@ public class Rack {
 	}
 	
 	public boolean isFull() {
-		return tiles.size() == 9;
+		return tiles.size() == Constants.RACK_SIZE;
 	}
 	
 	public Integer countTilesInRack() {

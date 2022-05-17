@@ -33,8 +33,8 @@ public class Game {
 	
 	private void giveEachPlayerStack() {
 		while(!this.gameTileList.isEmpty()) {
-			this.player1.stack.add(this.gameTileList.remove(0));
-			this.player2.stack.add(this.gameTileList.remove(0));
+			this.player1.getStack().add(this.gameTileList.remove(0));
+			this.player2.getStack().add(this.gameTileList.remove(0));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class Game {
 	}
 	
 	public void nextTurn(Player p1, Player p2) {
-		if (p1.turn == true) {
+		if (p1.getTurn() == true) {
 			p1.endTurn();
 			p2.startTurn();
 		} else {
@@ -95,5 +95,4 @@ public class Game {
 		}
 		return false;
 	}
-	
 }

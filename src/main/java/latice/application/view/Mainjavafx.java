@@ -470,7 +470,7 @@ public class Mainjavafx extends Application {
 			@Override
 			public void handle(DragEvent event) {
 				if (event.getTransferMode() == TransferMode.MOVE) {
-					if (game.getPlayer1().turn == true) {
+					if (game.getPlayer1().getTurn() == true) {
 						for (int i=0;i<game.getPlayer1().getRack().getTiles().size();i++) {
 							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer1.get(i).getImage()) {
 								gpRackOfPlayer1.getChildren().remove(i);
@@ -488,7 +488,7 @@ public class Mainjavafx extends Application {
 			@Override
 			public void handle(DragEvent event) {
 				if (event.getTransferMode() == TransferMode.MOVE) {
-					if (game.getPlayer2().turn == true) {
+					if (game.getPlayer2().getTurn() == true) {
 						for (int i=0;i<game.getPlayer2().getRack().getTiles().size();i++) {
 							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer2.get(i).getImage()) {
 								gpRackOfPlayer2.getChildren().remove(i);

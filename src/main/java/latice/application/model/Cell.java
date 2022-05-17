@@ -23,7 +23,7 @@ public class Cell {
 	}
 	
 	public Boolean isEmpty() {
-		return tile.equals(null);
+		return tile == null;
 	}
 	
 	public boolean isBonus() {

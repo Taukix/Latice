@@ -39,7 +39,7 @@ public class TileFx {
 		this.imgTile.setOnDragDetected(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (game.getPlayer1().turn == true && ImageDragFrom() == game.getPlayer1() || game.getPlayer2().turn == true && ImageDragFrom() == game.getPlayer2()) {
+				if (game.getPlayer1().getTurn() == true && ImageDragFrom() == game.getPlayer1() || game.getPlayer2().getTurn() == true && ImageDragFrom() == game.getPlayer2()) {
 					Dragboard db = imgTile.startDragAndDrop(TransferMode.ANY);
 				
 					ClipboardContent content = new ClipboardContent();

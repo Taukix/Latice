@@ -1,16 +1,15 @@
 package latice.application.model;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-	public String username;
-	public Integer score;
-	public boolean consumedTurn;
-	public boolean turn;
-	public List<Tile> stack;
-	public Rack rack;
+	private String username;
+	private Integer score;
+	private boolean consumedTurn;
+	private boolean turn;
+	private List<Tile> stack;
+	private Rack rack;
 	
 	public Player(String username){
 		this.username = username;
@@ -27,6 +26,32 @@ public class Player {
 		//TODO
 	}
 
+	public boolean canPlaceTileAt(Game game, Position pos, Tile tile) {
+		boolean placeable = false;
+		
+		// Check if tile already there
+		placeable = !game.getBoard().tileAt(pos);
+		
+		
+		// Check on top, under, on left and on right of the tile
+		for(int i = 0; i <= 1; i++) {
+			int x = pos.x() -1 + 2*i;
+			for(int j = 0; j <= 1; j++) {
+				int y = pos.y()-1+2*j;
+				Position newPos = new Position(x,y);
+				if(!game.getBoard().tileAt(newPos) && x < Constants.BOARD_SIZE && y < Constants.BOARD_SIZE && x > 0 && y > 0) {
+					if(game.getBoard().tileAt(newPos)) {
+						placeable = placeable && (game.getBoard().getTileAt(newPos).getColor() == tile.getColor() || game.getBoard().getTileAt(newPos).getShape() == tile.getShape()); 
+					}
+				}
+			}
+		}
+		
+		return placeable;
+	}
+	
+	
+	
 
 	public boolean placeTile(Game game, Position pos, int tileOfRack) {
 		boolean inMap = false;
@@ -35,9 +60,9 @@ public class Player {
 		int y = pos.y();
 		Tile tile = rack.getTiles().remove(tileOfRack);
 		
-		if(!tile.equals(null)) {
+		if(tile != null) {
 			if(x > 0 && x <= Constants.BOARD_SIZE && y > 0 && y <= Constants.BOARD_SIZE && (!consumedTurn|| score > 2)) {				
-				Boolean bonus;
+				boolean bonus;
 				if(consumedTurn) {
 					score = score - 2;
 				}
@@ -52,7 +77,7 @@ public class Player {
 					score += 2;
 				}
 				consumedTurn = true;
-				inMap = true;
+				inMap = canPlaceTileAt(game, pos, tile);
 			}
 		}
 		else {
@@ -104,5 +129,9 @@ public class Player {
 
 	public Rack getRack() {
 		return rack;
+	}
+	
+	public boolean getTurn() {
+		return this.turn;
 	}
 }
