@@ -32,6 +32,15 @@ public class LaticeTest {
 		assertEquals(31, player1.countTilesInStack());
 		assertEquals(31, player2.countTilesInStack());
 	}
+	
+	@Test
+	public void player1RemovesTilesOnHisRackByPlayingThemOnTheBoard() {
+		player1.startTurn();
+		player1.placeTile(game, _1_1, 0);
+		player1.placeTile(game, _2_4, 0);
+		player1.placeTile(game, LAST_POSITION, 0);
+		assertEquals(2,player1.getRack().getTiles().size());
+	}
 
 	@Test
 	public void player1PutHisFirstTileOn_1_1() {
@@ -74,4 +83,20 @@ public class LaticeTest {
 		player1.placeTile(game, LAST_POSITION, 0);
 		assertEquals(true, game.playerWon(player1, player2, null, null));
 	}
+	
+	@Test
+	public void player1ShouldNotPlayTilesInSamePlaceOnBoard() {
+		player1.startTurn();
+		player1.placeTile(game, LAST_POSITION, 0);
+		player1.placeTile(game, LAST_POSITION, 0);
+		assertEquals(4,player1.getRack().getTiles().size());
+	}
+	
+	@Test
+	public void player2ShouldNotPlayWhenItIsNotHisTurn() {
+		player1.startTurn();
+		player2.placeTile(game, LAST_POSITION, 0);
+		assertEquals(5,player2.getRack().getTiles().size());
+	}
+	
 }
