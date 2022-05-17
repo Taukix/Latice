@@ -41,7 +41,6 @@ public class Game {
 		}
 	}
 
-
 	private void generateNewGameTileList() {
 		//Put in a list every elements of the Color Enum class
 		List<ColorTile> colors = new ArrayList<>();

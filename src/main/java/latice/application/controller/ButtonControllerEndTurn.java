@@ -114,7 +114,5 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			gp1.setEffect(shadow);
 			}
 		
-		if (game.playerWon(game.getPlayer1(), game.getPlayer2(), list1, list2)) {
-			
-		}
+		game.playerWon(game.getPlayer1(), game.getPlayer2(), list1, list2);
 }}

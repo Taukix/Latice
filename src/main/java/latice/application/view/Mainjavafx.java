@@ -347,15 +347,24 @@ public class Mainjavafx extends Application {
         vbPlateGame = new VBox();
         gpPlate = new Group();
         
+        DropShadow yellowShadow = new DropShadow();
+        yellowShadow.setRadius(40);
+        yellowShadow.setSpread(0.5);
+        yellowShadow.setColor(Color.YELLOW);
+        
         nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
         nbrTilesInStack1.setFont(new Font("Calibri", 40));
 		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
-		root.setMargin(nbrTilesInStack1, new Insets(200,0,0,0));
+		root.setAlignment(nbrTilesInStack1, Pos.CENTER);
+		root.setMargin(nbrTilesInStack1, new Insets(0,0,0,50));
+		nbrTilesInStack1.setEffect(yellowShadow);
 		
         nbrTilesInStack2 = new Label("Nombre de tuiles restantes: 31");
         nbrTilesInStack2.setFont(new Font("Calibri", 40));
 		nbrTilesInStack2.setTextFill(Color.WHITESMOKE);
-		root.setMargin(nbrTilesInStack2, new Insets(200,0,0,0));
+		root.setAlignment(nbrTilesInStack2, Pos.CENTER);
+		root.setMargin(nbrTilesInStack2, new Insets(0,50,0,0));
+		nbrTilesInStack2.setEffect(yellowShadow);
         
         fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
         imgLeague = new Image(new FileInputStream(fileLeague));
@@ -401,7 +410,6 @@ public class Mainjavafx extends Application {
         		
         		Tile tile = new Tile(null, null);
         		TileFx defaulttilefx = new TileFx(tile, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
-        		defaulttilefx.getImageView().setStyle("-fx-background-color: white;");
         		
         		defaulttilefx.getImageView().setOnDragOver(new EventHandler<DragEvent>() {
         			@Override

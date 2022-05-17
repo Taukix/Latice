@@ -49,4 +49,29 @@ public class LaticeTest {
 		assertEquals(false,player1.placeTile(game, _1_1, 1));
 		assertEquals(true,player2.placeTile(game, _1_1, 1));
 	}
+	
+	@Test
+	public void player1GotHisTilesAfterHisTurnAndAfterPlayingTiles() {
+		player1.startTurn();
+		player1.placeTile(game, _1_1, 4);
+		assertEquals(4,player1.getRack().getTiles().size());
+		player1.placeTile(game, _2_4, 3);
+		assertEquals(3,player1.getRack().getTiles().size());
+		player1.refreshRack();
+		assertEquals(5,player1.getRack().getTiles().size());
+	}
+	
+	@Test
+	public void player1GotVictoryWhenHeHasNoTilesLeftInStackAndRack() {
+		System.out.println(player1.countTilesInStack());
+		player1.startTurn();
+		for (int i=0;i<6;i++) {
+			for (int j=4;j>=0;j--) {
+				player1.placeTile(game, new Position(j,i), j);
+			}
+			player1.refreshRack();
+		}
+		player1.placeTile(game, LAST_POSITION, 0);
+		assertEquals(true, game.playerWon(player1, player2, null, null));
+	}
 }
