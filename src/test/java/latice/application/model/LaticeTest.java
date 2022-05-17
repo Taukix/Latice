@@ -1,6 +1,7 @@
 package latice.application.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,8 +14,17 @@ public class LaticeTest {
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
 	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE, Constants.BOARD_SIZE);
+	private static final Position CENTER = new Position(5,5);
+	static final Position BOTTOM_CENTER = new Position(6,5);
+	static final Position TOP_CENTER = new Position(4,5);
+	static final Position LEFT_CENTER = new Position(5,4);
+	static final Position RIGHT_CENTER = new Position(5,6);
 	private static final Player player1 = new Player("Player1");
 	private static final Player player2 = new Player("Player2");
+	private static final Tile redFlower = new Tile(ColorTile.RED, Shape.FLOWER);
+	private static final Tile blueFlower = new Tile(ColorTile.BLUE, Shape.FLOWER);
+	private static final Tile redDolphin = new Tile(ColorTile.RED, Shape.DOLPHIN);
+	private static final Tile blueDolphin = new Tile(ColorTile.BLUE, Shape.DOLPHIN);
 
 	
 	@BeforeEach
@@ -44,11 +54,36 @@ public class LaticeTest {
 
 	@Test
 	public void player1PutHisFirstTileOn_1_1() {
+		//Arrange
 		player1.startTurn();
 		Tile placedTile = player1.getRack().getTiles().get(1);
+		
+		//Act & Assert
 		assertTrue(player1.placeTile(game, _1_1, 1));
 		assertNotEquals(placedTile, player1.getRack().getTiles().get(1));
 		assertEquals(2, player1.getScore());
+	}
+	
+	@Test
+	public void get_shape_of_a_tile_based_on_a_new_position() {
+		// TODO
+	}
+	
+	@Test
+	public void player1_place_a_second_tile() {
+		//Arrange
+		game.getBoard().tiles.put(CENTER,redFlower);
+		
+		//Act
+		
+		//Assert
+		assertTrue(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, redDolphin));
+		assertTrue(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, blueFlower));
+		assertFalse(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, blueDolphin));
+		assertFalse(game.getPlayer1().canPlaceTileAt(game, TOP_CENTER, blueDolphin));
+		assertFalse(game.getPlayer1().canPlaceTileAt(game, RIGHT_CENTER, blueDolphin));
+		assertFalse(game.getPlayer1().canPlaceTileAt(game, BOTTOM_CENTER, blueDolphin));
+
 	}
 	
 	@Test
@@ -56,6 +91,7 @@ public class LaticeTest {
 		player1.endTurn();
 		player2.startTurn();
 		assertEquals(false,player1.placeTile(game, _1_1, 1));
+		
 		assertEquals(true,player2.placeTile(game, _1_1, 1));
 	}
 	
@@ -69,7 +105,7 @@ public class LaticeTest {
 		player1.refreshRack();
 		assertEquals(5,player1.getRack().getTiles().size());
 	}
-	
+	/*
 	@Test
 	public void player1GotVictoryWhenHeHasNoTilesLeftInStackAndRack() {
 		System.out.println(player1.countTilesInStack());
@@ -82,7 +118,7 @@ public class LaticeTest {
 		}
 		player1.placeTile(game, LAST_POSITION, 0);
 		assertEquals(true, game.playerWon(player1, player2, null, null));
-	}
+	}*/
 	
 	@Test
 	public void player1ShouldNotPlayTilesInSamePlaceOnBoard() {
