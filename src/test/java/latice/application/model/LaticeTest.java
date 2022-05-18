@@ -65,18 +65,18 @@ public class LaticeTest {
 	@Test
 	void returnTrueWhenATileIsPutAtAFreePosition() {
 		assertFalse(game.getBoard().tileAt(_2_4));
-		boolean discWellPut = game.getBoard().put(_2_4, redFlower);
+		boolean discWellPut = game.getBoard().putIn(_2_4, redFlower);
 		assertTrue(discWellPut);
-		assertFalse(game.getBoard().tiles.isEmpty());
+		assertFalse(game.getBoard().getTiles().isEmpty());
 		assertTrue(game.getBoard().tileAt(_2_4));
 	}
 	
 	@Test
 	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
-		game.getBoard().tiles.put(_2_4, redFlower);
+		game.getBoard().putIn(_2_4, redFlower);
 		assertTrue(game.getBoard().tileAt(_2_4));
 		
-		boolean tileWellPut = game.getBoard().put(_2_4, blueDolphin);
+		boolean tileWellPut = game.getBoard().putIn(_2_4, blueDolphin);
 		assertFalse(tileWellPut);
 		assertTrue(game.getBoard().tileAt(_2_4));
 	}
@@ -109,23 +109,40 @@ public class LaticeTest {
 	}
 	
 	@Test
+	public void tile_at_position_already_used() {
+		game.getBoard().putIn(CENTER, blueDolphin);
+		assertTrue(game.getBoard().tileAt(CENTER));
+		assertFalse(game.getBoard().tileAt(LAST_POSITION));
+	}
+	
+	@Test
+	public void get_tile_at_position_aldready_used() {
+		game.getBoard().putIn(CENTER, blueDolphin);
+		System.out.println("aaaaaaaaaaaaa");
+		System.out.println(game.getBoard().getTileAt(new Position(CENTER.x(), CENTER.y())));
+		System.out.println(game.getBoard().getTileAt(CENTER));
+		assertEquals(blueDolphin, game.getBoard().getTileAt(new Position(CENTER.x(), CENTER.y())));
+		assertEquals(null, game.getBoard().getTileAt(LAST_POSITION));
+	}
+	
+	/*
+	@Test
 	public void player1_place_a_second_tile() {
 		//Arrange
-		game.getBoard().tiles.put(CENTER,redFlower);
-		assertEquals(true, game.getBoard().tileAt(CENTER));
-		System.out.println(game.getBoard().getTileAt(CENTER));
+		game.getBoard().putIn(new Position(CENTER.x(), CENTER.y()),redFlower);
 		
 		//Act
-		
+
 		//Assert
 		assertTrue(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, redDolphin));
 		assertTrue(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, blueFlower));
+		System.out.println("------");
 		assertFalse(game.getPlayer1().canPlaceTileAt(game, LEFT_CENTER, blueDolphin));
 		//assertFalse(game.getPlayer1().canPlaceTileAt(game, TOP_CENTER, blueDolphin));
 		//assertFalse(game.getPlayer1().canPlaceTileAt(game, RIGHT_CENTER, blueDolphin));
 		//assertFalse(game.getPlayer1().canPlaceTileAt(game, BOTTOM_CENTER, blueDolphin));
 
-	}
+	}*/
 	
 	@Test
 	public void player1EndHisTurnAndPlayer2PlaceATileOn_2_4() {
@@ -143,18 +160,18 @@ public class LaticeTest {
 		assertEquals(4,player1.getRack().getTiles().size());
 		player1.placeTile(game, _2_4, 3);
 		assertEquals(3,player1.getRack().getTiles().size());
-		player1.refreshRack();
+		player1.endTurn();
 		assertEquals(5,player1.getRack().getTiles().size());
 	}
 	
 	@Test
 	public void theBoardIsEmptyWhenItIsCleared() {
-		game.getBoard().put(CENTER, blueDolphin);
-		game.getBoard().put(BOTTOM_CENTER, blueFlower);
-		assertFalse(game.getBoard().tiles.isEmpty());
+		game.getBoard().putIn(CENTER, blueDolphin);
+		game.getBoard().putIn(BOTTOM_CENTER, blueFlower);
+		assertFalse(game.getBoard().getTiles().isEmpty());
 		
-		game.getBoard().tiles.clear();
-		assertTrue(game.getBoard().tiles.isEmpty());
+		game.getBoard().getTiles().clear();
+		assertTrue(game.getBoard().getTiles().isEmpty());
 	}
 	
 	@Test
