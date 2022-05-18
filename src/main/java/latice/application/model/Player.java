@@ -27,17 +27,12 @@ public class Player {
 	}
 
 	public boolean canPlaceTileAt(Game game, Position pos, Tile tile) {
-		System.out.println(game.getBoard().getTileAt(new Position(5,5)));
 		boolean placeable = false;
 		int x = 0;
 		int y = 0;
 		
 		// Check if tile already there
-		System.out.println(game.getBoard().getTileAt(new Position(5,5)));
 		placeable = !game.getBoard().tileAt(pos);
-		System.out.println(pos.x());
-		System.out.println(pos.y());
-		System.out.println("----------");
 		
 		// Check on top, under, on left and on right of the tile
 		for (int k = 0; k<2; k++) {
@@ -51,15 +46,8 @@ public class Player {
 							x = pos.x();
 						}
 						Position newPos = new Position(x,y);
-						System.out.println(newPos.x());
-						System.out.println(newPos.y());
-						System.out.println(game.getBoard().getTileAt(newPos));
-						System.out.println(game.getBoard().tileAt(newPos));
 						if(game.getBoard().tileAt(newPos) && x < Constants.BOARD_SIZE && y < Constants.BOARD_SIZE && x > 0 && y > 0) {
-								System.out.println(game.getBoard().getTileAt(newPos).getColor() == tile.getColor());
-								System.out.println(game.getBoard().getTileAt(newPos).getShape() == tile.getShape());
 								placeable = (game.getBoard().getTileAt(newPos).getColor() == tile.getColor() || game.getBoard().getTileAt(newPos).getShape() == tile.getShape()); 
-								System.out.println(placeable);
 						}
 					}
 				}

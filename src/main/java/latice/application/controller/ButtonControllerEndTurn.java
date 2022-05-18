@@ -36,16 +36,15 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 		shadow.setRadius(40);
 		shadow.setColor(Color.YELLOW);
 		
-		
+		// TOUR DU JOUEUR 1
 		if (this.game.getPlayer1().getTurn() == false) {
-			this.game.getPlayer1().refreshRack();
 			Mainjavafx.nbrTilesInStack1.setText("Nombre de tuiles restantes: " + game.getPlayer1().getStack().size());
 			
 			for (int i=gp1.getChildren().size()-1;i>=0;i--) {
 				gp1.getChildren().remove(i);
 			}
 			
-			if (this.list1.size() != Constants.RACK_SIZE && this.game.getPlayer1().getStack().size() >= Constants.RACK_SIZE) {
+			if (this.list1.size() != Constants.RACK_SIZE && this.game.getPlayer1().getStack().size() > 0) {
 				for (int i=this.list1.size();i<Constants.RACK_SIZE;i++) {
 					try {
 						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.list1, this.list2, this.game);
@@ -54,11 +53,11 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 						e.printStackTrace();
 					}
 				}
-			} else if (this.game.getPlayer1().getStack().size() < 5) {
-				for (int l=0;l<this.game.getPlayer1().getStack().size();l++) {
+			} else if (this.game.getPlayer1().getStack().size() == 0) {
+				for (int l=0;l<this.game.getPlayer1().getRack().getTiles().size();l++) {
 					try {
-						TileFx tileOfRack2 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(l), this.list1, this.list2, this.game);
-						this.list1.add(tileOfRack2);
+						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(l), this.list1, this.list2, this.game);
+						this.list1.add(tileOfRack1);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					}
@@ -71,7 +70,8 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			
 			gp1.setEffect(null);
 			gp2.setEffect(shadow);
-				
+		
+		// TOUR DU JOUEUR 2
 		} else {
 			this.game.getPlayer2().refreshRack();
 			Mainjavafx.nbrTilesInStack2.setText("Nombre de tuiles restantes: " + game.getPlayer2().getStack().size());
