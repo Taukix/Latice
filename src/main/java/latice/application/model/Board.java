@@ -21,5 +21,14 @@ public class Board {
 	public Tile getTileAt(Position pos) {
 		return this.tiles.get(pos);
 	}
+	
+	public boolean put(Position position, Tile tile) {
+		if (tiles.containsKey(position)) {
+			return false;
+		} else {
+			tiles.put(position, tile);
+			return true;
+		}
+	}
 }
  

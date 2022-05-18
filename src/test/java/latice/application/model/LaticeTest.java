@@ -70,6 +70,16 @@ public class LaticeTest {
 		player1.placeTile(game, LAST_POSITION, 0);
 		assertEquals(2,player1.getRack().getTiles().size());
 	}
+	
+	@Test
+	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
+		game.getBoard().tiles.put(_2_4, redFlower);
+		assertTrue(game.getBoard().tileAt(_2_4));
+		
+		boolean tileWellPut = game.getBoard().put(_2_4, blueDolphin);
+		assertFalse(tileWellPut);
+		assertTrue(game.getBoard().tileAt(_2_4));
+	}
 
 	@Test
 	public void player1PutHisFirstTileOn_1_1() {
