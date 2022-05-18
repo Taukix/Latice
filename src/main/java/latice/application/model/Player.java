@@ -25,35 +25,6 @@ public class Player {
 	public void changeRack() {
 		//TODO
 	}
-
-	public boolean canPlaceTileAt(Game game, Position pos, Tile tile) {
-		boolean placeable = false;
-		int x = 0;
-		int y = 0;
-		
-		// Check if tile already there
-		placeable = !game.getBoard().tileAt(pos);
-		
-		// Check on top, under, on left and on right of the tile
-		for (int k = 0; k<2; k++) {
-				for(int i = 0; i <= 1; i++) {
-					if (placeable == true) {
-						if (k == 0) {
-							x = pos.x() + i*2 -1;
-							y = pos.y();
-						} else {
-							y = pos.y() + i*2 -1;
-							x = pos.x();
-						}
-						Position newPos = new Position(x,y);
-						if(game.getBoard().tileAt(newPos) && x < Constants.BOARD_SIZE && y < Constants.BOARD_SIZE && x > 0 && y > 0) {
-								placeable = (game.getBoard().getTileAt(newPos).getColor() == tile.getColor() || game.getBoard().getTileAt(newPos).getShape() == tile.getShape()); 
-						}
-					}
-				}
-			}
-			return placeable;
-}
 	
 	
 	
@@ -77,7 +48,7 @@ public class Player {
 				//Check if bonus is in on the border of the map
 				bonus = bonus || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9)) ;
 				
-				game.getBoard().tiles.put(pos, tile);
+				game.getBoard().putIn(pos, tile);
 				if(bonus && score%2 < 3) {
 					score += 2;
 				}
