@@ -63,12 +63,12 @@ public class LaticeTest {
 	}
 	
 	@Test
-	public void player1RemovesTilesOnHisRackByPlayingThemOnTheBoard() {
-		player1.startTurn();
-		player1.placeTile(game, _1_1, 0);
-		player1.placeTile(game, _2_4, 0);
-		player1.placeTile(game, LAST_POSITION, 0);
-		assertEquals(2,player1.getRack().getTiles().size());
+	void returnTrueWhenATileIsPutAtAFreePosition() {
+		assertFalse(game.getBoard().tileAt(_2_4));
+		boolean discWellPut = game.getBoard().put(_2_4, redFlower);
+		assertTrue(discWellPut);
+		assertFalse(game.getBoard().tiles.isEmpty());
+		assertTrue(game.getBoard().tileAt(_2_4));
 	}
 	
 	@Test
@@ -80,6 +80,16 @@ public class LaticeTest {
 		assertFalse(tileWellPut);
 		assertTrue(game.getBoard().tileAt(_2_4));
 	}
+	
+	@Test
+	public void player1RemovesTilesOnHisRackByPlayingThemOnTheBoard() {
+		player1.startTurn();
+		player1.placeTile(game, _1_1, 0);
+		player1.placeTile(game, _2_4, 0);
+		player1.placeTile(game, LAST_POSITION, 0);
+		assertEquals(2,player1.getRack().getTiles().size());
+	}
+	
 
 	@Test
 	public void player1PutHisFirstTileOn_1_1() {
@@ -135,6 +145,16 @@ public class LaticeTest {
 		assertEquals(3,player1.getRack().getTiles().size());
 		player1.refreshRack();
 		assertEquals(5,player1.getRack().getTiles().size());
+	}
+	
+	@Test
+	public void theBoardIsEmptyWhenItIsCleared() {
+		game.getBoard().put(CENTER, blueDolphin);
+		game.getBoard().put(BOTTOM_CENTER, blueFlower);
+		assertFalse(game.getBoard().tiles.isEmpty());
+		
+		game.getBoard().tiles.clear();
+		assertTrue(game.getBoard().tiles.isEmpty());
 	}
 	
 	@Test
