@@ -11,7 +11,7 @@ public class Board {
 	}
 
 	public Map<Position, Tile> getTiles() {
-		return tiles;
+		return this.tiles;
 	}
 	
 	public boolean tileAt(Position pos) {
