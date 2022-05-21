@@ -1,5 +1,6 @@
 package latice.application.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,37 +27,56 @@ public class Board {
 		return this.tiles.get(new Position(pos.x(), pos.y()));
 	}
 	
-	public boolean isPlaceable(Position pos, Tile tile) {
-		System.out.println(getTileAt(new Position(5,5)));
+	private boolean isPlaceable(Position pos, Tile tile) {
 		boolean placeable = false;
 		int x = 0;
 		int y = 0;
-		
+
 		// Check if tile already there
 		placeable = !tileAt(pos);
-		
-		System.out.println(tile.toString() + placeable);
-		
-		// Check on top, under, on left and on right of the tile
-		for(int i = 0; i <= 1; i++) {
-			int y1 = pos.y() - 1 + 2*i;
-			Position newPos = new Position(pos.x(),y1);
-			System.out.println(newPos.x() + " " +  newPos.y());
-			System.out.println(tileAt(newPos) && y1 < Constants.BOARD_SIZE && y1 > 0);
-			if(tileAt(newPos) && y1 < Constants.BOARD_SIZE && y1 > 0) {
-				placeable = placeable && (getTileAt(newPos).getColor() == tile.getColor() || getTileAt(newPos).getShape() == tile.getShape()); 
+		if(isEmpty() && placeable) {
+			placeable = (pos.equals(Constants.CENTER));
+		}
+		else {
+			// Check on top, under, on left and on right of the tile
+
+			ArrayList<Tile> buffer = new ArrayList<>();
+			for(int i = 0; i <= 1; i++) {
+				Position posHorizontal = new Position(pos.x() - 1 + 2 * i, pos.y());
+				Position posVertical = new Position(pos.x(), pos.y() - 1 + 2 * i);
+				boolean tileInHorizontalPosition = tileAt(posHorizontal);
+				boolean tileInVerticalPosition = tileAt(posVertical);
+				if(tileInHorizontalPosition){
+					buffer.add(getTileAt(posHorizontal));
+				}
+				if(tileInVerticalPosition) {
+					buffer.add(getTileAt(posVertical));
+				}
+			}
+			System.out.println(tiles.keySet().contains(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
+			if(buffer.isEmpty()) {
+				placeable = false;
+			}
+			else {
+			for (Tile bufferTile : buffer) {
+				placeable = placeable && (tile.getShape() == bufferTile.getShape() || tile.getColor() == bufferTile.getColor());
+			}
 			}
 		}
 		return placeable;
 	}
 	
+	private boolean isEmpty() {
+		return this.tiles.isEmpty();
+	}
+	
 	public boolean putIn(Position position, Tile tile) {
-		if (isPlaceable(position, tile)) {
-			return false;
-		} else {
+		boolean putable = false;
+		if (isPlaceable(position, tile)){
 			this.tiles.put(position, tile);
-			return true;
+			putable = true;
 		}
+		return putable;
 	}
 }
  
