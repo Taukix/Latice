@@ -150,8 +150,6 @@ public class Mainjavafx extends Application {
 	private HBox hbRacks;
 	private GridPane gpRackOfPlayer1;
 	private GridPane gpRackOfPlayer2;
-	private ArrayList<TileFx> ArrayOfTilesOnRackOnPlayer1;
-	private ArrayList<TileFx> ArrayOfTilesOnRackOnPlayer2;
 	private Timeline tlPlaySceneChange;
 	public static Image imgWhereDragStart;
 	public static int floorX;
@@ -387,25 +385,19 @@ public class Mainjavafx extends Application {
         gpRackOfPlayer1 = new GridPane();
         gpRackOfPlayer2 = new GridPane();
         
-        ArrayOfTilesOnRackOnPlayer1 = new ArrayList<TileFx>();
-        ArrayOfTilesOnRackOnPlayer2 = new ArrayList<TileFx>();
-        
-        
         // Début de la partie
         Game game = new Game(new Player("alexandre"), new Player("toto"));
         
         // Mise en place de chaque Rack avec leurs tuiles
         for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
-        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
-        	ArrayOfTilesOnRackOnPlayer1.add(tileFxOfPlayer1);
-        	gpRackOfPlayer1.add(ArrayOfTilesOnRackOnPlayer1.get(i).getImageView(), i, 0);
+        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), game);
+        	gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
         	
-        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
-        	ArrayOfTilesOnRackOnPlayer2.add(tileFxofPlayer2);
-        	gpRackOfPlayer2.add(ArrayOfTilesOnRackOnPlayer2.get(i).getImageView(), i, 0);
+        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), game);
+        	gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
         	
-        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2);
-        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2);
+        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2);
+        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2);
         }
         
         // Définition des cases du plateau dans le GridPane
@@ -413,7 +405,7 @@ public class Mainjavafx extends Application {
         	for (int j = 0; j < 9; j++) {
         		
         		Tile tile = new Tile(null, null);
-        		TileFx defaulttilefx = new TileFx(tile, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
+        		TileFx defaulttilefx = new TileFx(tile, game);
         		
         		DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame);
         		
@@ -434,7 +426,7 @@ public class Mainjavafx extends Application {
         // Le player 1 commence à chaque fois
         game.getPlayer1().startTurn();
         
-        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2));
+        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2));
 		
         gpPlate.getChildren().add(gpGame);
         hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);

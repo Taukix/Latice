@@ -21,7 +21,7 @@ public class DndTileFx {
 	private static int floorX;
 	private static int floorY;
 
-		public static void manageSourceDragAndDrop(TileFx source, Game game, GridPane gpRack1, GridPane gpRack2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
+		public static void manageSourceDragAndDrop(TileFx source, Game game, GridPane gpRack1, GridPane gpRack2) {
 			source.getImageView().setOnDragDetected(new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
@@ -62,9 +62,8 @@ public class DndTileFx {
 					if (event.getTransferMode() == TransferMode.MOVE) {
 						if (game.getPlayer1().getTurn() == true) {
 							for (int i=0;i<game.getPlayer1().getRack().getTiles().size();i++) {
-								if (Mainjavafx.imgWhereDragStart == list1.get(i).getImage()) {
+								if (event.getGestureSource() == gpRack1.getChildren().get(i)) {
 									gpRack1.getChildren().remove(i);
-									list1.remove(i);
 								
 									game.getPlayer1().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
 									break;
@@ -80,9 +79,8 @@ public class DndTileFx {
 					if (event.getTransferMode() == TransferMode.MOVE) {
 						if (game.getPlayer2().getTurn() == true) {
 							for (int i=0;i<game.getPlayer2().getRack().getTiles().size();i++) {
-								if (Mainjavafx.imgWhereDragStart == list2.get(i).getImage()) {
+								if (event.getGestureSource() == gpRack2.getChildren().get(i)) {
 									gpRack2.getChildren().remove(i);
-									list2.remove(i);
 								
 									game.getPlayer2().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
 									break;
