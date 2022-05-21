@@ -48,6 +48,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 				for (int i=this.list1.size();i<Constants.RACK_SIZE;i++) {
 					try {
 						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.list1, this.list2, this.game);
+						DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gp1, gp2, list1, list2);
 						this.list1.add(tileOfRack1);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -57,6 +58,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 				for (int l=0;l<this.game.getPlayer1().getRack().getTiles().size();l++) {
 					try {
 						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(l), this.list1, this.list2, this.game);
+						DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gp1, gp2, list1, list2);
 						this.list1.add(tileOfRack1);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -84,6 +86,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 				for (int i=this.list2.size();i<Constants.RACK_SIZE;i++) {
 					try {
 						TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i), this.list1, this.list2, this.game);
+						DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gp1, gp2, list1, list2);
 						this.list2.add(tileOfRack2);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -93,6 +96,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 				for (int l=0;l<this.game.getPlayer2().getStack().size();l++) {
 					try {
 						TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(l), this.list1, this.list2, this.game);
+						DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gp1, gp2, list1, list2);
 						this.list2.add(tileOfRack2);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();

@@ -35,8 +35,9 @@ public class TileFx {
 		this.list1 = list1;
 		this.list2 = list2;
 		this.game = game;
+	}
 		
-		this.imgTile.setOnDragDetected(new EventHandler<MouseEvent>() {
+		/*this.imgTile.setOnDragDetected(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				if (game.getPlayer1().getTurn() == true && ImageDragFrom() == game.getPlayer1() || game.getPlayer2().getTurn() == true && ImageDragFrom() == game.getPlayer2()) {
@@ -71,7 +72,7 @@ public class TileFx {
 				imgTile.setEffect(null);
 			}
 		});
-	}
+	}*/
 	
 	public ImageView getImageView() {
 		imgTile.setFitWidth(59);

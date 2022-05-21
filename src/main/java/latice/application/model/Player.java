@@ -53,7 +53,7 @@ public class Player {
 					score += 2;
 				}
 				consumedTurn = true;
-				inMap = canPlaceTileAt(game, pos, tile);
+				//inMap = canPlaceTileAt(game, pos, tile);
 			}
 		}
 		else {

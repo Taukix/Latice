@@ -55,6 +55,7 @@ import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
 import latice.application.controller.ButtonControllerSoundOn;
+import latice.application.controller.DndTileFx;
 import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
 import latice.application.controller.SourdineOffWhenSliderProgress;
@@ -402,6 +403,9 @@ public class Mainjavafx extends Application {
         	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
         	ArrayOfTilesOnRackOnPlayer2.add(tileFxofPlayer2);
         	gpRackOfPlayer2.add(ArrayOfTilesOnRackOnPlayer2.get(i).getImageView(), i, 0);
+        	
+        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2);
+        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2);
         }
         
         // Définition des cases du plateau dans le GridPane
@@ -411,50 +415,14 @@ public class Mainjavafx extends Application {
         		Tile tile = new Tile(null, null);
         		TileFx defaulttilefx = new TileFx(tile, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2, game);
         		
-        		defaulttilefx.getImageView().setOnDragOver(new EventHandler<DragEvent>() {
-        			@Override
-        			public void handle(DragEvent event) {
-        				Dragboard db = event.getDragboard();
-        				
-        				if (db.hasImage()) {
-        					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        				}
-        				event.consume();
-        			}
-        		});
-        		
-        		gpGame.setOnDragDropped(new EventHandler<DragEvent>() {
-        			@Override
-        			public void handle(DragEvent event) {
-        				Dragboard db = event.getDragboard();
-        				boolean success = false;
-        				
-        				if (db.hasImage()) {
-        					floorX = (int) Math.floor((event.getX()-18)/62);
-        					floorY = (int) Math.floor((event.getY()-18)/62);
-        					
-        					ImageView imageViewOnPlate = new ImageView(db.getImage());
-        					imageViewOnPlate.setFitWidth(59);
-        					imageViewOnPlate.setFitHeight(60);
-        					imageViewOnPlate.setVisible(true);
-        					
-        					gpGame.getChildren().remove(floorY*9+floorX);
-        					gpGame.getChildren().add(floorY*9+floorX, imageViewOnPlate);
-        					gpGame.setColumnIndex(imageViewOnPlate, floorX);
-        					gpGame.setRowIndex(imageViewOnPlate, floorY);
-        					
-        					success = true;
-        				}
-        				event.setDropCompleted(success);
-        				event.consume();
-        			}	
-        		});
+        		DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame);
         		
         		GridPane.setRowIndex(defaulttilefx.getImageView(), i);
         		GridPane.setColumnIndex(defaulttilefx.getImageView(), j);
         		
         		gpGame.getChildren().add(defaulttilefx.getImageView());
-        	}}
+        	}
+        }
         
         
         DropShadow shadow = new DropShadow();
@@ -465,42 +433,6 @@ public class Mainjavafx extends Application {
         
         // Le player 1 commence à chaque fois
         game.getPlayer1().startTurn();
-        
-        gpRackOfPlayer1.setOnDragDone(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent event) {
-				if (event.getTransferMode() == TransferMode.MOVE) {
-					if (game.getPlayer1().getTurn() == true) {
-						for (int i=0;i<game.getPlayer1().getRack().getTiles().size();i++) {
-							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer1.get(i).getImage()) {
-								gpRackOfPlayer1.getChildren().remove(i);
-								ArrayOfTilesOnRackOnPlayer1.remove(i);
-							
-								game.getPlayer1().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
-								break;
-							}
-						}
-					}
-				}
-			}});
- 
-        gpRackOfPlayer2.setOnDragDone(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent event) {
-				if (event.getTransferMode() == TransferMode.MOVE) {
-					if (game.getPlayer2().getTurn() == true) {
-						for (int i=0;i<game.getPlayer2().getRack().getTiles().size();i++) {
-							if (Mainjavafx.imgWhereDragStart == ArrayOfTilesOnRackOnPlayer2.get(i).getImage()) {
-								gpRackOfPlayer2.getChildren().remove(i);
-								ArrayOfTilesOnRackOnPlayer2.remove(i);
-							
-								game.getPlayer2().placeTile(game, new Position(Mainjavafx.floorX,Mainjavafx.floorY), i);
-								break;
-							}
-						}
-					}
-				}
-			}});
         
         btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, ArrayOfTilesOnRackOnPlayer1, ArrayOfTilesOnRackOnPlayer2));
 		
