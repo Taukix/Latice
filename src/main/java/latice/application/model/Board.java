@@ -27,7 +27,7 @@ public class Board {
 		return this.tiles.get(new Position(pos.x(), pos.y()));
 	}
 	
-	private boolean isPlaceable(Position pos, Tile tile) {
+	public boolean isPlaceable(Position pos, Tile tile) {
 		boolean placeable = false;
 		int x = 0;
 		int y = 0;
