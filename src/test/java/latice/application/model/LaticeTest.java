@@ -2,8 +2,8 @@ package latice.application.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ public class LaticeTest {
 	private static final Position _1_1 = new Position(1, 1);
 	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE, Constants.BOARD_SIZE);
 	
-	public static final Position CENTER = new Position(5,5);
 	static final Position BOTTOM_CENTER = new Position(6,5);
 	static final Position TOP_CENTER = new Position(4,5);
 	static final Position LEFT_CENTER = new Position(5,4);
@@ -42,7 +41,7 @@ public class LaticeTest {
 	@Test
 	public void returnFalseWhenPositionIsWithoutTile() {
 		assertFalse(game.getBoard().tileAt(LAST_POSITION));
-		assertFalse(game.getBoard().tileAt(CENTER));
+		assertFalse(game.getBoard().tileAt(Constants.CENTER));
 		assertFalse(game.getBoard().tileAt(_1_1));
 		assertFalse(game.getBoard().tileAt(_2_4));
 		assertFalse(game.getBoard().tileAt(RIGHT_CENTER));
@@ -84,9 +83,9 @@ public class LaticeTest {
 	@Test
 	public void player1RemovesTilesOnHisRackByPlayingThemOnTheBoard() {
 		player1.startTurn();
-		player1.placeTile(game, _1_1, 0);
-		player1.placeTile(game, _2_4, 0);
-		player1.placeTile(game, LAST_POSITION, 0);
+		player1.placeTile(game.getBoard(), _1_1, 0);
+		player1.placeTile(game.getBoard(), _2_4, 0);
+		player1.placeTile(game.getBoard(), LAST_POSITION, 0);
 		assertEquals(2,player1.getRack().getTiles().size());
 	}
 	
@@ -97,8 +96,11 @@ public class LaticeTest {
 		player1.startTurn();
 		Tile placedTile = player1.getRack().getTiles().get(1);
 		
-		//Act & Assert
-		assertTrue(player1.placeTile(game, _1_1, 1));
+		//Act
+		player1.placeTile(game.getBoard(), _1_1, 1);
+		
+		//Assert
+		assertThat(game.getBoard().getTileAt(_1_1)).isEqualTo(placedTile);
 		//assertNotEquals(placedTile, player1.getRack().getTiles().get(1));
 		//assertEquals(2, player1.getScore());
 	}
@@ -110,18 +112,17 @@ public class LaticeTest {
 	
 	@Test
 	public void tile_at_position_already_used() {
-		game.getBoard().putIn(CENTER, blueDolphin);
-		assertTrue(game.getBoard().tileAt(CENTER));
+		game.getBoard().putIn(Constants.CENTER, blueDolphin);
+		assertTrue(game.getBoard().tileAt(Constants.CENTER));
 		assertFalse(game.getBoard().tileAt(LAST_POSITION));
 	}
 	
 	@Test
 	public void get_tile_at_position_aldready_used() {
-		game.getBoard().putIn(CENTER, blueDolphin);
-		System.out.println("aaaaaaaaaaaaa");
-		System.out.println(game.getBoard().getTileAt(new Position(CENTER.x(), CENTER.y())));
-		System.out.println(game.getBoard().getTileAt(CENTER));
-		assertEquals(blueDolphin, game.getBoard().getTileAt(new Position(CENTER.x(), CENTER.y())));
+		game.getBoard().putIn(Constants.CENTER, blueDolphin);
+		System.out.println(game.getBoard().getTileAt(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
+		System.out.println(game.getBoard().getTileAt(Constants.CENTER));
+		assertEquals(blueDolphin, game.getBoard().getTileAt(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
 		assertEquals(null, game.getBoard().getTileAt(LAST_POSITION));
 	}
 	
@@ -146,19 +147,24 @@ public class LaticeTest {
 	
 	@Test
 	public void player1EndHisTurnAndPlayer2PlaceATileOn_2_4() {
+		//Arrange
 		player1.endTurn();
 		player2.startTurn();
-		assertEquals(false,player1.placeTile(game, _1_1, 1));
+		//Act
+		player1.placeTile(game.getBoard(), _1_1, 1);
+		player2.placeTile(game.getBoard(), _2_4, 1);
+		//Assert
+		assertThat(game.getBoard().getTileAt(_1_1)).isNull();;
 		
-		assertEquals(true,player2.placeTile(game, _1_1, 1));
+		assertThat(game.getBoard().getTileAt(_2_4)).isNotNull().isInstanceOf(Tile.class);
 	}
 	
 	@Test
 	public void player1GotHisTilesAfterHisTurnAndAfterPlayingTiles() {
 		player1.startTurn();
-		player1.placeTile(game, _1_1, 4);
+		player1.placeTile(game.getBoard(), _1_1, 4);
 		assertEquals(4,player1.getRack().getTiles().size());
-		player1.placeTile(game, _2_4, 3);
+		player1.placeTile(game.getBoard(), _2_4, 3);
 		assertEquals(3,player1.getRack().getTiles().size());
 		player1.endTurn();
 		assertEquals(5,player1.getRack().getTiles().size());
@@ -166,7 +172,7 @@ public class LaticeTest {
 	
 	@Test
 	public void theBoardIsEmptyWhenItIsCleared() {
-		game.getBoard().putIn(CENTER, blueDolphin);
+		game.getBoard().putIn(Constants.CENTER, blueDolphin);
 		game.getBoard().putIn(BOTTOM_CENTER, blueFlower);
 		assertFalse(game.getBoard().getTiles().isEmpty());
 		
@@ -180,26 +186,19 @@ public class LaticeTest {
 		player1.startTurn();
 		for (int i=0;i<7;i++) {
 			for (int j=4;j>=0;j--) {
-				player1.placeTile(game, new Position(j,i), j);
+				player1.placeTile(game.getBoard(), new Position(j,i), j);
 			}
 			player1.refreshRack();
 		}
-		player1.placeTile(game, LAST_POSITION, 0);
+		player1.placeTile(game.getBoard(), LAST_POSITION, 0);
 		System.out.println(player1.getRack().getTiles().size());
 		assertEquals(true, game.playerWon(player1, player2));
 	}
 	
 	@Test
-	public void player1ShouldNotPlayTilesInSamePlaceOnBoard() {
-		player1.startTurn();
-		player1.placeTile(game, LAST_POSITION, 0);
-		assertEquals(false,player1.canPlaceTileAt(game, LAST_POSITION, blueDolphin));
-	}
-	
-	@Test
 	public void player2ShouldNotPlayWhenItIsNotHisTurn() {
 		player1.startTurn();
-		player2.placeTile(game, LAST_POSITION, 0);
+		player2.placeTile(game.getBoard(), LAST_POSITION, 0);
 		assertEquals(5,player2.getRack().getTiles().size());
 	}
 	
