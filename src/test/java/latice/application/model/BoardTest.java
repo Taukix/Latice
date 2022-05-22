@@ -71,4 +71,46 @@ public class BoardTest {
 		assertTrue(result);
 	}
 
+	
+	@Test
+	void put_tile_around_two_differents_tiles_one_same_shape_one_same_color() {
+		//Arrange
+		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(new Position(4,4), redFlower);
+		
+		//Act
+		boolean result = board.putIn(TOP_CENTER, redDolphin);
+		
+		//Assert
+		assertTrue(result);
+	}
+	
+	@Test
+	void put_tile_around_two_differents_tiles() {
+		//Arrange
+		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(new Position(4,4), redFlower);
+		
+		//Act
+		boolean result = board.putIn(TOP_CENTER, redDolphin);
+		
+		//Assert
+		assertTrue(result);
+	}
+	
+	@Test
+	void put_tile_around_two_differents_tiles_different_shape_and_color() {
+		//Arrange
+		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(new Position(4,4), redFlower);
+		
+		//Act
+		boolean result = board.putIn(TOP_CENTER, new Tile(ColorTile.GREEN, Shape.FEATHER));
+		
+		//Assert
+		assertFalse(result);
+	}
 }
