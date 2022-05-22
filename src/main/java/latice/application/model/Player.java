@@ -29,15 +29,14 @@ public class Player {
 	
 	
 
-	public boolean placeTile(Game game, Position pos, int tileOfRack) {
-		boolean inMap = false;
+	public void placeTile(Board board,Position pos, int tileOfRack) {
 		if(turn) {
 		int x = pos.x();
 		int y = pos.y();
 		Tile tile = rack.getTiles().remove(tileOfRack);
 		
 		if(tile != null) {
-			if(x > 0 && x <= Constants.BOARD_SIZE && y > 0 && y <= Constants.BOARD_SIZE && (!consumedTurn|| score > 2)) {				
+			if(board.isPlaceable(pos, tile) && (!consumedTurn|| score > 2)) {				
 				boolean bonus;
 				if(consumedTurn) {
 					score = score - 2;
@@ -48,19 +47,18 @@ public class Player {
 				//Check if bonus is in on the border of the map
 				bonus = bonus || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9)) ;
 				
-				game.getBoard().putIn(pos, tile);
+				board.putIn(pos, tile);
 				if(bonus && score%2 < 3) {
 					score += 2;
 				}
 				consumedTurn = true;
-				inMap = canPlaceTileAt(game, pos, tile);
+				
+				}
+			}
+			else {
+				rack.getTiles().add(tile);
 			}
 		}
-		else {
-			rack.getTiles().add(tile);
-		}
-		}
-		return inMap;
 	}
 	
 	public void endTurn() {
