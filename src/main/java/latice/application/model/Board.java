@@ -2,6 +2,7 @@ package latice.application.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -27,39 +28,49 @@ public class Board {
 		return this.tiles.get(new Position(pos.x(), pos.y()));
 	}
 	
+	public boolean isTileBonus(Position pos) {
+		boolean bonusTile = false;
+		int x = pos.x();
+		int y = pos.y();
+		//Check if the position is on a bonus of the cross of the map
+		bonusTile = ((x == y) || (x == y - Constants.BOARD_SIZE)) && (x <= 3 || x >= 7) && (y <= 3 || y >= 7);
+		
+		//Check if the position is on a bonus of the border of the map
+		bonusTile = bonusTile || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9));
+		return bonusTile;
+	}
+	
+	public List<Tile> getNearbyTilesOfAPosition(Position tilePos){
+		ArrayList<Tile> nearbyTiles = new ArrayList<>();
+		for(int i = 0; i <= 1; i++) {
+			Position horizontalPos = new Position(tilePos.x()-1+2*i, tilePos.y());
+			Position verticalPos = new Position(tilePos.x(), tilePos.y()-1+2*i);
+			if(getTileAt(horizontalPos) != null) nearbyTiles.add(getTileAt(horizontalPos));
+			if(getTileAt(verticalPos) != null) nearbyTiles.add(getTileAt(verticalPos));
+		}
+		return nearbyTiles;
+	}
+	
 	public boolean isPlaceable(Position pos, Tile tile) {
 		boolean placeable = false;
-		int x = 0;
-		int y = 0;
-
+		
 		// Check if tile already there
 		placeable = !tileAt(pos);
+		
+		//Check if there is at least 1 tile else, it should be place in the center
 		if(isEmpty() && placeable) {
 			placeable = (pos.equals(Constants.CENTER));
 		}
 		else {
 			// Check on top, under, on left and on right of the tile
 
-			ArrayList<Tile> buffer = new ArrayList<>();
-			for(int i = 0; i <= 1; i++) {
-				Position posHorizontal = new Position(pos.x() - 1 + 2 * i, pos.y());
-				Position posVertical = new Position(pos.x(), pos.y() - 1 + 2 * i);
-				boolean tileInHorizontalPosition = tileAt(posHorizontal);
-				boolean tileInVerticalPosition = tileAt(posVertical);
-				if(tileInHorizontalPosition){
-					buffer.add(getTileAt(posHorizontal));
-				}
-				if(tileInVerticalPosition) {
-					buffer.add(getTileAt(posVertical));
-				}
-			}
-			System.out.println(tiles.keySet().contains(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
+			ArrayList<Tile> buffer = (ArrayList<Tile>) getNearbyTilesOfAPosition(pos);
 			if(buffer.isEmpty()) {
 				placeable = false;
 			}
 			else {
 			for (Tile bufferTile : buffer) {
-				placeable = placeable && (tile.getShape() == bufferTile.getShape() || tile.getColor() == bufferTile.getColor());
+				placeable = placeable && tile.hasCommonTraits(bufferTile);
 			}
 			}
 		}

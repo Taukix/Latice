@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player {
 	private String username;
-	private Integer score;
+	private Integer bonus;
 	private boolean consumedTurn;
 	private boolean turn;
 	private List<Tile> stack;
@@ -13,7 +13,7 @@ public class Player {
 	
 	public Player(String username){
 		this.username = username;
-		this.score = 0;
+		this.bonus = 0;
 		this.stack = new ArrayList<>();
 		turn = false;
 	}
@@ -30,34 +30,36 @@ public class Player {
 	
 
 	public void placeTile(Board board,Position pos, int tileOfRack) {
-		if(turn) {
-		int x = pos.x();
-		int y = pos.y();
-		Tile tile = rack.getTiles().remove(tileOfRack);
+			if(turn) {
+			Tile tile = rack.getTiles().remove(tileOfRack);
 		
-		if(tile != null) {
-			if(board.isPlaceable(pos, tile) && (!consumedTurn|| score > 2)) {				
-				boolean bonus;
-				if(consumedTurn) {
-					score = score - 2;
-				}
-				//Check if bonus is in the cross of the map
-				bonus = ((x == y) || (x == y - Constants.BOARD_SIZE)) && (x <= 3 || x >= 7) && (y <= 3 || y >= 7);
-				
-				//Check if bonus is in on the border of the map
-				bonus = bonus || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9)) ;
-				
-				board.putIn(pos, tile);
-				if(bonus && score%2 < 3) {
-					score += 2;
-				}
-				consumedTurn = true;
-				
+			if(tile != null) {
+				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus > 2)) {				
+					boolean bonusTile = board.isTileBonus(pos);		
+					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);	
+					getBonusPoints(bonusTile, nearbyTiles.size());		
+					board.putIn(pos, tile);
+					consumedTurn = true;
 				}
 			}
 			else {
 				rack.getTiles().add(tile);
 			}
+		}
+	}
+	
+	private void getBonusPoints(boolean bonusTile, int countOfNearbyTiles) {
+		if(consumedTurn) {
+			bonus = bonus - 2;
+		}
+		if(bonusTile) {
+			bonus += 2;
+		}
+		if(countOfNearbyTiles > 1) {
+			bonus += countOfNearbyTiles-1;
+		}
+		if(bonus > 6) {
+			bonus = 6;
 		}
 	}
 	
@@ -93,8 +95,8 @@ public class Player {
 		return username;
 	}
 
-	public Integer getScore() {
-		return score;
+	public Integer getBonus() {
+		return bonus;
 	}
 
 	public List<Tile> getStack() {
