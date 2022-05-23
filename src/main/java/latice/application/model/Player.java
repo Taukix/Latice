@@ -58,8 +58,8 @@ public class Player {
 		if(countOfNearbyTiles > 1) {
 			bonus += countOfNearbyTiles-1;
 		}
-		if(bonus > 6) {
-			bonus = 6;
+		if(bonus > Constants.MAX_BONUS) {
+			bonus = Constants.MAX_BONUS;
 		}
 	}
 	
