@@ -21,4 +21,8 @@ public class Tile {
 	public Shape getShape() {
 		return shape;
 	}
+	
+	public boolean hasCommonTraits(Tile tile) {
+		return this.getShape() == tile.getShape() || this.getColor() == tile.getColor();
+	}
 }
