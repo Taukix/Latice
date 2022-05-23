@@ -15,17 +15,15 @@ import latice.application.view.TileFx;
 
 public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private Game game;
-	private GridPane gp1;
-	private GridPane gp2;
+	private GridPane gpRack1;
+	private GridPane gpRack2;
 	private ArrayList<TileFx> list1;
 	private ArrayList<TileFx> list2;
 	
-	public ButtonControllerEndTurn(Game game, GridPane gp1, GridPane gp2, ArrayList<TileFx> list1, ArrayList<TileFx> list2) {
+	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2) {
 		this.game = game;
-		this.gp1 = gp1;
-		this.gp2 = gp2;
-		this.list1 = list1;
-		this.list2 = list2;
+		this.gpRack1 = gpRack1;
+		this.gpRack2 = gpRack2;
 	}
 
 	@Override
@@ -40,72 +38,49 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 		if (this.game.getPlayer1().getTurn() == false) {
 			Mainjavafx.nbrTilesInStack1.setText("Nombre de tuiles restantes: " + game.getPlayer1().getStack().size());
 			
-			for (int i=gp1.getChildren().size()-1;i>=0;i--) {
-				gp1.getChildren().remove(i);
+			// On vide le RackFX pour le remplir avec les tuiles qui ont été rajouté
+			for (int i=gpRack1.getChildren().size()-1;i>=0;i--) {
+				this.gpRack1.getChildren().remove(i);
 			}
 			
-			if (this.list1.size() != Constants.RACK_SIZE && this.game.getPlayer1().getStack().size() > 0) {
-				for (int i=this.list1.size();i<Constants.RACK_SIZE;i++) {
-					try {
-						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.list1, this.list2, this.game);
-						this.list1.add(tileOfRack1);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-				}
-			} else if (this.game.getPlayer1().getStack().size() == 0) {
-				for (int l=0;l<this.game.getPlayer1().getRack().getTiles().size();l++) {
-					try {
-						TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(l), this.list1, this.list2, this.game);
-						this.list1.add(tileOfRack1);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+			for (int i=0;i<this.game.getPlayer1().getRack().getTiles().size();i++) {
+				try {
+					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.game);
+					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2);
+					this.gpRack1.getChildren().add(tileOfRack1.getImageView());
+					this.gpRack1.setColumnIndex(tileOfRack1.getImageView(), i);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
 			
-			for (int k=0;k<list1.size();k++) {
-				gp1.add(list1.get(k).getImageView(), k, 0);
-			}
-			
-			gp1.setEffect(null);
-			gp2.setEffect(shadow);
+			gpRack1.setEffect(null);
+			gpRack2.setEffect(shadow);
 		
 		// TOUR DU JOUEUR 2
-		} else {
+			} else {
 			this.game.getPlayer2().refreshRack();
 			Mainjavafx.nbrTilesInStack2.setText("Nombre de tuiles restantes: " + game.getPlayer2().getStack().size());
 			
-			for (int i=gp2.getChildren().size()-1;i>=0;i--) {
-				gp2.getChildren().remove(i);
+			// On vide le RackFX pour le remplir avec les tuiles qui ont été rajouté
+			for (int i=gpRack2.getChildren().size()-1;i>=0;i--) {
+				gpRack2.getChildren().remove(i);
 			}
-				
-			if (this.list2.size() != Constants.RACK_SIZE && this.game.getPlayer2().getStack().size() >= Constants.RACK_SIZE) {
-				for (int i=this.list2.size();i<Constants.RACK_SIZE;i++) {
-					try {
-						TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i), this.list1, this.list2, this.game);
-						this.list2.add(tileOfRack2);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-				}
-			} else if (this.game.getPlayer2().getStack().size() < 5) {
-				for (int l=0;l<this.game.getPlayer2().getStack().size();l++) {
-					try {
-						TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(l), this.list1, this.list2, this.game);
-						this.list2.add(tileOfRack2);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+
+			// Remplissage
+			for (int i=0;i<this.game.getPlayer2().getRack().getTiles().size();i++) {
+				try {
+					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i),this.game);
+					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2);
+					this.gpRack2.getChildren().add(tileOfRack2.getImageView());
+					this.gpRack2.setColumnIndex(tileOfRack2.getImageView(), i);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
 			
-			for (int k=0;k<list2.size();k++) {
-				gp2.add(list2.get(k).getImageView(), k, 0);
-			}
-			
-			gp2.setEffect(null);
-			gp1.setEffect(shadow);
+			gpRack2.setEffect(null);
+			gpRack1.setEffect(shadow);
 			}
 		
 		game.playerWon(game.getPlayer1(), game.getPlayer2());
