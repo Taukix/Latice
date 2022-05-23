@@ -29,8 +29,9 @@ public class Player {
 	
 	
 
-	public void placeTile(Board board,Position pos, int tileOfRack) {
-			if(turn) {
+	public boolean placeTile(Board board,Position pos, int tileOfRack) {
+		boolean madeChange = false;
+		if(turn) {
 			Tile tile = rack.getTiles().remove(tileOfRack);
 		
 			if(tile != null) {
@@ -38,7 +39,7 @@ public class Player {
 					boolean bonusTile = board.isTileBonus(pos);		
 					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);	
 					getBonusPoints(bonusTile, nearbyTiles.size());		
-					board.putIn(pos, tile);
+					madeChange = board.putIn(pos, tile);
 					consumedTurn = true;
 				}
 			}
@@ -46,6 +47,7 @@ public class Player {
 				rack.getTiles().add(tile);
 			}
 		}
+		return madeChange;
 	}
 	
 	private void getBonusPoints(boolean bonusTile, int countOfNearbyTiles) {
