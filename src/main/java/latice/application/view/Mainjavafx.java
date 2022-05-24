@@ -92,9 +92,13 @@ public class Mainjavafx extends Application {
 	private Button buttonQuitMenu;
 	
 	// IMAGES
-	private File fileLeague;
-	private Image imgLeague;
-	private BackgroundImage bgiLeague;
+	private File fileBackground;
+	private Image imgBackground;
+	private BackgroundImage mainBackground;
+	
+	private File fileImagePlate;
+	private Image imgPlate;
+	private BackgroundImage bgiPlate;
 	private ImageView imgVLeague;
 	
 	private File fileBeach;
@@ -190,10 +194,10 @@ public class Mainjavafx extends Application {
 		root = new BorderPane();
 		
 		// Ajout du fond d'écran par défault
-		fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/FOND.jpg"));
-		imgLeague = new Image(new FileInputStream(fileLeague));
-		bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
-		root.setBackground(new Background(bgiLeague));
+		fileBackground = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/FOND.jpg"));
+		imgBackground = new Image(new FileInputStream(fileBackground));
+		mainBackground = new BackgroundImage(imgBackground, null, null, null, null);
+		root.setBackground(new Background(mainBackground));
 		
 			// Image de chargement
 			vbTopLeftLoadingScene = new VBox();
@@ -369,10 +373,6 @@ public class Mainjavafx extends Application {
 		nbrBonusPoint2.setFont(new Font("Calibri", 40));
 		nbrBonusPoint2.setTextFill(Color.WHITESMOKE);
 		nbrBonusPoint2.setEffect(yellowShadow);
-		  
-        fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
-        imgLeague = new Image(new FileInputStream(fileLeague));
-        bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
         
         hbButtons = new HBox(10);
         hbButtons.setAlignment(Pos.CENTER);
@@ -385,8 +385,12 @@ public class Mainjavafx extends Application {
         btnEndTurn.setPadding(new Insets(7,100,7,100));
         btnEndTurn.setStyle("-fx-background-color: #FFF; ");
         
+        fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
+        imgPlate = new Image(new FileInputStream(fileImagePlate));
+		bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
+        
         gpGame = new GridPane();
-        gpGame.setBackground(new Background(bgiLeague));
+        gpGame.setBackground(new Background(bgiPlate));
         gpGame.setPrefSize(600, 600); 
         gpGame.setPadding(new Insets(15,17,15,18));
         gpGame.setHgap(4);
@@ -563,7 +567,7 @@ public class Mainjavafx extends Application {
         lblTopGeneralParameters = new Label("THEMES");
         lblTopGeneralParameters.setStyle("-fx-font: 30 arial;");
         
-        imgVLeague = new ImageView(imgLeague);
+        imgVLeague = new ImageView(imgBackground);
         imgVLeague.setFitHeight(125);
         imgVLeague.setFitWidth(175);
 		imgVLeague.setEffect(new DropShadow(20, Color.BLACK));
@@ -692,10 +696,10 @@ public class Mainjavafx extends Application {
 		mediaMusic.play();
 			
 			// Actions des images THEME
-			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, bgiLeague, imgLeague, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic));
-			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Audio.mp3", pgbMusic, mediaMusic));
-			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic));
-			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic));
+			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, mainBackground, imgBackground, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic, "League of Legends", gpGame));
+			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Audio.mp3", pgbMusic, mediaMusic, "Plage", gpGame));
+			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic, "Indien", gpGame));
+			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic, "Harry Potter", gpGame));
 		
 		// Mise en place des éléments dans le BorderPane
 		root.setTop(vbTop);
