@@ -18,21 +18,23 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private GridPane gpRack1;
 	private GridPane gpRack2;
 	private GridPane gpGame;
+	public static DropShadow shadowRack;
+	
 	
 	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame) {
 		this.game = game;
 		this.gpRack1 = gpRack1;
 		this.gpRack2 = gpRack2;
 		this.gpGame = gpGame;
+		
+		shadowRack = new DropShadow();
+		shadowRack.setRadius(40);
+		shadowRack.setColor(Color.YELLOW);
 	}
 
 	@Override
 	public void handle(MouseEvent event) {
 		this.game.nextTurn(this.game.getPlayer1(), this.game.getPlayer2());
-		
-		DropShadow shadow = new DropShadow();
-		shadow.setRadius(40);
-		shadow.setColor(Color.YELLOW);
 		
 		// TOUR DU JOUEUR 1
 		if (this.game.getPlayer1().getTurn() == false) {
@@ -45,7 +47,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			
 			for (int i=0;i<this.game.getPlayer1().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.game);
+					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i));
 					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2, gpGame);
 					this.gpRack1.getChildren().add(tileOfRack1.getImageView());
 					this.gpRack1.setColumnIndex(tileOfRack1.getImageView(), i);
@@ -55,7 +57,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			}
 			
 			gpRack1.setEffect(null);
-			gpRack2.setEffect(shadow);
+			gpRack2.setEffect(shadowRack);
 		
 		// TOUR DU JOUEUR 2
 			} else {
@@ -70,7 +72,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			// Remplissage
 			for (int i=0;i<this.game.getPlayer2().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i),this.game);
+					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i));
 					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2, gpGame);
 					this.gpRack2.getChildren().add(tileOfRack2.getImageView());
 					this.gpRack2.setColumnIndex(tileOfRack2.getImageView(), i);
@@ -80,7 +82,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			}
 			
 			gpRack2.setEffect(null);
-			gpRack1.setEffect(shadow);
+			gpRack1.setEffect(shadowRack);
 			}
 		
 		game.playerWon(game.getPlayer1(), game.getPlayer2());

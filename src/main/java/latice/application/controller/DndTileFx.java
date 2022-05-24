@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import latice.application.model.Game;
 import latice.application.model.Position;
+import latice.application.model.Tile;
 import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
 
@@ -97,7 +98,7 @@ public class DndTileFx {
 				}});
 		}
 		
-		public static void manageTargetDragAndDrop(TileFx target, GridPane gpGame) {
+		public static void manageTargetDragAndDrop(TileFx target, GridPane gpGame, Game game) {
 			
 			target.getImageView().setOnDragOver(new EventHandler<DragEvent>() {
     			@Override
@@ -108,8 +109,7 @@ public class DndTileFx {
     					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
     				}
     				event.consume();
-    			}
-    		});
+    		}});
 			
 			gpGame.setOnDragDropped(new EventHandler<DragEvent>() {
     			@Override

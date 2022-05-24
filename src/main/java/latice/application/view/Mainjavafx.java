@@ -40,6 +40,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import latice.application.controller.AnimationPoint;
+import latice.application.controller.ButtonControllerChangeRack;
 import latice.application.controller.ButtonControllerCloseApplication;
 import latice.application.controller.ButtonControllerEndTurn;
 import latice.application.controller.ButtonControllerParametersMenu;
@@ -51,7 +52,6 @@ import latice.application.controller.DndTileFx;
 import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
 import latice.application.controller.SourdineOffWhenSliderProgress;
-import latice.application.model.ColorTile;
 import latice.application.model.Game;
 import latice.application.model.Player;
 import latice.application.model.Tile;
@@ -140,6 +140,8 @@ public class Mainjavafx extends Application {
 	private GridPane gpRackOfPlayer1;
 	private GridPane gpRackOfPlayer2;
 	private Timeline tlPlaySceneChange;
+	private HBox hbButtons;
+	private Button btnChangeRack;
 	private Button btnEndTurn;
 	private VBox vbInfoPlayer1;
 	private VBox vbInfoPlayer2;
@@ -372,6 +374,13 @@ public class Mainjavafx extends Application {
         imgLeague = new Image(new FileInputStream(fileLeague));
         bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
         
+        hbButtons = new HBox(10);
+        hbButtons.setAlignment(Pos.CENTER);
+        
+        btnChangeRack = new Button("Changer le Rack");
+        btnChangeRack.setPadding(new Insets(7,100,7,100));
+        btnChangeRack.setStyle("-fx-background-color: #FFF; ");
+        
         btnEndTurn = new Button("Fin du tour");
         btnEndTurn.setPadding(new Insets(7,100,7,100));
         btnEndTurn.setStyle("-fx-background-color: #FFF; ");
@@ -383,20 +392,20 @@ public class Mainjavafx extends Application {
         gpGame.setHgap(4);
         gpGame.setVgap(3);
         
-        hbRacks = new HBox();
+        hbRacks = new HBox(200);
         hbRacks.setAlignment(Pos.CENTER);
         gpRackOfPlayer1 = new GridPane();
         gpRackOfPlayer2 = new GridPane();
         
-        // Début de la partie
+        // Lancement de la Partie
         Game game = new Game(new Player("alexandre"), new Player("toto"));
         
         // Mise en place de chaque Rack avec leurs tuiles
         for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
-        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), game);
+        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i));
         	gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
         	
-        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), game);
+        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i));
         	gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
         	
         	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
@@ -408,9 +417,9 @@ public class Mainjavafx extends Application {
         	for (int j = 0; j < 9; j++) {
         		
         		Tile tile = new Tile(null, null);
-        		TileFx defaulttilefx = new TileFx(tile, game);
+        		TileFx defaulttilefx = new TileFx(tile);
         		
-        		DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame);
+        		DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame, game);
         		
         		GridPane.setRowIndex(defaulttilefx.getImageView(), i);
         		GridPane.setColumnIndex(defaulttilefx.getImageView(), j);
@@ -418,17 +427,19 @@ public class Mainjavafx extends Application {
         		gpGame.getChildren().add(defaulttilefx.getImageView());
         	}}
         
+        // Action des deux boutons
+        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+        btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+        
+        // Le player 1 commence à chaque fois
+        game.getPlayer1().startTurn();
         
         DropShadow shadow = new DropShadow();
 		shadow.setRadius(40);
 		shadow.setColor(Color.YELLOW);
 		
 		gpRackOfPlayer1.setEffect(shadow);
-        
-        // Le player 1 commence à chaque fois
-        game.getPlayer1().startTurn();
-        
-        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+		
 		
         vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
         vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
@@ -437,9 +448,10 @@ public class Mainjavafx extends Application {
         
         gpPlate.getChildren().add(gpGame);
         hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);
-        hbRacks.setSpacing(200);
         
-        vbPlateGame.getChildren().addAll(gpPlate,hbRacks, btnEndTurn);
+        hbButtons.getChildren().addAll(btnChangeRack,btnEndTurn);
+        
+        vbPlateGame.getChildren().addAll(gpPlate,hbRacks, hbButtons);
         vbPlateGame.setAlignment(Pos.CENTER);
         vbPlateGame.setSpacing(50);
         
