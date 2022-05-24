@@ -35,9 +35,9 @@ public class Player {
 			Tile tile = rack.getTiles().remove(tileOfRack);
 		
 			if(tile != null) {
-				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus > 2)) {				
+				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
 					boolean bonusTile = board.isTileBonus(pos);		
-					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);	
+					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);
 					getBonusPoints(bonusTile, nearbyTiles.size());		
 					madeChange = board.putIn(pos, tile);
 					consumedTurn = true;
@@ -57,8 +57,10 @@ public class Player {
 		if(bonusTile) {
 			bonus += 2;
 		}
-		if(countOfNearbyTiles > 1) {
-			bonus += countOfNearbyTiles-1;
+		if(countOfNearbyTiles > 2) {
+			bonus += 2;
+		} else if (countOfNearbyTiles > 1) {
+			bonus += countOfNearbyTiles - 1;
 		}
 		if(bonus > Constants.MAX_BONUS) {
 			bonus = Constants.MAX_BONUS;

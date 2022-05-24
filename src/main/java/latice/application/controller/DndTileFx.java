@@ -12,13 +12,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import latice.application.model.Game;
 import latice.application.model.Position;
+import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
 
 public class DndTileFx {
 	private static int floorX;
 	private static int floorY;
+	private static ImageView imageViewOnPlate;
 
-		public static void manageSourceDragAndDrop(TileFx source, Game game, GridPane gpRack1, GridPane gpRack2) {
+		public static void manageSourceDragAndDrop(TileFx source, Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame) {
 			source.getImageView().setOnDragDetected(new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
@@ -57,10 +59,16 @@ public class DndTileFx {
 				public void handle(DragEvent event) {
 					if (event.getTransferMode() == TransferMode.MOVE && game.getPlayer1().getTurn() == true) {
 						for (int i=0;i<game.getPlayer1().getRack().getTiles().size();i++) {
-							if (event.getGestureSource() == gpRack1.getChildren().get(i)) {
+							if (event.getGestureSource() == gpRack1.getChildren().get(i) && game.getPlayer1().placeTile(game.getBoard(), new Position(floorX+1,floorY+1), i)) {
+								
 								gpRack1.getChildren().remove(i);
 								
-								game.getPlayer1().placeTile(game.getBoard(), new Position(floorX,floorY), i);
+								gpGame.getChildren().remove(floorY*9+floorX);
+		    					gpGame.getChildren().add(floorY*9+floorX, imageViewOnPlate);
+		    					gpGame.setColumnIndex(imageViewOnPlate, floorX);
+		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
+		    					
+		    					Mainjavafx.nbrBonusPoint1.setText("Point(s) Bonus : " + game.getPlayer1().getBonus());
 								break;
 							}
 						}
@@ -72,16 +80,21 @@ public class DndTileFx {
 				public void handle(DragEvent event) {
 					if (event.getTransferMode() == TransferMode.MOVE && game.getPlayer2().getTurn() == true) {
 						for (int i=0;i<game.getPlayer2().getRack().getTiles().size();i++) {
-							if (event.getGestureSource() == gpRack2.getChildren().get(i)) {
+							if (event.getGestureSource() == gpRack2.getChildren().get(i) && game.getPlayer2().placeTile(game.getBoard(), new Position(floorX+1,floorY+1), i)) {
+								
 								gpRack2.getChildren().remove(i);
-									
-								game.getPlayer2().placeTile(game.getBoard(), new Position(floorX,floorY), i);
+								
+								gpGame.getChildren().remove(floorY*9+floorX);
+		    					gpGame.getChildren().add(floorY*9+floorX, imageViewOnPlate);
+		    					gpGame.setColumnIndex(imageViewOnPlate, floorX);
+		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
+		    					
+		    					Mainjavafx.nbrBonusPoint2.setText("Point(s) Bonus : " + game.getPlayer2().getBonus());
 								break;
 							}
 						}
 					}
 				}});
-
 		}
 		
 		public static void manageTargetDragAndDrop(TileFx target, GridPane gpGame) {
@@ -108,15 +121,10 @@ public class DndTileFx {
     					floorX = (int) Math.floor((event.getX()-18)/62);
     					floorY = (int) Math.floor((event.getY()-18)/62);
     					
-    					ImageView imageViewOnPlate = new ImageView(db.getImage());
+    					imageViewOnPlate = new ImageView(db.getImage());
     					imageViewOnPlate.setFitWidth(59);
     					imageViewOnPlate.setFitHeight(60);
     					imageViewOnPlate.setVisible(true);
-    					
-    					gpGame.getChildren().remove(floorY*9+floorX);
-    					gpGame.getChildren().add(floorY*9+floorX, imageViewOnPlate);
-    					gpGame.setColumnIndex(imageViewOnPlate, floorX);
-    					gpGame.setRowIndex(imageViewOnPlate, floorY);
     					
     					success = true;
     				}

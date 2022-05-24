@@ -33,7 +33,7 @@ public class Board {
 		int x = pos.x();
 		int y = pos.y();
 		//Check if the position is on a bonus of the cross of the map
-		bonusTile = ((x == y) || (x == y - Constants.BOARD_SIZE)) && (x <= 3 || x >= 7) && (y <= 3 || y >= 7);
+		bonusTile = ((x == y) || (x + y == 10)) && (x <= 3 || x >= 7) && (y <= 3 || y >= 7);
 		
 		//Check if the position is on a bonus of the border of the map
 		bonusTile = bonusTile || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9));

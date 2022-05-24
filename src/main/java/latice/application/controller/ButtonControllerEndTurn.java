@@ -17,13 +17,13 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private Game game;
 	private GridPane gpRack1;
 	private GridPane gpRack2;
-	private ArrayList<TileFx> list1;
-	private ArrayList<TileFx> list2;
+	private GridPane gpGame;
 	
-	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2) {
+	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame) {
 		this.game = game;
 		this.gpRack1 = gpRack1;
 		this.gpRack2 = gpRack2;
+		this.gpGame = gpGame;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			for (int i=0;i<this.game.getPlayer1().getRack().getTiles().size();i++) {
 				try {
 					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), this.game);
-					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2);
+					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2, gpGame);
 					this.gpRack1.getChildren().add(tileOfRack1.getImageView());
 					this.gpRack1.setColumnIndex(tileOfRack1.getImageView(), i);
 				} catch (FileNotFoundException e) {
@@ -71,7 +71,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			for (int i=0;i<this.game.getPlayer2().getRack().getTiles().size();i++) {
 				try {
 					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i),this.game);
-					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2);
+					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2, gpGame);
 					this.gpRack2.getChildren().add(tileOfRack2.getImageView());
 					this.gpRack2.setColumnIndex(tileOfRack2.getImageView(), i);
 				} catch (FileNotFoundException e) {

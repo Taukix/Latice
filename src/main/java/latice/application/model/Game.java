@@ -24,6 +24,7 @@ public class Game {
 
 		giveEachPlayerStack();
 		generateEachPlayerRack();
+		
 	}
 
 	private void generateEachPlayerRack() {
@@ -86,8 +87,6 @@ public class Game {
 	}
 	
 	public boolean playerWon(Player p1, Player p2) {
-		System.out.println(p1.getStack().size());
-		System.out.println(p1.getRack().getTiles().size());
 		if (p1.getStack().size() == 0 && p1.getRack().getTiles().size() == 0) {
 			System.out.println(p1.getUsername() + " won !");
 			return true;

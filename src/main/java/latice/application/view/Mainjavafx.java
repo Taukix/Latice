@@ -51,6 +51,7 @@ import latice.application.controller.DndTileFx;
 import latice.application.controller.ImageViewController;
 import latice.application.controller.ProgressBarAnimation;
 import latice.application.controller.SourdineOffWhenSliderProgress;
+import latice.application.model.ColorTile;
 import latice.application.model.Game;
 import latice.application.model.Player;
 import latice.application.model.Tile;
@@ -140,8 +141,13 @@ public class Mainjavafx extends Application {
 	private GridPane gpRackOfPlayer2;
 	private Timeline tlPlaySceneChange;
 	private Button btnEndTurn;
+	private VBox vbInfoPlayer1;
+	private VBox vbInfoPlayer2;
 	public static Label nbrTilesInStack1;
 	public static Label nbrTilesInStack2;
+	public static Label nbrBonusPoint1;
+	public static Label nbrBonusPoint2;
+	
 
 	// REGLES
 	private Text txtRulesTitle;
@@ -306,8 +312,8 @@ public class Mainjavafx extends Application {
 		            	tlPlaySceneChange = new Timeline(new KeyFrame(Duration.seconds(7.5), e -> root.setCenter(vbPlateGame)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setBottom(null)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setTop(null)),
-		            			new KeyFrame(Duration.seconds(7.5), e -> root.setLeft(nbrTilesInStack1)),
-		            			new KeyFrame(Duration.seconds(7.5), e -> root.setRight(nbrTilesInStack2)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setLeft(vbInfoPlayer1)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setRight(vbInfoPlayer2)),
 		            			new KeyFrame(Duration.seconds(7.6), e -> pgbLoadingScene.setProgress(0)));
 		            	
 		            	tlPgbBarLoadingScene.play();
@@ -336,20 +342,32 @@ public class Mainjavafx extends Application {
         yellowShadow.setSpread(0.5);
         yellowShadow.setColor(Color.YELLOW);
         
+        vbInfoPlayer1 = new VBox(30);
+        vbInfoPlayer1.setAlignment(Pos.CENTER);
+        
+        vbInfoPlayer2 = new VBox(30);
+        vbInfoPlayer2.setAlignment(Pos.CENTER);
+        
         nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
         nbrTilesInStack1.setFont(new Font("Calibri", 40));
 		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
-		root.setAlignment(nbrTilesInStack1, Pos.CENTER);
-		root.setMargin(nbrTilesInStack1, new Insets(0,0,0,50));
 		nbrTilesInStack1.setEffect(yellowShadow);
 		
         nbrTilesInStack2 = new Label("Nombre de tuiles restantes: 31");
         nbrTilesInStack2.setFont(new Font("Calibri", 40));
 		nbrTilesInStack2.setTextFill(Color.WHITESMOKE);
-		root.setAlignment(nbrTilesInStack2, Pos.CENTER);
-		root.setMargin(nbrTilesInStack2, new Insets(0,50,0,0));
 		nbrTilesInStack2.setEffect(yellowShadow);
-        
+		
+		nbrBonusPoint1 = new Label("Point(s) Bonus : 0");
+		nbrBonusPoint1.setFont(new Font("Calibri", 40));
+		nbrBonusPoint1.setTextFill(Color.WHITESMOKE);
+		nbrBonusPoint1.setEffect(yellowShadow);
+		
+		nbrBonusPoint2 = new Label("Point(s) Bonus : 0");
+		nbrBonusPoint2.setFont(new Font("Calibri", 40));
+		nbrBonusPoint2.setTextFill(Color.WHITESMOKE);
+		nbrBonusPoint2.setEffect(yellowShadow);
+		  
         fileLeague = new File(new File("").getAbsolutePath().concat("/Theme/Plage/Plateau.png"));
         imgLeague = new Image(new FileInputStream(fileLeague));
         bgiLeague = new BackgroundImage(imgLeague, null, null, null, null);
@@ -381,8 +399,8 @@ public class Mainjavafx extends Application {
         	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), game);
         	gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
         	
-        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2);
-        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2);
+        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
+        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
         }
         
         // Définition des cases du plateau dans le GridPane
@@ -410,8 +428,13 @@ public class Mainjavafx extends Application {
         // Le player 1 commence à chaque fois
         game.getPlayer1().startTurn();
         
-        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2));
+        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
 		
+        vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
+        vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
+        root.setMargin(vbInfoPlayer1, new Insets(0,0,0,50));
+        root.setMargin(vbInfoPlayer2, new Insets(0,50,0,0));
+        
         gpPlate.getChildren().add(gpGame);
         hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);
         hbRacks.setSpacing(200);
