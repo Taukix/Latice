@@ -113,4 +113,8 @@ public class Player {
 	public boolean getTurn() {
 		return this.turn;
 	}
+	
+	public boolean getConsumedTurn() {
+		return consumedTurn;
+	}
 }
