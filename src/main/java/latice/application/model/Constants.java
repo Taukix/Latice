@@ -10,7 +10,7 @@ public enum Constants {
 		this.value = value;
 	}
 	
-	public int getValue() {
+	public int value() {
 		return this.value;
 	}
 }

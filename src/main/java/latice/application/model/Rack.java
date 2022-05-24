@@ -15,7 +15,7 @@ public class Rack {
 	}
 	
 	public void fillRackWithTiles(final List<Tile> tiles){
-		while(!tiles.isEmpty() && this.tiles.size() < Constants.RACK_SIZE.getValue()) {
+		while(!tiles.isEmpty() && this.tiles.size() < Constants.RACK_SIZE.value()) {
 			this.tiles.add(tiles.remove(0));
 		}
 	}
@@ -25,7 +25,7 @@ public class Rack {
 	}
 	
 	public boolean isFull() {
-		return tiles.size() == Constants.RACK_SIZE.getValue();
+		return tiles.size() == Constants.RACK_SIZE.value();
 	}
 	
 	public Integer countTilesInRack() {

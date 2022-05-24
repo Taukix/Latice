@@ -15,7 +15,7 @@ public class LaticeTest {
 	
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
-	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.getValue(), Constants.BOARD_SIZE.getValue());
+	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.value(), Constants.BOARD_SIZE.value());
 	
 	static final Position BOTTOM_CENTER = new Position(6,5);
 	static final Position TOP_CENTER = new Position(4,5);
