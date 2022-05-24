@@ -47,6 +47,33 @@ public class BoardTest {
 		assertTrue(result);
 	}
 	
+	@Test
+	void returnFalseWhenATileIsPutAtAPositionWithoutTileNeabyNotInTheMiddle() {
+		//Arrange
+		boolean tileWellPut;
+		
+		//Act
+		tileWellPut = board.putIn(_2_4, redFlower);
+		
+		//Assert
+		assertFalse(tileWellPut);
+		assertTrue(board.getTiles().isEmpty());
+		assertFalse(board.tileAt(_2_4));
+	}
+	
+	@Test
+	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
+		//Arrange
+		board.putIn(Constants.CENTER, redFlower);
+		assertTrue(board.tileAt(Constants.CENTER));
+		boolean tileWellPut;
+		//Act
+		tileWellPut = board.putIn(Constants.CENTER, blueDolphin);
+		//Assert
+		assertFalse(tileWellPut);
+		assertTrue(board.tileAt(Constants.CENTER));
+	}
+	
 	@Test 
 	void try_put_a_second_tile_not_around_an_other_tile_should_return_false() {
 		//Arrange
