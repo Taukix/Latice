@@ -24,8 +24,8 @@ public class Player {
 		for(Tile tile : rack.getTiles()) {
 			stack.add(tile);
 		}
-		Collections.shuffle(stack);
 		rack.fillRackWithTiles(stack);
+		Collections.shuffle(stack);
 		consumedTurn = true;
 	}
 	
