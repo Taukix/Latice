@@ -24,13 +24,11 @@ public class TileFx {
 	private Tile tile;
 	private Image img;
 	private ImageView imgTile;
-	private Game game;
 	
-	public TileFx(Tile tile, Game game) throws FileNotFoundException {
+	public TileFx(Tile tile) throws FileNotFoundException {
 		this.tile = tile;
 		this.img = new Image(new FileInputStream(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/" + tile.getShape() + "/" + tile.getColor() + ".png"))));
 		this.imgTile = new ImageView(img);
-		this.game = game;
 	}
 	
 	public ImageView getImageView() {
