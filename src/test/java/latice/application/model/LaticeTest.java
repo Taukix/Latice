@@ -62,25 +62,6 @@ public class LaticeTest {
 	}
 	
 	@Test
-	void returnTrueWhenATileIsPutAtAFreePosition() {
-		assertFalse(game.getBoard().tileAt(_2_4));
-		boolean discWellPut = game.getBoard().putIn(_2_4, redFlower);
-		assertTrue(discWellPut);
-		assertFalse(game.getBoard().getTiles().isEmpty());
-		assertTrue(game.getBoard().tileAt(_2_4));
-	}
-	
-	@Test
-	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
-		game.getBoard().putIn(_2_4, redFlower);
-		assertTrue(game.getBoard().tileAt(_2_4));
-		
-		boolean tileWellPut = game.getBoard().putIn(_2_4, blueDolphin);
-		assertFalse(tileWellPut);
-		assertTrue(game.getBoard().tileAt(_2_4));
-	}
-	
-	@Test
 	public void player1RemovesTilesOnHisRackByPlayingThemOnTheBoard() {
 		player1.startTurn();
 		player1.placeTile(game.getBoard(), _1_1, 0);
