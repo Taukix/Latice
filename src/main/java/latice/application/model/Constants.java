@@ -1,7 +1,16 @@
 package latice.application.model;
 
-public final class Constants {
-	public static final int BOARD_SIZE = 9;
-	public static final int RACK_SIZE = 5;
-	public static final Position CENTER = new Position(5,5);
+public enum Constants {
+	BOARD_SIZE(9), RACK_SIZE(5);
+	
+	
+	private int value;
+	
+	private Constants(int value) {
+		this.value = value;
+	}
+	
+	public int getValue() {
+		return this.value;
+	}
 }

@@ -61,7 +61,7 @@ public class Player {
 			bonus += 2;
 		}
 		if(countOfNearbyTiles > 1) {
-			bonus += (int) Math.pow(2, countOfNearbyTiles-2);
+			bonus += (int) Math.pow(2, countOfNearbyTiles- (double) 2);
 		}
 	}
 	

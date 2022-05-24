@@ -51,9 +51,9 @@ public class Game {
 		//Add every combination of color and shape 2 times
 		gameTileList = new ArrayList<>();
 		for (Iterator<Shape> iterator = shapes.iterator(); iterator.hasNext();) {
-			Shape shape = (Shape) iterator.next();
+			Shape shape = iterator.next();
 			for (Iterator<ColorTile> iterator2 = colors.iterator(); iterator2.hasNext();) {
-				ColorTile color = (ColorTile) iterator2.next();
+				ColorTile color = iterator2.next();
 				gameTileList.add(new Tile(color, shape));
 				gameTileList.add(new Tile(color, shape));
 			}
@@ -77,7 +77,7 @@ public class Game {
 	}
 	
 	public void nextTurn(Player p1, Player p2) {
-		if (p1.getTurn() == true) {
+		if (p1.getTurn()) {
 			p1.endTurn();
 			p2.startTurn();
 		} else {
@@ -87,10 +87,10 @@ public class Game {
 	}
 	
 	public boolean playerWon(Player p1, Player p2) {
-		if (p1.getStack().size() == 0 && p1.getRack().getTiles().size() == 0) {
+		if (p1.getStack().isEmpty() && p1.getRack().getTiles().isEmpty()) {
 			System.out.println(p1.getUsername() + " won !");
 			return true;
-		} else if (p2.getStack().size() == 0 && p2.getRack().getTiles().size() == 0){
+		} else if (p2.getStack().isEmpty() && p2.getRack().getTiles().isEmpty()){
 			System.out.println(p2.getUsername() + " won !");
 			return true;
 		}

@@ -59,7 +59,7 @@ public class Board {
 		
 		//Check if there is at least 1 tile else, it should be place in the center
 		if(isEmpty() && placeable) {
-			placeable = (pos.equals(Constants.CENTER));
+			placeable = (pos.equals(ConstantPosition.CENTER.pos()));
 		}
 		else {
 			// Check on top, under, on left and on right of the tile
@@ -69,9 +69,9 @@ public class Board {
 				placeable = false;
 			}
 			else {
-			for (Tile bufferTile : buffer) {
-				placeable = placeable && tile.hasCommonTraits(bufferTile);
-			}
+				for (Tile bufferTile : buffer) {
+					placeable = placeable && tile.hasCommonTraits(bufferTile);
+				}
 			}
 		}
 		return placeable;
