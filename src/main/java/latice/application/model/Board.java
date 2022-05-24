@@ -36,7 +36,7 @@ public class Board {
 		bonusTile = ((x == y) || (x + y == 10)) && (x <= 3 || x >= 7) && (y <= 3 || y >= 7);
 		
 		//Check if the position is on a bonus of the border of the map
-		bonusTile = bonusTile || (y == 4 && (x == 1 || x == 9)) || (x == 4 && (y == 1 || y == 9));
+		bonusTile = bonusTile || (y == 5 && (x == 1 || x == 9)) || (x == 5 && (y == 1 || y == 9));
 		return bonusTile;
 	}
 	
