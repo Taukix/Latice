@@ -1,6 +1,7 @@
 package latice.application.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Player {
@@ -18,12 +19,14 @@ public class Player {
 		turn = false;
 	}
 	
-	public void changeTile(final Integer tileNum) {
-		//TODO
-	}
 	
 	public void changeRack() {
-		//TODO
+		for(Tile tile : rack.getTiles()) {
+			stack.add(tile);
+		}
+		Collections.shuffle(stack);
+		rack.fillRackWithTiles(stack);
+		consumedTurn = true;
 	}
 	
 	
@@ -36,6 +39,9 @@ public class Player {
 		
 			if(tile != null) {
 				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
+					if(consumedTurn) {
+						bonus = bonus - 2;
+					}
 					boolean bonusTile = board.isTileBonus(pos);		
 					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);
 					getBonusPoints(bonusTile, nearbyTiles.size());		
@@ -51,19 +57,11 @@ public class Player {
 	}
 	
 	private void getBonusPoints(boolean bonusTile, int countOfNearbyTiles) {
-		if(consumedTurn) {
-			bonus = bonus - 2;
-		}
 		if(bonusTile) {
 			bonus += 2;
 		}
-		if(countOfNearbyTiles > 2) {
-			bonus += 2;
-		} else if (countOfNearbyTiles > 1) {
-			bonus += countOfNearbyTiles - 1;
-		}
-		if(bonus > Constants.MAX_BONUS) {
-			bonus = Constants.MAX_BONUS;
+		if(countOfNearbyTiles > 1) {
+			bonus += (int) Math.pow(2, countOfNearbyTiles-2);
 		}
 	}
 	
