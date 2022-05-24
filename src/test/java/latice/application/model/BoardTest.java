@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class BoardTest {
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
-	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE, Constants.BOARD_SIZE);
+	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.getValue(), Constants.BOARD_SIZE.getValue());
 	static final Position BOTTOM_CENTER = new Position(6,5);
 	static final Position TOP_CENTER = new Position(4,5);
 	static final Position LEFT_CENTER = new Position(5,4);
@@ -42,7 +42,7 @@ public class BoardTest {
 		//Arrange
 		Tile tile = new Tile(ColorTile.BLUE, Shape.FLOWER);
 		//Act
-		boolean result = board.putIn(Constants.CENTER, tile);
+		boolean result = board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Assert
 		assertTrue(result);
 	}
@@ -64,21 +64,21 @@ public class BoardTest {
 	@Test
 	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
 		//Arrange
-		board.putIn(Constants.CENTER, redFlower);
-		assertTrue(board.tileAt(Constants.CENTER));
+		board.putIn(ConstantPosition.CENTER.pos(), redFlower);
+		assertTrue(board.tileAt(ConstantPosition.CENTER.pos()));
 		boolean tileWellPut;
 		//Act
-		tileWellPut = board.putIn(Constants.CENTER, blueDolphin);
+		tileWellPut = board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
 		//Assert
 		assertFalse(tileWellPut);
-		assertTrue(board.tileAt(Constants.CENTER));
+		assertTrue(board.tileAt(ConstantPosition.CENTER.pos()));
 	}
 	
 	@Test 
 	void try_put_a_second_tile_not_around_an_other_tile_should_return_false() {
 		//Arrange
 		Tile tile = new Tile(ColorTile.BLUE, Shape.FLOWER);
-		board.putIn(Constants.CENTER, tile);
+		board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Act
 		boolean result = board.putIn(LAST_POSITION, tile);
 		//Assert
@@ -90,7 +90,7 @@ public class BoardTest {
 		//arrange
 		Tile tileNotCenter = new Tile(ColorTile.BLUE, Shape.DOLPHIN);
 		Tile centerTile = new Tile(ColorTile.BLUE, Shape.BIRD);
-		board.putIn(Constants.CENTER, centerTile);
+		board.putIn(ConstantPosition.CENTER.pos(), centerTile);
 		//Act
 		boolean result = board.putIn(RIGHT_CENTER, tileNotCenter);
 		
@@ -102,7 +102,7 @@ public class BoardTest {
 	@Test
 	void put_tile_around_two_differents_tiles_one_same_shape_one_same_color() {
 		//Arrange
-		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
 		board.putIn(LEFT_CENTER, blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		
@@ -116,7 +116,7 @@ public class BoardTest {
 	@Test
 	void put_tile_around_two_differents_tiles() {
 		//Arrange
-		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
 		board.putIn(LEFT_CENTER, blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		
@@ -130,7 +130,7 @@ public class BoardTest {
 	@Test
 	void put_tile_around_two_differents_tiles_different_shape_and_color() {
 		//Arrange
-		board.putIn(Constants.CENTER, blueDolphin);
+		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
 		board.putIn(LEFT_CENTER, blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		

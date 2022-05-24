@@ -15,7 +15,7 @@ public class LaticeTest {
 	
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
-	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE, Constants.BOARD_SIZE);
+	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.getValue(), Constants.BOARD_SIZE.getValue());
 	
 	static final Position BOTTOM_CENTER = new Position(6,5);
 	static final Position TOP_CENTER = new Position(4,5);
@@ -41,7 +41,7 @@ public class LaticeTest {
 	@Test
 	public void returnFalseWhenPositionIsWithoutTile() {
 		assertFalse(game.getBoard().tileAt(LAST_POSITION));
-		assertFalse(game.getBoard().tileAt(Constants.CENTER));
+		assertFalse(game.getBoard().tileAt(ConstantPosition.CENTER.pos()));
 		assertFalse(game.getBoard().tileAt(_1_1));
 		assertFalse(game.getBoard().tileAt(_2_4));
 		assertFalse(game.getBoard().tileAt(RIGHT_CENTER));
@@ -93,17 +93,17 @@ public class LaticeTest {
 	
 	@Test
 	public void tile_at_position_already_used() {
-		game.getBoard().putIn(Constants.CENTER, blueDolphin);
-		assertTrue(game.getBoard().tileAt(Constants.CENTER));
+		game.getBoard().putIn(ConstantPosition.CENTER.pos(), blueDolphin);
+		assertTrue(game.getBoard().tileAt(ConstantPosition.CENTER.pos()));
 		assertFalse(game.getBoard().tileAt(LAST_POSITION));
 	}
 	
 	@Test
 	public void get_tile_at_position_aldready_used() {
-		game.getBoard().putIn(Constants.CENTER, blueDolphin);
-		System.out.println(game.getBoard().getTileAt(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
-		System.out.println(game.getBoard().getTileAt(Constants.CENTER));
-		assertEquals(blueDolphin, game.getBoard().getTileAt(new Position(Constants.CENTER.x(), Constants.CENTER.y())));
+		game.getBoard().putIn(ConstantPosition.CENTER.pos(), blueDolphin);
+		System.out.println(game.getBoard().getTileAt(new Position(ConstantPosition.CENTER.pos().x(), ConstantPosition.CENTER.pos().y())));
+		System.out.println(game.getBoard().getTileAt(ConstantPosition.CENTER.pos()));
+		assertEquals(blueDolphin, game.getBoard().getTileAt(new Position(ConstantPosition.CENTER.pos().x(), ConstantPosition.CENTER.pos().y())));
 		assertEquals(null, game.getBoard().getTileAt(LAST_POSITION));
 	}
 	
@@ -153,7 +153,7 @@ public class LaticeTest {
 	
 	@Test
 	public void theBoardIsEmptyWhenItIsCleared() {
-		game.getBoard().putIn(Constants.CENTER, blueDolphin);
+		game.getBoard().putIn(ConstantPosition.CENTER.pos(), blueDolphin);
 		game.getBoard().putIn(BOTTOM_CENTER, blueFlower);
 		assertFalse(game.getBoard().getTiles().isEmpty());
 		
