@@ -19,6 +19,10 @@ public class Rack {
 			this.tiles.add(tiles.remove(0));
 		}
 	}
+	
+	public void clear() {
+		tiles.removeAll(tiles);
+	}
 
 	public List<Tile> getTiles() {
 		return tiles;
