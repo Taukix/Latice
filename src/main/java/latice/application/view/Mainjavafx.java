@@ -2,6 +2,8 @@ package latice.application.view;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -44,6 +46,7 @@ import latice.application.controller.ButtonControllerChangeRack;
 import latice.application.controller.ButtonControllerCloseApplication;
 import latice.application.controller.ButtonControllerEndTurn;
 import latice.application.controller.ButtonControllerParametersMenu;
+import latice.application.controller.ButtonControllerReturnToMenu;
 import latice.application.controller.ButtonControllerShadowOff;
 import latice.application.controller.ButtonControllerShadowOn;
 import latice.application.controller.ButtonControllerSoundOff;
@@ -147,6 +150,7 @@ public class Mainjavafx extends Application {
 	private HBox hbButtons;
 	private Button btnChangeRack;
 	private Button btnEndTurn;
+	private Button btnReturnToMenu;
 	private VBox vbInfoPlayer1;
 	private VBox vbInfoPlayer2;
 	public static Label nbrTilesInStack1;
@@ -301,6 +305,145 @@ public class Mainjavafx extends Application {
 		            	root.setTop(vbTopLeftLoadingScene);
 		            	root.setMargin(vbTopLeftLoadingScene, new Insets(100,0,0,100));
 		            	
+		            	// Implémentation du GROUP PLAY et de ses composants de sorte que le système recréer une nouvelle partie si l'on quitte celle d'avant
+		                vbPlateGame = new VBox();
+		                gpPlate = new Group();
+		                
+		                DropShadow yellowShadow = new DropShadow();
+		                yellowShadow.setRadius(40);
+		                yellowShadow.setSpread(0.5);
+		                yellowShadow.setColor(Color.YELLOW);
+		                
+		                vbInfoPlayer1 = new VBox(30);
+		                vbInfoPlayer1.setAlignment(Pos.CENTER);
+		                
+		                vbInfoPlayer2 = new VBox(30);
+		                vbInfoPlayer2.setAlignment(Pos.CENTER);
+		                
+		                nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
+		                nbrTilesInStack1.setFont(new Font("Calibri", 40));
+		        		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
+		        		nbrTilesInStack1.setEffect(yellowShadow);
+		        		
+		                nbrTilesInStack2 = new Label("Nombre de tuiles restantes: 31");
+		                nbrTilesInStack2.setFont(new Font("Calibri", 40));
+		        		nbrTilesInStack2.setTextFill(Color.WHITESMOKE);
+		        		nbrTilesInStack2.setEffect(yellowShadow);
+		        		
+		        		nbrBonusPoint1 = new Label("Point(s) Bonus : 0");
+		        		nbrBonusPoint1.setFont(new Font("Calibri", 40));
+		        		nbrBonusPoint1.setTextFill(Color.WHITESMOKE);
+		        		nbrBonusPoint1.setEffect(yellowShadow);
+		        		
+		        		nbrBonusPoint2 = new Label("Point(s) Bonus : 0");
+		        		nbrBonusPoint2.setFont(new Font("Calibri", 40));
+		        		nbrBonusPoint2.setTextFill(Color.WHITESMOKE);
+		        		nbrBonusPoint2.setEffect(yellowShadow);
+		                
+		                hbButtons = new HBox(10);
+		                hbButtons.setAlignment(Pos.CENTER);
+		                
+		                btnReturnToMenu = new Button("<--");
+		                btnReturnToMenu.setPadding(new Insets(7,10,7,10));
+		                btnReturnToMenu.setStyle("-fx-background-color: #FFF; ");
+		                btnReturnToMenu.setAlignment(Pos.TOP_LEFT);
+		                
+		                btnChangeRack = new Button("Changer le Rack");
+		                btnChangeRack.setPadding(new Insets(7,100,7,100));
+		                btnChangeRack.setStyle("-fx-background-color: #FFF; ");
+		                
+		                btnEndTurn = new Button("Fin du tour");
+		                btnEndTurn.setPadding(new Insets(7,100,7,100));
+		                btnEndTurn.setStyle("-fx-background-color: #FFF; ");
+		                
+		                // Image par défaut du plateau de jeu
+		                fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
+		                try {
+							imgPlate = new Image(new FileInputStream(fileImagePlate));
+						} catch (FileNotFoundException e2) {
+							e2.printStackTrace();
+						}
+		                bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
+		                
+		                gpGame = new GridPane();
+		                gpGame.setBackground(new Background(bgiPlate));
+		                gpGame.setPrefSize(600, 600); 
+		                gpGame.setPadding(new Insets(15,17,15,18));
+		                gpGame.setHgap(4);
+		                gpGame.setVgap(3);
+		                
+		                hbRacks = new HBox(200);
+		                hbRacks.setAlignment(Pos.CENTER);
+		                gpRackOfPlayer1 = new GridPane();
+		                gpRackOfPlayer2 = new GridPane();
+		        		
+		                vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
+		                vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
+		                root.setMargin(vbInfoPlayer1, new Insets(0,0,0,50));
+		                root.setMargin(vbInfoPlayer2, new Insets(0,50,0,0));
+		                root.setMargin(btnReturnToMenu, new Insets(10,0,0,10));
+		                
+		                gpPlate.getChildren().add(gpGame);
+		                hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);
+		                
+		                hbButtons.getChildren().addAll(btnChangeRack,btnEndTurn);
+		                
+		                vbPlateGame.getChildren().addAll(gpPlate,hbRacks, hbButtons);
+		                vbPlateGame.setAlignment(Pos.CENTER);
+		                vbPlateGame.setSpacing(50);
+		            	
+		            	// Lancement de la Partie
+		                Game game = new Game(new Player("Joueur 1"), new Player("Joueur 2"));
+		                
+		                // Mise en place de chaque Rack avec leurs tuiles
+		                for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
+							try {
+								TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i));
+								gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
+								DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
+								
+								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i));
+								gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
+								DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
+							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							} 	
+		                }
+		                
+		                // Définition des cases du plateau dans le GridPane
+		                for (int i = 0; i < 9; i++) {
+		                	for (int j = 0; j < 9; j++) {
+		                		
+		                		Tile tile = new Tile(null, null);
+		                		TileFx defaulttilefx;
+								try {
+									defaulttilefx = new TileFx(tile);
+									DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame, game);
+									
+									GridPane.setRowIndex(defaulttilefx.getImageView(), i);
+									GridPane.setColumnIndex(defaulttilefx.getImageView(), j);
+									
+									gpGame.getChildren().add(defaulttilefx.getImageView());
+								} catch (FileNotFoundException e1) {
+									e1.printStackTrace();
+								}
+		                		
+		                }}
+		                
+		                // Le player 1 commence à chaque fois
+		                game.getPlayer1().startTurn();
+		                
+		                DropShadow shadow = new DropShadow();
+		        		shadow.setRadius(40);
+		        		shadow.setColor(Color.YELLOW);
+		        		
+		        		gpRackOfPlayer1.setEffect(shadow);
+		        		
+		        		// Action des trois boutons
+		                btnReturnToMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
+		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+		            	
 		            	// Timeline pour les 3 petits points
 		            	tlLoadingScene = new Timeline(new KeyFrame(Duration.seconds(1), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,true)),
 		            			new KeyFrame(Duration.seconds(1.25), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint2,true)),
@@ -317,7 +460,7 @@ public class Mainjavafx extends Application {
 		            	// Timeline pour le changement de scène à la fin du timing de la barre
 		            	tlPlaySceneChange = new Timeline(new KeyFrame(Duration.seconds(7.5), e -> root.setCenter(vbPlateGame)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setBottom(null)),
-		            			new KeyFrame(Duration.seconds(7.5), e -> root.setTop(null)),
+		            			new KeyFrame(Duration.seconds(7.5), e -> root.setTop(btnReturnToMenu)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setLeft(vbInfoPlayer1)),
 		            			new KeyFrame(Duration.seconds(7.5), e -> root.setRight(vbInfoPlayer2)),
 		            			new KeyFrame(Duration.seconds(7.6), e -> pgbLoadingScene.setProgress(0)));
@@ -338,126 +481,6 @@ public class Mainjavafx extends Application {
 		                root.setMargin(vbParameters, new Insets(0,0,100,0));}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
-        		
-        // Implémentation du GROUP PLAY et de ses composants
-        vbPlateGame = new VBox();
-        gpPlate = new Group();
-        
-        DropShadow yellowShadow = new DropShadow();
-        yellowShadow.setRadius(40);
-        yellowShadow.setSpread(0.5);
-        yellowShadow.setColor(Color.YELLOW);
-        
-        vbInfoPlayer1 = new VBox(30);
-        vbInfoPlayer1.setAlignment(Pos.CENTER);
-        
-        vbInfoPlayer2 = new VBox(30);
-        vbInfoPlayer2.setAlignment(Pos.CENTER);
-        
-        nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
-        nbrTilesInStack1.setFont(new Font("Calibri", 40));
-		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
-		nbrTilesInStack1.setEffect(yellowShadow);
-		
-        nbrTilesInStack2 = new Label("Nombre de tuiles restantes: 31");
-        nbrTilesInStack2.setFont(new Font("Calibri", 40));
-		nbrTilesInStack2.setTextFill(Color.WHITESMOKE);
-		nbrTilesInStack2.setEffect(yellowShadow);
-		
-		nbrBonusPoint1 = new Label("Point(s) Bonus : 0");
-		nbrBonusPoint1.setFont(new Font("Calibri", 40));
-		nbrBonusPoint1.setTextFill(Color.WHITESMOKE);
-		nbrBonusPoint1.setEffect(yellowShadow);
-		
-		nbrBonusPoint2 = new Label("Point(s) Bonus : 0");
-		nbrBonusPoint2.setFont(new Font("Calibri", 40));
-		nbrBonusPoint2.setTextFill(Color.WHITESMOKE);
-		nbrBonusPoint2.setEffect(yellowShadow);
-        
-        hbButtons = new HBox(10);
-        hbButtons.setAlignment(Pos.CENTER);
-        
-        btnChangeRack = new Button("Changer le Rack");
-        btnChangeRack.setPadding(new Insets(7,100,7,100));
-        btnChangeRack.setStyle("-fx-background-color: #FFF; ");
-        
-        btnEndTurn = new Button("Fin du tour");
-        btnEndTurn.setPadding(new Insets(7,100,7,100));
-        btnEndTurn.setStyle("-fx-background-color: #FFF; ");
-        
-        fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
-        imgPlate = new Image(new FileInputStream(fileImagePlate));
-		bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
-        
-        gpGame = new GridPane();
-        gpGame.setBackground(new Background(bgiPlate));
-        gpGame.setPrefSize(600, 600); 
-        gpGame.setPadding(new Insets(15,17,15,18));
-        gpGame.setHgap(4);
-        gpGame.setVgap(3);
-        
-        hbRacks = new HBox(200);
-        hbRacks.setAlignment(Pos.CENTER);
-        gpRackOfPlayer1 = new GridPane();
-        gpRackOfPlayer2 = new GridPane();
-        
-        // Lancement de la Partie
-        Game game = new Game(new Player("alexandre"), new Player("toto"));
-        
-        // Mise en place de chaque Rack avec leurs tuiles
-        for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
-        	TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i));
-        	gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
-        	
-        	TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i));
-        	gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
-        	
-        	DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
-        	DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
-        }
-        
-        // Définition des cases du plateau dans le GridPane
-        for (int i = 0; i < 9; i++) {
-        	for (int j = 0; j < 9; j++) {
-        		
-        		Tile tile = new Tile(null, null);
-        		TileFx defaulttilefx = new TileFx(tile);
-        		
-        		DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame, game);
-        		
-        		GridPane.setRowIndex(defaulttilefx.getImageView(), i);
-        		GridPane.setColumnIndex(defaulttilefx.getImageView(), j);
-        		
-        		gpGame.getChildren().add(defaulttilefx.getImageView());
-        	}}
-        
-        // Action des deux boutons
-        btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
-        btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
-        
-        // Le player 1 commence à chaque fois
-        game.getPlayer1().startTurn();
-        
-        DropShadow shadow = new DropShadow();
-		shadow.setRadius(40);
-		shadow.setColor(Color.YELLOW);
-		
-		gpRackOfPlayer1.setEffect(shadow);
-		
-		
-        vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
-        vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
-        root.setMargin(vbInfoPlayer1, new Insets(0,0,0,50));
-        root.setMargin(vbInfoPlayer2, new Insets(0,50,0,0));
-        
-        gpPlate.getChildren().add(gpGame);
-        hbRacks.getChildren().addAll(gpRackOfPlayer1,gpRackOfPlayer2);
-        
-        hbButtons.getChildren().addAll(btnChangeRack,btnEndTurn);
-        
-        vbPlateGame.getChildren().addAll(gpPlate,hbRacks, hbButtons);
-        vbPlateGame.setAlignment(Pos.CENTER);
-        vbPlateGame.setSpacing(50);
         
         // Implémentation du GROUP REGLES et de ses composants
         groupRules = new Group();

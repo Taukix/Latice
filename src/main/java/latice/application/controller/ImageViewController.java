@@ -68,7 +68,6 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		imgV4.setEffect(null);
 		
 		// Chargement du plateau en accord avec le thème
-		System.out.println(theme);
 		File fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/" + theme + "/Plateau.png"));
 		try {
 			Image imgPlate = new Image(new FileInputStream(fileImagePlate));
