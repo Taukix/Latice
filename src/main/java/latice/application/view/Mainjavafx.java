@@ -356,15 +356,6 @@ public class Mainjavafx extends Application {
 		                btnEndTurn.setPadding(new Insets(7,100,7,100));
 		                btnEndTurn.setStyle("-fx-background-color: #FFF; ");
 		                
-		                // Image par défaut du plateau de jeu
-		                fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
-		                try {
-							imgPlate = new Image(new FileInputStream(fileImagePlate));
-						} catch (FileNotFoundException e2) {
-							e2.printStackTrace();
-						}
-		                bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
-		                
 		                // On vide le plateau JAVAFX à chaque lancement de partie
 		                if (gpGame.getChildren().size() > 0) {
 		                	for (int i=gpGame.getChildren().size()-1;i>=0;i--) {
@@ -481,8 +472,11 @@ public class Mainjavafx extends Application {
 		                root.setMargin(vbParameters, new Insets(0,0,100,0));}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
+        
+        fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
+        imgPlate = new Image(new FileInputStream(fileImagePlate));
+        bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
         		
-        // gpGame = new GridPane();
         gpGame = new GridPane();
         gpGame.setBackground(new Background(bgiPlate));
         gpGame.setPrefSize(600, 600); 
