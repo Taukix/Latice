@@ -25,9 +25,9 @@ public class TileFx {
 	private Image img;
 	private ImageView imgTile;
 	
-	public TileFx(Tile tile) throws FileNotFoundException {
+	public TileFx(Tile tile, String theme) throws FileNotFoundException {
 		this.tile = tile;
-		this.img = new Image(new FileInputStream(new File(new File("").getAbsolutePath().concat("/Theme/Plage/Tuile/" + tile.getShape() + "/" + tile.getColor() + ".png"))));
+		this.img = new Image(new FileInputStream(new File(new File("").getAbsolutePath().concat("/Theme/" + theme + "/Tuile/" + tile.getShape() + "/" + tile.getColor() + ".png"))));
 		this.imgTile = new ImageView(img);
 	}
 	

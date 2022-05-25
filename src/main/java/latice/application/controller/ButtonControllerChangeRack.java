@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import latice.application.model.Game;
+import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
 
 public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
@@ -35,7 +36,7 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 			for (int j=0;j<game.getPlayer1().getRack().getTiles().size();j++) {
 				TileFx tileAfterChangeRack;
 				try {
-					tileAfterChangeRack = new TileFx(game.getPlayer1().getRack().getTiles().get(j));
+					tileAfterChangeRack = new TileFx(game.getPlayer1().getRack().getTiles().get(j), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileAfterChangeRack, game, gpRack1, gpRack2, gpGame);
 					gpRack1.getChildren().add(tileAfterChangeRack.getImageView());
 					gpRack1.setColumnIndex(tileAfterChangeRack.getImageView(), j);
@@ -60,7 +61,7 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 			for (int j=0;j<game.getPlayer2().getRack().getTiles().size();j++) {
 				TileFx tileAfterChangeRack;
 				try {
-					tileAfterChangeRack = new TileFx(game.getPlayer2().getRack().getTiles().get(j));
+					tileAfterChangeRack = new TileFx(game.getPlayer2().getRack().getTiles().get(j), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileAfterChangeRack, game, gpRack1, gpRack2, gpGame);
 					gpRack2.getChildren().add(tileAfterChangeRack.getImageView());
 					gpRack2.setColumnIndex(tileAfterChangeRack.getImageView(), j);

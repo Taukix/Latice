@@ -157,6 +157,7 @@ public class Mainjavafx extends Application {
 	public static Label nbrTilesInStack2;
 	public static Label nbrBonusPoint1;
 	public static Label nbrBonusPoint2;
+	public static String theme;
 	
 
 	// REGLES
@@ -389,11 +390,11 @@ public class Mainjavafx extends Application {
 		                // Mise en place de chaque Rack avec leurs tuiles
 		                for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
 							try {
-								TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i));
+								TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), theme);
 								gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
 								DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
 								
-								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i));
+								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), theme);
 								gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
 								DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
 							} catch (FileNotFoundException e1) {
@@ -408,7 +409,7 @@ public class Mainjavafx extends Application {
 		                		Tile tile = new Tile(null, null);
 		                		TileFx defaulttilefx;
 								try {
-									defaulttilefx = new TileFx(tile);
+									defaulttilefx = new TileFx(tile, theme);
 									DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame, game);
 									
 									GridPane.setRowIndex(defaulttilefx.getImageView(), i);
@@ -483,6 +484,8 @@ public class Mainjavafx extends Application {
         gpGame.setPadding(new Insets(15,17,15,18));
         gpGame.setHgap(4);
         gpGame.setVgap(3);
+        
+        theme = "League of Legends";
         
         // Implémentation du GROUP REGLES et de ses composants
         groupRules = new Group();
@@ -725,7 +728,7 @@ public class Mainjavafx extends Application {
 			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Audio.mp3", pgbMusic, mediaMusic, "Plage", gpGame));
 			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic, "Indien", gpGame));
 			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic, "Harry Potter", gpGame));
-		
+			
 		// Mise en place des éléments dans le BorderPane
 		root.setTop(vbTop);
 		root.setMargin(vbTop, new Insets(20,0,0,0));

@@ -47,7 +47,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			
 			for (int i=0;i<this.game.getPlayer1().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i));
+					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2, gpGame);
 					this.gpRack1.getChildren().add(tileOfRack1.getImageView());
 					this.gpRack1.setColumnIndex(tileOfRack1.getImageView(), i);
@@ -72,7 +72,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			// Remplissage
 			for (int i=0;i<this.game.getPlayer2().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i));
+					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2, gpGame);
 					this.gpRack2.getChildren().add(tileOfRack2.getImageView());
 					this.gpRack2.setColumnIndex(tileOfRack2.getImageView(), i);
