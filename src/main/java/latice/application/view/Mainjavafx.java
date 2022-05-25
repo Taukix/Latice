@@ -365,13 +365,13 @@ public class Mainjavafx extends Application {
 						}
 		                bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
 		                
-		                gpGame = new GridPane();
-		                gpGame.setBackground(new Background(bgiPlate));
-		                gpGame.setPrefSize(600, 600); 
-		                gpGame.setPadding(new Insets(15,17,15,18));
-		                gpGame.setHgap(4);
-		                gpGame.setVgap(3);
-		                
+		                // On vide le plateau JAVAFX à chaque lancement de partie
+		                if (gpGame.getChildren().size() > 0) {
+		                	for (int i=gpGame.getChildren().size()-1;i>=0;i--) {
+		                		gpGame.getChildren().remove(i);
+		                	}
+		                }
+		               
 		                hbRacks = new HBox(200);
 		                hbRacks.setAlignment(Pos.CENTER);
 		                gpRackOfPlayer1 = new GridPane();
@@ -481,6 +481,14 @@ public class Mainjavafx extends Application {
 		                root.setMargin(vbParameters, new Insets(0,0,100,0));}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
+        		
+        // gpGame = new GridPane();
+        gpGame = new GridPane();
+        gpGame.setBackground(new Background(bgiPlate));
+        gpGame.setPrefSize(600, 600); 
+        gpGame.setPadding(new Insets(15,17,15,18));
+        gpGame.setHgap(4);
+        gpGame.setVgap(3);
         
         // Implémentation du GROUP REGLES et de ses composants
         groupRules = new Group();
