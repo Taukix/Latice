@@ -11,11 +11,13 @@ public class Game {
 	private Player player2;
 	private Board board;
 	private List<Tile> gameTileList;
+	private int turn;
 	
 	public Game(Player p1, Player p2) {
 
 		this.player1 = p1;
 		this.player2 = p2;
+		this.turn = 10;
 		this.board = new Board();
 		
 		generateNewGameTileList();
@@ -80,19 +82,34 @@ public class Game {
 		if (p1.getTurn()) {
 			p1.endTurn();
 			p2.startTurn();
+			this.turn -= 1;
 		} else {
 			p2.endTurn();
-			p1.startTurn();
+			p1.startTurn();	
 		}
 	}
 	
 	public boolean playerWon(Player p1, Player p2) {
-		if (p1.getStack().isEmpty() && p1.getRack().getTiles().isEmpty()) {
+		if (p1.getStack().isEmpty() && p1.getRack().getTiles().isEmpty() || (!player1.canPlay(board) && !player2.canPlay(board))) {
 			System.out.println(p1.getUsername() + " won !");
 			return true;
-		} else if (p2.getStack().isEmpty() && p2.getRack().getTiles().isEmpty()){
+		} else if (p2.getStack().isEmpty() && p2.getRack().getTiles().isEmpty() || (!player1.canPlay(board) && !player2.canPlay(board))) {
 			System.out.println(p2.getUsername() + " won !");
 			return true;
+		}
+		else if(this.turn == 0) {
+			if(p1.countTilesInStack() < p2.countTilesInStack()) {
+				System.out.println(p1.getUsername() + " won !");
+				return true;
+			}
+			else if(p1.countTilesInStack() == p2.countTilesInStack()) {
+				System.out.println("It's a draw ! ");
+				return true;
+			}
+			else {
+				System.out.println(p1.getUsername() + " won !");
+				return true;
+			}
 		}
 		return false;
 	}
