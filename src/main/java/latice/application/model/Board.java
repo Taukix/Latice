@@ -24,6 +24,15 @@ public class Board {
 		return isTileFound;
 	}
 	
+	public List<Position> getNearbyPositions(Position pos) {
+		List<Position> nearbyPos = new ArrayList<>();
+		for(int i = 0; i <= 1; i++) {
+			nearbyPos.add(new Position(pos.x()-1+2*i, pos.y()));
+			nearbyPos.add(new Position(pos.x(), pos.y()-1+2*i));
+		}
+		return nearbyPos;
+	}
+	
 	public Tile getTileAt(Position pos) {
 		return this.tiles.get(new Position(pos.x(), pos.y()));
 	}
