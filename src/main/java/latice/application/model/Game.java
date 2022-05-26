@@ -78,6 +78,10 @@ public class Game {
 		return this.board;
 	}
 	
+	public int getNumberOfTurn() {
+		return this.turn;
+	}
+	
 	public void nextTurn(Player p1, Player p2) {
 		if (p1.getTurn()) {
 			p1.endTurn();
