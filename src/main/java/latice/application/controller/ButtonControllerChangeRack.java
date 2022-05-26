@@ -1,10 +1,13 @@
 package latice.application.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import latice.application.model.Game;
 import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
@@ -26,6 +29,10 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 	public void handle(MouseEvent event) {
 		if (game.getPlayer1().getTurn() && !game.getPlayer1().getConsumedTurn()) {
 			game.getPlayer1().changeRack();
+			
+			ButtonControllerEndTurn.mediaFillRackEffect = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/FillRackSoundEffect.mp3")).toURI().toString()));
+			ButtonControllerEndTurn.mediaFillRackEffect.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+			ButtonControllerEndTurn.mediaFillRackEffect.play();
 			
 			// On vide le Rack JavaFX
 			for (int i=gpRack1.getChildren().size()-1;i>=0;i--) {
@@ -51,6 +58,10 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 			
 		} else if (game.getPlayer2().getTurn() && !game.getPlayer2().getConsumedTurn()){
 			game.getPlayer2().changeRack();
+			
+			ButtonControllerEndTurn.mediaFillRackEffect = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/FillRackSoundEffect.mp3")).toURI().toString()));
+			ButtonControllerEndTurn.mediaFillRackEffect.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+			ButtonControllerEndTurn.mediaFillRackEffect.play();
 			
 			// On vide le Rack JavaFX
 			for (int i=gpRack2.getChildren().size()-1;i>=0;i--) {

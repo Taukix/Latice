@@ -153,6 +153,8 @@ public class Mainjavafx extends Application {
 	private Button btnReturnToMenu;
 	private VBox vbInfoPlayer1;
 	private VBox vbInfoPlayer2;
+	private Label nameOfPlayer1;
+	private Label nameOfPlayer2;
 	public static Label nbrTilesInStack1;
 	public static Label nbrTilesInStack2;
 	public static Label nbrBonusPoint1;
@@ -188,10 +190,10 @@ public class Mainjavafx extends Application {
 	private CheckBox chbxMusic;
 	private Slider sliderMusic;
 	
-	private ProgressBar pgbSoundEffect;
+	public static ProgressBar pgbSoundEffect;
 	private Label lblProgressBarSoundEffect;
 	private CheckBox chbxEffect;
-	private MediaPlayer mediaEffects;
+	public static MediaPlayer mediaEffects;
 	private Slider sliderEffect;
 	
 	@Override
@@ -321,6 +323,16 @@ public class Mainjavafx extends Application {
 		                vbInfoPlayer2 = new VBox(30);
 		                vbInfoPlayer2.setAlignment(Pos.CENTER);
 		                
+		                nameOfPlayer1 = new Label("Player 1");
+		                nameOfPlayer1.setFont(new Font("Calibri", 40));
+		                nameOfPlayer1.setTextFill(Color.WHITESMOKE);
+		                nameOfPlayer1.setEffect(yellowShadow);
+		                
+		                nameOfPlayer2 = new Label("Player 2");
+		                nameOfPlayer2.setFont(new Font("Calibri", 40));
+		                nameOfPlayer2.setTextFill(Color.WHITESMOKE);
+		                nameOfPlayer2.setEffect(yellowShadow);
+		                
 		                nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
 		                nbrTilesInStack1.setFont(new Font("Calibri", 40));
 		        		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
@@ -369,8 +381,8 @@ public class Mainjavafx extends Application {
 		                gpRackOfPlayer1 = new GridPane();
 		                gpRackOfPlayer2 = new GridPane();
 		        		
-		                vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
-		                vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
+		                vbInfoPlayer1.getChildren().addAll(nameOfPlayer1, nbrTilesInStack1, nbrBonusPoint1);
+		                vbInfoPlayer2.getChildren().addAll(nameOfPlayer2, nbrTilesInStack2, nbrBonusPoint2);
 		                root.setMargin(vbInfoPlayer1, new Insets(0,0,0,50));
 		                root.setMargin(vbInfoPlayer2, new Insets(0,50,0,0));
 		                root.setMargin(btnReturnToMenu, new Insets(10,0,0,10));
@@ -723,6 +735,7 @@ public class Mainjavafx extends Application {
 		mediaMusic = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3")).toURI().toString()));
 		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
 		mediaMusic.play();
+		mediaMusic.setCycleCount(Integer.MAX_VALUE);
 			
 			// Actions des images THEME
 			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, mainBackground, imgBackground, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic, "League of Legends", gpGame));
