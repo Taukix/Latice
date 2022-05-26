@@ -1,5 +1,7 @@
 package latice.application.controller;
 
+import java.io.File;
+
 import javafx.event.EventHandler;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
@@ -9,10 +11,11 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import latice.application.model.Game;
 import latice.application.model.Position;
-import latice.application.model.Tile;
 import latice.application.view.Mainjavafx;
 import latice.application.view.TileFx;
 
@@ -69,8 +72,11 @@ public class DndTileFx {
 		    					gpGame.setColumnIndex(imageViewOnPlate, floorX);
 		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
 		    					
+		    					Mainjavafx.mediaEffects = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/PutTileOnTheBoardSoundEffect.mp3")).toURI().toString()));
+		    					Mainjavafx.mediaEffects.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+		    					Mainjavafx.mediaEffects.play();
+		    					
 		    					Mainjavafx.nbrBonusPoint1.setText("Point(s) Bonus : " + game.getPlayer1().getBonus());
-								break;
 							}
 						}
 					}
@@ -90,8 +96,11 @@ public class DndTileFx {
 		    					gpGame.setColumnIndex(imageViewOnPlate, floorX);
 		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
 		    					
+		    					Mainjavafx.mediaEffects = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/PutTileOnTheBoardSoundEffect.mp3")).toURI().toString()));
+		    					Mainjavafx.mediaEffects.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+		    					Mainjavafx.mediaEffects.play();
+		    					
 		    					Mainjavafx.nbrBonusPoint2.setText("Point(s) Bonus : " + game.getPlayer2().getBonus());
-								break;
 							}
 						}
 					}

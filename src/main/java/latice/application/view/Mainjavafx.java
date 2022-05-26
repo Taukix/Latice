@@ -153,10 +153,13 @@ public class Mainjavafx extends Application {
 	private Button btnReturnToMenu;
 	private VBox vbInfoPlayer1;
 	private VBox vbInfoPlayer2;
+	private Label nameOfPlayer1;
+	private Label nameOfPlayer2;
 	public static Label nbrTilesInStack1;
 	public static Label nbrTilesInStack2;
 	public static Label nbrBonusPoint1;
 	public static Label nbrBonusPoint2;
+	public static String theme;
 	
 
 	// REGLES
@@ -187,10 +190,10 @@ public class Mainjavafx extends Application {
 	private CheckBox chbxMusic;
 	private Slider sliderMusic;
 	
-	private ProgressBar pgbSoundEffect;
+	public static ProgressBar pgbSoundEffect;
 	private Label lblProgressBarSoundEffect;
 	private CheckBox chbxEffect;
-	private MediaPlayer mediaEffects;
+	public static MediaPlayer mediaEffects;
 	private Slider sliderEffect;
 	
 	@Override
@@ -320,6 +323,16 @@ public class Mainjavafx extends Application {
 		                vbInfoPlayer2 = new VBox(30);
 		                vbInfoPlayer2.setAlignment(Pos.CENTER);
 		                
+		                nameOfPlayer1 = new Label("Player 1");
+		                nameOfPlayer1.setFont(new Font("Calibri", 40));
+		                nameOfPlayer1.setTextFill(Color.WHITESMOKE);
+		                nameOfPlayer1.setEffect(yellowShadow);
+		                
+		                nameOfPlayer2 = new Label("Player 2");
+		                nameOfPlayer2.setFont(new Font("Calibri", 40));
+		                nameOfPlayer2.setTextFill(Color.WHITESMOKE);
+		                nameOfPlayer2.setEffect(yellowShadow);
+		                
 		                nbrTilesInStack1 = new Label("Nombre de tuiles restantes: 31");
 		                nbrTilesInStack1.setFont(new Font("Calibri", 40));
 		        		nbrTilesInStack1.setTextFill(Color.WHITESMOKE);
@@ -356,15 +369,6 @@ public class Mainjavafx extends Application {
 		                btnEndTurn.setPadding(new Insets(7,100,7,100));
 		                btnEndTurn.setStyle("-fx-background-color: #FFF; ");
 		                
-		                // Image par défaut du plateau de jeu
-		                fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
-		                try {
-							imgPlate = new Image(new FileInputStream(fileImagePlate));
-						} catch (FileNotFoundException e2) {
-							e2.printStackTrace();
-						}
-		                bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
-		                
 		                // On vide le plateau JAVAFX à chaque lancement de partie
 		                if (gpGame.getChildren().size() > 0) {
 		                	for (int i=gpGame.getChildren().size()-1;i>=0;i--) {
@@ -377,8 +381,8 @@ public class Mainjavafx extends Application {
 		                gpRackOfPlayer1 = new GridPane();
 		                gpRackOfPlayer2 = new GridPane();
 		        		
-		                vbInfoPlayer1.getChildren().addAll(nbrTilesInStack1, nbrBonusPoint1);
-		                vbInfoPlayer2.getChildren().addAll(nbrTilesInStack2, nbrBonusPoint2);
+		                vbInfoPlayer1.getChildren().addAll(nameOfPlayer1, nbrTilesInStack1, nbrBonusPoint1);
+		                vbInfoPlayer2.getChildren().addAll(nameOfPlayer2, nbrTilesInStack2, nbrBonusPoint2);
 		                root.setMargin(vbInfoPlayer1, new Insets(0,0,0,50));
 		                root.setMargin(vbInfoPlayer2, new Insets(0,50,0,0));
 		                root.setMargin(btnReturnToMenu, new Insets(10,0,0,10));
@@ -398,13 +402,14 @@ public class Mainjavafx extends Application {
 		                // Mise en place de chaque Rack avec leurs tuiles
 		                for (int i = 0; i < game.getPlayer1().getRack().getTiles().size(); i++) {
 							try {
-								TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i));
+								TileFx tileFxOfPlayer1 = new TileFx(game.getPlayer1().getRack().getTiles().get(i), theme);
 								gpRackOfPlayer1.add(tileFxOfPlayer1.getImageView(), i, 0);
 								DndTileFx.manageSourceDragAndDrop(tileFxOfPlayer1, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
 								
-								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i));
+								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), theme);
 								gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
 								DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
+								
 							} catch (FileNotFoundException e1) {
 								e1.printStackTrace();
 							} 	
@@ -417,7 +422,7 @@ public class Mainjavafx extends Application {
 		                		Tile tile = new Tile(null, null);
 		                		TileFx defaulttilefx;
 								try {
-									defaulttilefx = new TileFx(tile);
+									defaulttilefx = new TileFx(tile, theme);
 									DndTileFx.manageTargetDragAndDrop(defaulttilefx, gpGame, game);
 									
 									GridPane.setRowIndex(defaulttilefx.getImageView(), i);
@@ -481,14 +486,19 @@ public class Mainjavafx extends Application {
 		                root.setMargin(vbParameters, new Insets(0,0,100,0));}});
         		
         		buttonQuitMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerCloseApplication(root));
+        
+        fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Plateau.png"));
+        imgPlate = new Image(new FileInputStream(fileImagePlate));
+        bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
         		
-        // gpGame = new GridPane();
         gpGame = new GridPane();
         gpGame.setBackground(new Background(bgiPlate));
         gpGame.setPrefSize(600, 600); 
         gpGame.setPadding(new Insets(15,17,15,18));
         gpGame.setHgap(4);
         gpGame.setVgap(3);
+        
+        theme = "League of Legends";
         
         // Implémentation du GROUP REGLES et de ses composants
         groupRules = new Group();
@@ -725,13 +735,14 @@ public class Mainjavafx extends Application {
 		mediaMusic = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/Theme/League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3")).toURI().toString()));
 		mediaMusic.volumeProperty().bind(pgbMusic.progressProperty());
 		mediaMusic.play();
+		mediaMusic.setCycleCount(Integer.MAX_VALUE);
 			
 			// Actions des images THEME
 			imgVLeague.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVLeague, imgVBeach, imgVIndian, imgVHp, mainBackground, imgBackground, root,"League of Legends/Imagine Dragons x JID  Enemy Lyrics.mp3", pgbMusic, mediaMusic, "League of Legends", gpGame));
 			imgVBeach.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVBeach, imgVLeague, imgVIndian, imgVHp, bgiBeach, imgBeach, root,"Plage/Calvin Harris  Summer Audio.mp3", pgbMusic, mediaMusic, "Plage", gpGame));
 			imgVIndian.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVIndian, imgVBeach, imgVLeague, imgVHp, bgiIndian, imgIndian, root, "Indien/Panjabi MC  Mundian To Bach Ke The Dictator Soundtrack.mp3", pgbMusic, mediaMusic, "Indien", gpGame));
 			imgVHp.addEventHandler(MouseEvent.MOUSE_CLICKED, new ImageViewController(imgVHp, imgVBeach, imgVIndian, imgVLeague, bgiHp, imgHp, root, "Harry Potter/Harry Potter Theme Song.mp3", pgbMusic, mediaMusic, "Harry Potter", gpGame));
-		
+			
 		// Mise en place des éléments dans le BorderPane
 		root.setTop(vbTop);
 		root.setMargin(vbTop, new Insets(20,0,0,0));

@@ -1,5 +1,6 @@
 package latice.application.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -7,6 +8,8 @@ import javafx.event.EventHandler;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import latice.application.model.Constants;
 import latice.application.model.Game;
@@ -19,6 +22,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private GridPane gpRack2;
 	private GridPane gpGame;
 	public static DropShadow shadowRack;
+	public static MediaPlayer mediaFillRackEffect;
 	
 	
 	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame) {
@@ -40,6 +44,12 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 		if (this.game.getPlayer1().getTurn() == false) {
 			Mainjavafx.nbrTilesInStack1.setText("Nombre de tuiles restantes: " + game.getPlayer1().getStack().size());
 			
+			if (gpRack1.getChildren().size() < 5) {
+				mediaFillRackEffect = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/FillRackSoundEffect.mp3")).toURI().toString()));
+				mediaFillRackEffect.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+				mediaFillRackEffect.play();
+			}
+			
 			// On vide le RackFX pour le remplir avec les tuiles qui ont été rajouté
 			for (int i=gpRack1.getChildren().size()-1;i>=0;i--) {
 				this.gpRack1.getChildren().remove(i);
@@ -47,7 +57,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			
 			for (int i=0;i<this.game.getPlayer1().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i));
+					TileFx tileOfRack1 = new TileFx(this.game.getPlayer1().getRack().getTiles().get(i), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileOfRack1, game, gpRack1, gpRack2, gpGame);
 					this.gpRack1.getChildren().add(tileOfRack1.getImageView());
 					this.gpRack1.setColumnIndex(tileOfRack1.getImageView(), i);
@@ -64,6 +74,12 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			this.game.getPlayer2().refreshRack();
 			Mainjavafx.nbrTilesInStack2.setText("Nombre de tuiles restantes: " + game.getPlayer2().getStack().size());
 			
+			if (gpRack2.getChildren().size() < 5) {
+				mediaFillRackEffect = new MediaPlayer(new Media(new File(new File("").getAbsolutePath().concat("/SoundEffect/FillRackSoundEffect.mp3")).toURI().toString()));
+				mediaFillRackEffect.volumeProperty().bind(Mainjavafx.pgbSoundEffect.progressProperty());
+				mediaFillRackEffect.play();
+			}
+			
 			// On vide le RackFX pour le remplir avec les tuiles qui ont été rajouté
 			for (int i=gpRack2.getChildren().size()-1;i>=0;i--) {
 				gpRack2.getChildren().remove(i);
@@ -72,7 +88,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			// Remplissage
 			for (int i=0;i<this.game.getPlayer2().getRack().getTiles().size();i++) {
 				try {
-					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i));
+					TileFx tileOfRack2 = new TileFx(this.game.getPlayer2().getRack().getTiles().get(i), Mainjavafx.theme);
 					DndTileFx.manageSourceDragAndDrop(tileOfRack2, game, gpRack1, gpRack2, gpGame);
 					this.gpRack2.getChildren().add(tileOfRack2.getImageView());
 					this.gpRack2.setColumnIndex(tileOfRack2.getImageView(), i);

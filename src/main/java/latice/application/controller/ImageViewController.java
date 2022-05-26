@@ -37,10 +37,11 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 	private static MediaPlayer mdpIndependante;
 	private ProgressBar pgb;
 	private static int nbr = 0;
+	private String newtheme;
 	private String theme;
 	private GridPane gpGame;
 	
-	public ImageViewController(ImageView imgV, ImageView imgV2, ImageView imgV3, ImageView imgV4, BackgroundImage bgiParameter, Image imgbg, BorderPane root, String music, ProgressBar pgb, MediaPlayer mdp, String theme, GridPane gpGame) {
+	public ImageViewController(ImageView imgV, ImageView imgV2, ImageView imgV3, ImageView imgV4, BackgroundImage bgiParameter, Image imgbg, BorderPane root, String music, ProgressBar pgb, MediaPlayer mdp, String newtheme, GridPane gpGame) {
 		this.imgV = imgV;
 		this.imgV2 = imgV2;
 		this.imgV3 = imgV3;
@@ -51,6 +52,7 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		this.music = music;
 		this.pgb = pgb;
 		this.mdp = mdp;
+		this.newtheme = newtheme;
 		this.theme = theme;
 		this.gpGame = gpGame;
 	}
@@ -68,7 +70,9 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		imgV4.setEffect(null);
 		
 		// Chargement du plateau en accord avec le thème
-		File fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/" + theme + "/Plateau.png"));
+		Mainjavafx.theme = newtheme;
+		
+		File fileImagePlate = new File(new File("").getAbsolutePath().concat("/Theme/" + Mainjavafx.theme + "/Plateau.png"));
 		try {
 			Image imgPlate = new Image(new FileInputStream(fileImagePlate));
 			BackgroundImage bgiPlate = new BackgroundImage(imgPlate, null, null, null, null);
@@ -91,5 +95,6 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		mdpIndependante = new MediaPlayer(new Media(uriStringMusic));
 		mdpIndependante.volumeProperty().bind(pgb.progressProperty());
 		mdpIndependante.play();
+		
 	}
 }

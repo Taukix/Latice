@@ -21,10 +21,10 @@ public class LaticeTest {
 	static final Position TOP_CENTER = new Position(4,5);
 	static final Position LEFT_CENTER = new Position(5,4);
 	static final Position RIGHT_CENTER = new Position(5,6);
-	private static final Tile redFlower = new Tile(ColorTile.RED, Shape.FLOWER);
-	private static final Tile blueFlower = new Tile(ColorTile.BLUE, Shape.FLOWER);
-	private static final Tile redDolphin = new Tile(ColorTile.RED, Shape.DOLPHIN);
-	private static final Tile blueDolphin = new Tile(ColorTile.BLUE, Shape.DOLPHIN);
+	private static final Tile redFlower = new Tile(ColorTile.ONE, Shape.FIVE);
+	private static final Tile blueFlower = new Tile(ColorTile.SIX, Shape.FIVE);
+	private static final Tile redDolphin = new Tile(ColorTile.ONE, Shape.FOUR);
+	private static final Tile blueDolphin = new Tile(ColorTile.SIX, Shape.FOUR);
 	
 	@BeforeEach
 	public void cleanGame() {

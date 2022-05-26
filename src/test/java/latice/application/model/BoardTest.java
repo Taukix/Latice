@@ -17,10 +17,10 @@ public class BoardTest {
 	static final Position TOP_CENTER = new Position(4,5);
 	static final Position LEFT_CENTER = new Position(5,4);
 	static final Position RIGHT_CENTER = new Position(5,6);
-	private static final Tile redFlower = new Tile(ColorTile.RED, Shape.FLOWER);
-	private static final Tile blueFlower = new Tile(ColorTile.BLUE, Shape.FLOWER);
-	private static final Tile redDolphin = new Tile(ColorTile.RED, Shape.DOLPHIN);
-	private static final Tile blueDolphin = new Tile(ColorTile.BLUE, Shape.DOLPHIN);
+	private static final Tile redFlower = new Tile(ColorTile.ONE, Shape.FIVE);
+	private static final Tile blueFlower = new Tile(ColorTile.SIX, Shape.FIVE);
+	private static final Tile redDolphin = new Tile(ColorTile.ONE, Shape.FOUR);
+	private static final Tile blueDolphin = new Tile(ColorTile.SIX, Shape.FOUR);
 	Board board;
 	
 	@BeforeEach
@@ -31,7 +31,7 @@ public class BoardTest {
 	@Test
 	void try_to_put_a_tile_not_in_center_on_empty_board_should_return_false() {
 		//Arrange
-		Tile tile = new Tile(ColorTile.BLUE, Shape.FLOWER);
+		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		//Act
 		boolean result = board.putIn(LAST_POSITION, tile);
 		//Assert
@@ -41,7 +41,7 @@ public class BoardTest {
 	@Test 
 	void try_put_a_tile_in_center_on_empty_board_should_return_true() {
 		//Arrange
-		Tile tile = new Tile(ColorTile.BLUE, Shape.FLOWER);
+		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		//Act
 		boolean result = board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Assert
@@ -93,7 +93,7 @@ public class BoardTest {
 	@Test 
 	void try_put_a_second_tile_not_around_an_other_tile_should_return_false() {
 		//Arrange
-		Tile tile = new Tile(ColorTile.BLUE, Shape.FLOWER);
+		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Act
 		boolean result = board.putIn(LAST_POSITION, tile);
@@ -104,8 +104,8 @@ public class BoardTest {
 	@Test
 	void try_put_tile_near_an_other_tile_same_color_should_return_true() {
 		//arrange
-		Tile tileNotCenter = new Tile(ColorTile.BLUE, Shape.DOLPHIN);
-		Tile centerTile = new Tile(ColorTile.BLUE, Shape.BIRD);
+		Tile tileNotCenter = new Tile(ColorTile.SIX, Shape.FOUR);
+		Tile centerTile = new Tile(ColorTile.SIX, Shape.ONE);
 		board.putIn(ConstantPosition.CENTER.pos(), centerTile);
 		//Act
 		boolean result = board.putIn(RIGHT_CENTER, tileNotCenter);
@@ -151,7 +151,7 @@ public class BoardTest {
 		board.putIn(new Position(4,4), redFlower);
 		
 		//Act
-		boolean result = board.putIn(TOP_CENTER, new Tile(ColorTile.GREEN, Shape.FEATHER));
+		boolean result = board.putIn(TOP_CENTER, new Tile(ColorTile.THREE, Shape.TWO));
 		
 		//Assert
 		assertFalse(result);

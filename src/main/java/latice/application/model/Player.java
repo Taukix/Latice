@@ -47,10 +47,11 @@ public class Player {
 	public boolean placeTile(Board board,Position pos, int tileOfRack) {
 		boolean madeChange = false;
 		if(turn) {
-			Tile tile = rack.getTiles().remove(tileOfRack);
+			Tile tile = rack.getTiles().get(tileOfRack);
 		
 			if(tile != null) {
 				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
+					rack.getTiles().remove(tileOfRack);
 					if(consumedTurn) {
 						bonus = bonus - 2;
 					}
@@ -59,10 +60,7 @@ public class Player {
 					getBonusPoints(bonusTile, nearbyTiles.size());		
 					madeChange = board.putIn(pos, tile);
 					consumedTurn = true;
-				}
-			}
-			else {
-				rack.getTiles().add(tile);
+				} 
 			}
 		}
 		return madeChange;
