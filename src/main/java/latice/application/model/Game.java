@@ -82,11 +82,14 @@ public class Game {
 		if (p1.getTurn()) {
 			p1.endTurn();
 			p2.startTurn();
-			this.turn -= 1;
 		} else {
 			p2.endTurn();
-			p1.startTurn();	
+			this.turn -= 1;
+			if(turn != 0) {
+				p1.startTurn();	
+			}
 		}
+		playerWon(p1, p2);
 	}
 	
 	public boolean playerWon(Player p1, Player p2) {
