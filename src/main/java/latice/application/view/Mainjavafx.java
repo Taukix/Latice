@@ -397,6 +397,7 @@ public class Mainjavafx extends Application {
 								TileFx tileFxofPlayer2 = new TileFx(game.getPlayer2().getRack().getTiles().get(i), theme);
 								gpRackOfPlayer2.add(tileFxofPlayer2.getImageView(), i, 0);
 								DndTileFx.manageSourceDragAndDrop(tileFxofPlayer2, game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame);
+								
 							} catch (FileNotFoundException e1) {
 								e1.printStackTrace();
 							} 	

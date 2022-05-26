@@ -70,7 +70,6 @@ public class DndTileFx {
 		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
 		    					
 		    					Mainjavafx.nbrBonusPoint1.setText("Point(s) Bonus : " + game.getPlayer1().getBonus());
-								break;
 							}
 						}
 					}
@@ -91,7 +90,6 @@ public class DndTileFx {
 		    					gpGame.setRowIndex(imageViewOnPlate, floorY);
 		    					
 		    					Mainjavafx.nbrBonusPoint2.setText("Point(s) Bonus : " + game.getPlayer2().getBonus());
-								break;
 							}
 						}
 					}
