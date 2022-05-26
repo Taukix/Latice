@@ -1,9 +1,10 @@
 package latice.application.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,6 +73,21 @@ public class BoardTest {
 		//Assert
 		assertFalse(tileWellPut);
 		assertTrue(board.tileAt(ConstantPosition.CENTER.pos()));
+	}
+	
+	@Test
+	public void returnTilesAroundASelectedOne() {
+		//Arrange
+		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
+		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(RIGHT_CENTER, blueFlower);
+		List<Position> nbTiles;
+		//Act
+		nbTiles = board.getNearbyPositions(ConstantPosition.CENTER.pos());
+		
+		//Assert
+		assertThat(nbTiles).hasSize(4).containsExactly(LEFT_CENTER, RIGHT_CENTER);
+		
 	}
 	
 	@Test 
