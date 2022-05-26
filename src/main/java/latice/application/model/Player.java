@@ -16,18 +16,26 @@ public class Player {
 		this.username = username;
 		this.bonus = 0;
 		this.stack = new ArrayList<>();
-		turn = false;
+		this.turn = false;
+		this.consumedTurn = false;
 	}
 	
 	
-	public void changeRack() {
-		for(Tile tile : rack.getTiles()) {
-			stack.add(tile);
+	public boolean changeRack() {
+		if(bonus >= 2) {
+			for(Tile tile : rack.getTiles()) {
+				stack.add(tile);
+			}
+			rack.clear();
+			Collections.shuffle(stack);
+			rack.fillRackWithTiles(stack);
+			consumedTurn = true;
+			return true;
 		}
-		rack.clear();
-		Collections.shuffle(stack);
-		rack.fillRackWithTiles(stack);
-		consumedTurn = true;
+		else {
+			return false;
+		}
+		
 	}
 	
 	public boolean canPlay(Board board) {
