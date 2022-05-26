@@ -25,11 +25,22 @@ public class Player {
 			stack.add(tile);
 		}
 		rack.clear();
-		rack.fillRackWithTiles(stack);
 		Collections.shuffle(stack);
+		rack.fillRackWithTiles(stack);
 		consumedTurn = true;
 	}
 	
+	public boolean canPlay(Board board) {
+		boolean playable = false;
+		for(Position key : board.getTiles().keySet()) {
+			for (Tile tile : rack.getTiles()) {
+				for(Position pos : board.getNearbyPositions(key)) {					
+					playable = playable || board.isPlaceable(pos, tile);
+				}
+			}
+		}
+		return playable;
+	}
 	
 	
 
