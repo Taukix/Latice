@@ -22,7 +22,7 @@ public class Player {
 	
 	
 	public boolean changeRack() {
-		if(bonus >= 2) {
+		if(bonus >= 2 && rack.getTiles().size() == 5 && getTurn()) {
 			for(Tile tile : rack.getTiles()) {
 				stack.add(tile);
 			}
@@ -30,6 +30,7 @@ public class Player {
 			Collections.shuffle(stack);
 			rack.fillRackWithTiles(stack);
 			consumedTurn = true;
+			bonus -= 2;
 			return true;
 		}
 		else {
@@ -40,10 +41,10 @@ public class Player {
 	
 	public boolean canPlay(Board board) {
 		boolean playable = false;
-		if (!board.getTiles().isEmpty() && stack.isEmpty()) {
+		if (!board.getTiles().isEmpty() && (!stack.isEmpty() && getBonus() < 2) || stack.isEmpty()) {
 			for(Position key : board.getTiles().keySet()) {
 				for (Tile tile : rack.getTiles()) {
-					for(Position pos : board.getNearbyPositions(key)) {					
+					for(Position pos : board.getNearbyPositions(key)) {			
 						playable = playable || board.isPlaceable(pos, tile);
 					}
 				}

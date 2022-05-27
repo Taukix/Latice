@@ -463,7 +463,7 @@ public class Mainjavafx extends Application {
 		        		// Action des trois boutons
 		                btnReturnToMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
 		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame, btnQuitEndingScene, root));
-		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame, btnQuitEndingScene, root));
 		                
 		            	// Timeline pour les 3 petits points
 		            	tlLoadingScene = new Timeline(new KeyFrame(Duration.seconds(1), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,true)),

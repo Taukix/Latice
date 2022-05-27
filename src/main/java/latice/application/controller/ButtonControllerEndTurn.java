@@ -29,9 +29,9 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private GridPane gpRack1;
 	private GridPane gpRack2;
 	private GridPane gpGame;
-	private Label lblWinner;
-	private HBox hbWinner;
-	private VBox vbWinner;
+	public static Label lblWinner;
+	public static HBox hbWinner;
+	public static VBox vbWinner;
 	private Button btnQuitEndingScene;
 	private BorderPane root;
 	public static DropShadow shadowRack;
@@ -45,11 +45,18 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 		this.gpGame = gpGame;
 		this.btnQuitEndingScene = btnQuitEndingScene;
 		this.root = root;
-		this.hbWinner = hbWinner;
 		
 		shadowRack = new DropShadow();
 		shadowRack.setRadius(40);
 		shadowRack.setColor(Color.YELLOW);
+		
+		hbWinner = new HBox(50);
+		vbWinner = new VBox(200);
+		
+		lblWinner = new Label(Game.winner);
+        lblWinner.setFont(new Font("Calibri", 40));
+        lblWinner.setTextFill(Color.WHITESMOKE);
+        lblWinner.setEffect(Mainjavafx.yellowShadow);
 	}
 
 	@Override
@@ -122,20 +129,14 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			}
 		
 		if (Game.winner != "") {
-			// Implémentation du la scène de fin de jeu
-			hbWinner = new HBox(50);
-			vbWinner = new VBox(200);
-            
-			lblWinner = new Label(Game.winner);
-            lblWinner.setFont(new Font("Calibri", 40));
-            lblWinner.setTextFill(Color.WHITESMOKE);
-            lblWinner.setEffect(Mainjavafx.yellowShadow);
-            
-            hbWinner.getChildren().addAll(lblWinner, gpGame);
-            hbWinner.setAlignment(Pos.CENTER);
+			// Changement de scene en fin de partie
+			lblWinner.setText(Game.winner);
+			
+			hbWinner.getChildren().addAll(lblWinner, gpGame);
+	        hbWinner.setAlignment(Pos.CENTER);
 
-            vbWinner.getChildren().addAll(hbWinner, btnQuitEndingScene);
-            vbWinner.setAlignment(Pos.CENTER);
+	        vbWinner.getChildren().addAll(hbWinner, btnQuitEndingScene);
+	        vbWinner.setAlignment(Pos.CENTER);
             
 			root.setCenter(vbWinner);
 			root.setTop(null);
