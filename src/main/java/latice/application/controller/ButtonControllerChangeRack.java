@@ -53,6 +53,10 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 			}
 			game.nextTurn(game.getPlayer1(), game.getPlayer2());
 			
+			if (this.game.getNumberOfTurn() >= 0) {
+				Mainjavafx.lblNumberOfTurn.setText("Nombre de tour(s) restant(s) : " + this.game.getNumberOfTurn());			
+			}
+			
 			gpRack1.setEffect(null);
 			gpRack2.setEffect(ButtonControllerEndTurn.shadowRack);
 			
@@ -81,6 +85,10 @@ public class ButtonControllerChangeRack implements EventHandler<MouseEvent> {
 				}
 			}
 			game.nextTurn(game.getPlayer1(), game.getPlayer2());
+			
+			if (this.game.getNumberOfTurn() >= 0) {
+				Mainjavafx.lblNumberOfTurn.setText("Nombre de tour(s) restant(s) : " + this.game.getNumberOfTurn());			
+			}
 						
 			gpRack2.setEffect(null);
 			gpRack1.setEffect(ButtonControllerEndTurn.shadowRack);	

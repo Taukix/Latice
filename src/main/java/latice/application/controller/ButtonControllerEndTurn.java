@@ -5,12 +5,20 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import latice.application.model.Constants;
 import latice.application.model.Game;
 import latice.application.view.Mainjavafx;
@@ -21,15 +29,23 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	private GridPane gpRack1;
 	private GridPane gpRack2;
 	private GridPane gpGame;
+	private Label lblWinner;
+	private HBox hbWinner;
+	private VBox vbWinner;
+	private Button btnQuitEndingScene;
+	private BorderPane root;
 	public static DropShadow shadowRack;
 	public static MediaPlayer mediaFillRackEffect;
 	
 	
-	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame) {
+	public ButtonControllerEndTurn(Game game, GridPane gpRack1, GridPane gpRack2, GridPane gpGame, Button btnQuitEndingScene, BorderPane root) {
 		this.game = game;
 		this.gpRack1 = gpRack1;
 		this.gpRack2 = gpRack2;
 		this.gpGame = gpGame;
+		this.btnQuitEndingScene = btnQuitEndingScene;
+		this.root = root;
+		this.hbWinner = hbWinner;
 		
 		shadowRack = new DropShadow();
 		shadowRack.setRadius(40);
@@ -39,6 +55,10 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 	@Override
 	public void handle(MouseEvent event) {
 		this.game.nextTurn(this.game.getPlayer1(), this.game.getPlayer2());
+		
+		if (this.game.getNumberOfTurn() >= 0) {
+			Mainjavafx.lblNumberOfTurn.setText("Nombre de tour(s) restant(s) : " + this.game.getNumberOfTurn());			
+		}
 		
 		// TOUR DU JOUEUR 1
 		if (this.game.getPlayer1().getTurn() == false) {
@@ -69,7 +89,7 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			gpRack1.setEffect(null);
 			gpRack2.setEffect(shadowRack);
 		
-		// TOUR DU JOUEUR 2
+			// TOUR DU JOUEUR 2
 			} else {
 			this.game.getPlayer2().refreshRack();
 			Mainjavafx.nbrTilesInStack2.setText("Nombre de tuiles restantes: " + game.getPlayer2().getStack().size());
@@ -101,5 +121,26 @@ public class ButtonControllerEndTurn implements EventHandler<MouseEvent> {
 			gpRack1.setEffect(shadowRack);
 			}
 		
-		game.playerWon(game.getPlayer1(), game.getPlayer2());
+		if (Game.winner != "") {
+			// Implémentation du la scène de fin de jeu
+			hbWinner = new HBox(50);
+			vbWinner = new VBox(200);
+            
+			lblWinner = new Label(Game.winner);
+            lblWinner.setFont(new Font("Calibri", 40));
+            lblWinner.setTextFill(Color.WHITESMOKE);
+            lblWinner.setEffect(Mainjavafx.yellowShadow);
+            
+            hbWinner.getChildren().addAll(lblWinner, gpGame);
+            hbWinner.setAlignment(Pos.CENTER);
+
+            vbWinner.getChildren().addAll(hbWinner, btnQuitEndingScene);
+            vbWinner.setAlignment(Pos.CENTER);
+            
+			root.setCenter(vbWinner);
+			root.setTop(null);
+			root.setLeft(null);
+			root.setRight(null);
+			root.setBottom(null);
+		}
 }}
