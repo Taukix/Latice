@@ -12,7 +12,7 @@ public class Game {
 	private Board board;
 	private List<Tile> gameTileList;
 	private int turn;
-	public String winner = "";
+	public static String winner;
 	
 	public Game(Player p1, Player p2) {
 
@@ -20,6 +20,7 @@ public class Game {
 		this.player2 = p2;
 		this.turn = 10;
 		this.board = new Board();
+		winner = "";
 		
 		generateNewGameTileList();
 		
@@ -107,7 +108,7 @@ public class Game {
 		}
 		else if(this.turn == 0) {
 			if(p1.countTilesInStack() < p2.countTilesInStack()) {
-				winner = p1.getUsername() + " won !");
+				winner = p1.getUsername() + " won !";
 				return true;
 			}
 			else if(p1.countTilesInStack() == p2.countTilesInStack()) {

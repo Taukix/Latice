@@ -68,18 +68,31 @@ public class Mainjavafx extends Application {
 	private VBox vbCenter;
 	private VBox vbTop;
 	
-		// LOADING SCENE
+		// SCENE DE CHARGEMENT
 	private VBox vbLoadingScene;
 	private VBox vbTopLeftLoadingScene;
+	private HBox hbLoadingScene;
 	
-		// GAME
+		// JEU
 	private VBox vbPlateGame;
+	private Group gpPlate;
+	private GridPane gpGame;
+	private HBox hbRacks;
+	private GridPane gpRackOfPlayer1;
+	private GridPane gpRackOfPlayer2;
+	private HBox hbButtons;
+	private VBox vbInfoPlayer1;
+	private VBox vbInfoPlayer2;
 	
-		// AUDIO PARAMETERS
+		// THEME PARAMETRES
+	private GridPane gpThemeParameters;
+	
+		// AUDIO PARAMETRES
 	private Group groupParameters;
+	private GridPane gpAudioParameters;
 	private VBox vbParameters;
 	
-		// RULES
+		// REGLES
 	private Group groupRules;
 	private VBox vbRulesCenter;
 
@@ -132,7 +145,6 @@ public class Mainjavafx extends Application {
 	private ProgressBar pgbLoadingScene;
 	private Timeline tlLoadingScene;
 	private Timeline tlPgbBarLoadingScene;
-	private HBox hbLoadingScene;
 	private Label lblLoadingScene;
 	private Label lblPoint1;
 	private Label lblPoint2;
@@ -140,27 +152,24 @@ public class Mainjavafx extends Application {
 	private Label lblLaticeLoadingScene;
 	private Label lblSimpleGameLoadingScene;
 	
+		// SCENE FIN DE JEU
+	private Button btnQuitEndingScene;
+	private Label lblWinner;
+	
 		// JEU
-	private Group gpPlate;
-	private GridPane gpGame;
-	private HBox hbRacks;
-	private GridPane gpRackOfPlayer1;
-	private GridPane gpRackOfPlayer2;
 	private Timeline tlPlaySceneChange;
-	private HBox hbButtons;
 	private Button btnChangeRack;
 	private Button btnEndTurn;
 	private Button btnReturnToMenu;
-	private VBox vbInfoPlayer1;
-	private VBox vbInfoPlayer2;
 	private Label nameOfPlayer1;
 	private Label nameOfPlayer2;
 	public static Label nbrTilesInStack1;
 	public static Label nbrTilesInStack2;
 	public static Label nbrBonusPoint1;
 	public static Label nbrBonusPoint2;
-	public static String theme;
-	
+	public static Label lblNumberOfTurn;
+	public static String theme;	
+	public static DropShadow yellowShadow;
 
 	// REGLES
 	private Text txtRulesTitle;
@@ -176,14 +185,12 @@ public class Mainjavafx extends Application {
 		
 		// GENERAL
 	private Label lblTopGeneralParameters;
-	private GridPane gpThemeParameters;
 	private Label lblUnderLeague;
 	private Label lblUnderBeach;
 	private Label lblUnderIndian;
 	private Label lblUnderHp;
 	
 		// AUDIO
-	private GridPane gpAudioParameters;
 	private ProgressBar pgbMusic;
 	private Label lblProgressBarMusic;
 	private MediaPlayer mediaMusic;
@@ -312,7 +319,7 @@ public class Mainjavafx extends Application {
 		                vbPlateGame = new VBox();
 		                gpPlate = new Group();
 		                
-		                DropShadow yellowShadow = new DropShadow();
+		                yellowShadow = new DropShadow();
 		                yellowShadow.setRadius(40);
 		                yellowShadow.setSpread(0.5);
 		                yellowShadow.setColor(Color.YELLOW);
@@ -322,6 +329,11 @@ public class Mainjavafx extends Application {
 		                
 		                vbInfoPlayer2 = new VBox(30);
 		                vbInfoPlayer2.setAlignment(Pos.CENTER);
+		                
+		                lblNumberOfTurn = new Label("Nombre de tour(s) restant(s) : 10");
+		                lblNumberOfTurn.setFont(new Font("Calibri", 40));
+		                lblNumberOfTurn.setTextFill(Color.WHITESMOKE);
+		                lblNumberOfTurn.setEffect(yellowShadow);
 		                
 		                nameOfPlayer1 = new Label("Player 1");
 		                nameOfPlayer1.setFont(new Font("Calibri", 40));
@@ -369,6 +381,13 @@ public class Mainjavafx extends Application {
 		                btnEndTurn.setPadding(new Insets(7,100,7,100));
 		                btnEndTurn.setStyle("-fx-background-color: #FFF; ");
 		                
+		                // Implémentation du bouton pour la scène de fin de jeu
+		                
+		                btnQuitEndingScene = new Button("Revenir au menu principal");
+		                btnQuitEndingScene.setPadding(new Insets(7,100,7,100));
+		                btnQuitEndingScene.setStyle("-fx-background-color: #FFF; ");
+		                btnQuitEndingScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
+		                
 		                // On vide le plateau JAVAFX à chaque lancement de partie
 		                if (gpGame.getChildren().size() > 0) {
 		                	for (int i=gpGame.getChildren().size()-1;i>=0;i--) {
@@ -392,9 +411,10 @@ public class Mainjavafx extends Application {
 		                
 		                hbButtons.getChildren().addAll(btnChangeRack,btnEndTurn);
 		                
-		                vbPlateGame.getChildren().addAll(gpPlate,hbRacks, hbButtons);
+		                vbPlateGame.getChildren().addAll(lblNumberOfTurn,gpPlate,hbRacks,hbButtons);
 		                vbPlateGame.setAlignment(Pos.CENTER);
 		                vbPlateGame.setSpacing(50);
+		                
 		            	
 		            	// Lancement de la Partie
 		                Game game = new Game(new Player("Joueur 1"), new Player("Joueur 2"));
@@ -437,18 +457,14 @@ public class Mainjavafx extends Application {
 		                
 		                // Le player 1 commence à chaque fois
 		                game.getPlayer1().startTurn();
-		                
-		                DropShadow shadow = new DropShadow();
-		        		shadow.setRadius(40);
-		        		shadow.setColor(Color.YELLOW);
 		        		
-		        		gpRackOfPlayer1.setEffect(shadow);
+		        		gpRackOfPlayer1.setEffect(yellowShadow);
 		        		
 		        		// Action des trois boutons
 		                btnReturnToMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
-		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
+		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame, btnQuitEndingScene, root));
 		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
-		            	
+		                
 		            	// Timeline pour les 3 petits points
 		            	tlLoadingScene = new Timeline(new KeyFrame(Duration.seconds(1), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,true)),
 		            			new KeyFrame(Duration.seconds(1.25), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint2,true)),
