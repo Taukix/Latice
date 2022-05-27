@@ -40,14 +40,18 @@ public class Player {
 	
 	public boolean canPlay(Board board) {
 		boolean playable = false;
-		for(Position key : board.getTiles().keySet()) {
-			for (Tile tile : rack.getTiles()) {
-				for(Position pos : board.getNearbyPositions(key)) {					
-					playable = playable || board.isPlaceable(pos, tile);
+		if (!board.getTiles().isEmpty() && stack.isEmpty()) {
+			for(Position key : board.getTiles().keySet()) {
+				for (Tile tile : rack.getTiles()) {
+					for(Position pos : board.getNearbyPositions(key)) {					
+						playable = playable || board.isPlaceable(pos, tile);
+					}
 				}
 			}
+			return playable;
+		} else {
+			return true;
 		}
-		return playable;
 	}
 	
 	
