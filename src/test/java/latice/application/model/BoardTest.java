@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class BoardTest {
+class BoardTest {
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
 	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.value(), Constants.BOARD_SIZE.value());
@@ -43,8 +43,10 @@ public class BoardTest {
 		//Arrange
 		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		//Act
+		boolean placeable = board.isPlaceable(ConstantPosition.CENTER.pos(), tile);
 		boolean result = board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Assert
+		assertTrue(placeable);
 		assertTrue(result);
 	}
 	
@@ -63,7 +65,7 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
+	void returnFalseWhenATileCanNotPutBecauseThePositionIsOccupied() {
 		//Arrange
 		board.putIn(ConstantPosition.CENTER.pos(), redFlower);
 		assertTrue(board.tileAt(ConstantPosition.CENTER.pos()));
@@ -76,19 +78,16 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void returnTilesAroundASelectedOne() {
+	void returnPositionsAroundASelectedOne() {
 		//Arrange
-		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
-		board.putIn(LEFT_CENTER, blueFlower);
-		board.putIn(RIGHT_CENTER, blueFlower);
 		List<Position> nbTiles;
 		//Act
 		nbTiles = board.getNearbyPositions(ConstantPosition.CENTER.pos());
 		
 		//Assert
-		assertThat(nbTiles).hasSize(4).containsExactly(LEFT_CENTER, RIGHT_CENTER);
-		
+		assertThat(nbTiles).hasSize(4).contains(LEFT_CENTER, RIGHT_CENTER, TOP_CENTER, BOTTOM_CENTER);
 	}
+	
 	
 	@Test 
 	void try_put_a_second_tile_not_around_an_other_tile_should_return_false() {
@@ -155,5 +154,33 @@ public class BoardTest {
 		
 		//Assert
 		assertFalse(result);
+	}
+	
+	@Test
+	void verify_if_tile_is_a_bonus() {
+		//Arrange
+		boolean up_right_diagonal = false;
+		boolean isNotBonusPos = false;
+		boolean isPosBonusVert = false;
+		boolean up_left_diagonal = false;
+		boolean border_bottom = false;
+		boolean border_top = false;
+		boolean border_right =false;
+		
+		//Act
+		up_right_diagonal = board.isTileBonus(new Position(9, 1));
+		isNotBonusPos = board.isTileBonus(new Position(2, 3));
+		border_right = board.isTileBonus(new Position(9, 5));
+		border_top = board.isTileBonus(new Position(5,1));
+		border_bottom = board.isTileBonus(new Position(5,9));
+		up_left_diagonal = board.isTileBonus(new Position(1,9));
+		
+		//Assert
+		assertTrue(up_right_diagonal);
+		assertTrue(up_left_diagonal);
+		assertTrue(border_right);
+		assertTrue(border_top);
+		assertTrue(border_bottom);
+		assertFalse(isNotBonusPos);
 	}
 }

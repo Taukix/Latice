@@ -65,7 +65,6 @@ public class Board {
 		
 		// Check if tile already there
 		placeable = !tileAt(pos);
-		
 		//Check if there is at least 1 tile else, it should be place in the center
 		if(isEmpty() && placeable) {
 			placeable = (pos.equals(ConstantPosition.CENTER.pos()));
@@ -86,7 +85,7 @@ public class Board {
 		return placeable;
 	}
 	
-	private boolean isEmpty() {
+	public boolean isEmpty() {
 		return this.tiles.isEmpty();
 	}
 	
