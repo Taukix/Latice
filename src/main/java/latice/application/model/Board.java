@@ -85,6 +85,20 @@ public class Board {
 		return placeable;
 	}
 	
+	public boolean checkTilesPlayableInAList(List<Tile> tiles) {
+		boolean playable = false;
+		for(Position key : getTiles().keySet()) {
+			for (Tile tile : tiles) {
+				for(Position pos : getNearbyPositions(key)) {	
+					if(pos.x() <= Constants.BOARD_SIZE.value() && pos.y() < Constants.BOARD_SIZE.value()) {
+						playable = playable || isPlaceable(pos, tile);
+					}
+				}
+			}
+		}
+		return playable;
+	}
+	
 	public boolean isEmpty() {
 		return this.tiles.isEmpty();
 	}

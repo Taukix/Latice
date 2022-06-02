@@ -30,6 +30,7 @@ public class Player {
 			Collections.shuffle(stack);
 			rack.fillRackWithTiles(stack);
 			consumedTurn = true;
+			bonus = bonus -2;
 			return true;
 		}
 		else {
@@ -40,13 +41,13 @@ public class Player {
 	
 	public boolean canPlay(Board board) {
 		boolean playable = false;
-		for(Position key : board.getTiles().keySet()) {
-			for (Tile tile : rack.getTiles()) {
-				for(Position pos : board.getNearbyPositions(key)) {					
-					playable = playable || board.isPlaceable(pos, tile);
-				}
-			}
+		if(board.isEmpty() && rack.countTilesInRack() > 0) {
+			return true;
 		}
+		else {
+			playable = board.checkTilesPlayableInAList(rack.getTiles());
+		}
+		
 		return playable;
 	}
 	
@@ -57,8 +58,7 @@ public class Player {
 		if(turn) {
 			Tile tile = rack.getTiles().get(tileOfRack);
 		
-			if(tile != null) {
-				if(board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
+			if(tile != null && board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
 					rack.getTiles().remove(tileOfRack);
 					if(consumedTurn) {
 						bonus = bonus - 2;
@@ -68,7 +68,6 @@ public class Player {
 					getBonusPoints(bonusTile, nearbyTiles.size());		
 					madeChange = board.putIn(pos, tile);
 					consumedTurn = true;
-				} 
 			}
 		}
 		return madeChange;
@@ -83,6 +82,11 @@ public class Player {
 		}
 	}
 	
+	public void setBonus(Integer bonus) {
+		this.bonus = bonus;
+	}
+
+
 	public void endTurn() {
 		refreshRack();
 		consumedTurn = true;
