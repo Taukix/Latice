@@ -19,6 +19,7 @@ public class Game {
 		this.player2 = p2;
 		this.turn = 10;
 		this.board = new Board();
+		this.player1.startTurn();
 		
 		generateNewGameTileList();
 		
