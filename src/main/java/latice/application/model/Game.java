@@ -116,7 +116,7 @@ public class Game {
 				return true;
 			}
 			else {
-				winner = p1.getUsername() + " won !";
+				winner = p2.getUsername() + " won !";
 				return true;
 			}
 		}
