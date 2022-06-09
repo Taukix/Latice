@@ -20,11 +20,8 @@ public class Game {
 		this.player2 = p2;
 		this.turn = 10;
 		this.board = new Board();
-<<<<<<< HEAD
 		this.player1.startTurn();
-=======
 		winner = "";
->>>>>>> refs/remotes/origin/master
 		
 		generateNewGameTileList();
 		
