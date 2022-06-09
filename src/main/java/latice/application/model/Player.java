@@ -28,7 +28,7 @@ public class Player {
 	
 	
 	public boolean changeRack() {
-		if(bonus >= 2 && rack.getTiles().size() == 5 && getTurn()) {
+		if(!consumedTurn || bonus >= 2 && rack.getTiles().size() == 5 && getTurn()) {
 			for(Tile tile : rack.getTiles()) {
 				stack.add(tile);
 			}
@@ -36,7 +36,9 @@ public class Player {
 			Collections.shuffle(stack);
 			rack.fillRackWithTiles(stack);
 			consumedTurn = true;
-			bonus = bonus -2;
+			if (bonus >= 2) {
+				bonus = bonus -2;
+			}
 			return true;
 		}
 		else {
