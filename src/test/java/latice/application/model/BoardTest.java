@@ -12,11 +12,6 @@ import org.junit.jupiter.api.Test;
 class BoardTest {
 	private static final Position _2_4 = new Position(2, 4);
 	private static final Position _1_1 = new Position(1, 1);
-	private static final Position LAST_POSITION = new Position(Constants.BOARD_SIZE.value(), Constants.BOARD_SIZE.value());
-	static final Position BOTTOM_CENTER = new Position(6,5);
-	static final Position TOP_CENTER = new Position(4,5);
-	static final Position LEFT_CENTER = new Position(5,4);
-	static final Position RIGHT_CENTER = new Position(5,6);
 	private static final Tile redFlower = new Tile(ColorTile.ONE, Shape.FIVE);
 	private static final Tile blueFlower = new Tile(ColorTile.SIX, Shape.FIVE);
 	private static final Tile redDolphin = new Tile(ColorTile.ONE, Shape.FOUR);
@@ -33,7 +28,7 @@ class BoardTest {
 		//Arrange
 		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		//Act
-		boolean result = board.putIn(LAST_POSITION, tile);
+		boolean result = board.putIn(ConstantPosition.LAST_POSITION.pos(), tile);
 		//Assert
 		assertFalse(result);
 	}
@@ -85,7 +80,10 @@ class BoardTest {
 		nbTiles = board.getNearbyPositions(ConstantPosition.CENTER.pos());
 		
 		//Assert
-		assertThat(nbTiles).hasSize(4).contains(LEFT_CENTER, RIGHT_CENTER, TOP_CENTER, BOTTOM_CENTER);
+		assertThat(nbTiles).hasSize(4).contains(ConstantPosition.LEFT_CENTER.pos(),
+												ConstantPosition.RIGHT_CENTER.pos(), 
+												ConstantPosition.TOP_CENTER.pos(), 
+												ConstantPosition.BOTTOM_CENTER.pos());
 	}
 	
 	
@@ -95,7 +93,7 @@ class BoardTest {
 		Tile tile = new Tile(ColorTile.SIX, Shape.FIVE);
 		board.putIn(ConstantPosition.CENTER.pos(), tile);
 		//Act
-		boolean result = board.putIn(LAST_POSITION, tile);
+		boolean result = board.putIn(ConstantPosition.LAST_POSITION.pos(), tile);
 		//Assert
 		assertFalse(result);
 	}
@@ -107,7 +105,7 @@ class BoardTest {
 		Tile centerTile = new Tile(ColorTile.SIX, Shape.ONE);
 		board.putIn(ConstantPosition.CENTER.pos(), centerTile);
 		//Act
-		boolean result = board.putIn(RIGHT_CENTER, tileNotCenter);
+		boolean result = board.putIn(ConstantPosition.RIGHT_CENTER.pos(), tileNotCenter);
 		
 		//Assert
 		assertTrue(result);
@@ -118,11 +116,11 @@ class BoardTest {
 	void put_tile_around_two_differents_tiles_one_same_shape_one_same_color() {
 		//Arrange
 		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
-		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(ConstantPosition.LEFT_CENTER.pos(), blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		
 		//Act
-		boolean result = board.putIn(TOP_CENTER, redDolphin);
+		boolean result = board.putIn(ConstantPosition.TOP_CENTER.pos(), redDolphin);
 		
 		//Assert
 		assertTrue(result);
@@ -132,11 +130,11 @@ class BoardTest {
 	void put_tile_around_two_differents_tiles() {
 		//Arrange
 		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
-		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(ConstantPosition.LEFT_CENTER.pos(), blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		
 		//Act
-		boolean result = board.putIn(TOP_CENTER, redDolphin);
+		boolean result = board.putIn(ConstantPosition.TOP_CENTER.pos(), redDolphin);
 		
 		//Assert
 		assertTrue(result);
@@ -146,11 +144,11 @@ class BoardTest {
 	void put_tile_around_two_differents_tiles_different_shape_and_color() {
 		//Arrange
 		board.putIn(ConstantPosition.CENTER.pos(), blueDolphin);
-		board.putIn(LEFT_CENTER, blueFlower);
+		board.putIn(ConstantPosition.LEFT_CENTER.pos(), blueFlower);
 		board.putIn(new Position(4,4), redFlower);
 		
 		//Act
-		boolean result = board.putIn(TOP_CENTER, new Tile(ColorTile.THREE, Shape.TWO));
+		boolean result = board.putIn(ConstantPosition.TOP_CENTER.pos(), new Tile(ColorTile.THREE, Shape.TWO));
 		
 		//Assert
 		assertFalse(result);
