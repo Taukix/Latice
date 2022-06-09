@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Player {
+
 	private String username;
 	private Integer bonus;
 	private boolean consumedTurn;
@@ -18,6 +19,11 @@ public class Player {
 		this.stack = new ArrayList<>();
 		this.turn = false;
 		this.consumedTurn = false;
+	}
+	
+	public Tile getTileOfTheRack(int id) {
+		if(id > 0 && id <= 5) return this.rack.getTiles().get(id);
+		else return null;
 	}
 	
 	
@@ -45,11 +51,32 @@ public class Player {
 			return true;
 		}
 		else {
-			playable = board.checkTilesPlayableInAList(rack.getTiles());
+			playable = checkIfATileIsPlayable(board);
 		}
 		
 		return playable;
 	}
+
+	public void setBonus(Integer bonus) {
+		this.bonus = bonus;
+	}
+	
+	private boolean checkIfATileIsPlayable(Board board) {
+		boolean playable = false;
+		for(Position key : board.getTiles().keySet()) {
+			for (Tile tile : rack.getTiles()) {
+				for(Position pos : board.getNearbyPositions(key)) {	
+					boolean isAboveTheMinPos = pos.x() >= 1 && pos.y() >=1;
+					boolean isBelowTheMaxPos = pos.x() <= Constants.BOARD_SIZE.value() && pos.y() < Constants.BOARD_SIZE.value();
+					if(isAboveTheMinPos && isBelowTheMaxPos) {
+						playable = playable || board.isPlaceable(pos, tile);
+					}
+				}
+			}
+		}
+		return playable;
+	}
+	
 	
 	
 
@@ -57,17 +84,17 @@ public class Player {
 		boolean madeChange = false;
 		if(turn) {
 			Tile tile = rack.getTiles().get(tileOfRack);
-		
-			if(tile != null && board.isPlaceable(pos, tile) && (!consumedTurn|| bonus >= 2)) {
+			if(tile != null && board.isPlaceable(pos, tile) && (!(consumedTurn)|| bonus >= 2)) {
+					
 					rack.getTiles().remove(tileOfRack);
 					if(consumedTurn) {
-						bonus = bonus - 2;
+						this.bonus = this.bonus - 2;
 					}
 					boolean bonusTile = board.isTileBonus(pos);		
 					ArrayList<Tile> nearbyTiles = (ArrayList<Tile>) board.getNearbyTilesOfAPosition(pos);
 					getBonusPoints(bonusTile, nearbyTiles.size());		
 					madeChange = board.putIn(pos, tile);
-					consumedTurn = true;
+					this.consumedTurn = true;
 			}
 		}
 		return madeChange;
@@ -80,10 +107,9 @@ public class Player {
 		if(countOfNearbyTiles > 1) {
 			bonus += (int) Math.pow(2, countOfNearbyTiles- (double) 2);
 		}
-	}
-	
-	public void setBonus(Integer bonus) {
-		this.bonus = bonus;
+		if(bonus > 6) {
+			bonus = 6;
+		}
 	}
 
 
@@ -100,6 +126,10 @@ public class Player {
 	
 	public void refreshRack() {
 		this.rack.fillRackWithTiles(stack);
+	}
+
+	public void setConsumedTurn(boolean consumedTurn) {
+		this.consumedTurn = consumedTurn;
 	}
 
 	public void addTileToStack(final Tile tile){
