@@ -68,18 +68,31 @@ public class Mainjavafx extends Application {
 	private VBox vbCenter;
 	private VBox vbTop;
 	
-		// LOADING SCENE
+		// SCENE DE CHARGEMENT
 	private VBox vbLoadingScene;
 	private VBox vbTopLeftLoadingScene;
+	private HBox hbLoadingScene;
 	
-		// GAME
+		// JEU
 	private VBox vbPlateGame;
+	private Group gpPlate;
+	private GridPane gpGame;
+	private HBox hbRacks;
+	private GridPane gpRackOfPlayer1;
+	private GridPane gpRackOfPlayer2;
+	private HBox hbButtons;
+	private VBox vbInfoPlayer1;
+	private VBox vbInfoPlayer2;
 	
-		// AUDIO PARAMETERS
+		// THEME PARAMETRES
+	private GridPane gpThemeParameters;
+	
+		// AUDIO PARAMETRES
 	private Group groupParameters;
+	private GridPane gpAudioParameters;
 	private VBox vbParameters;
 	
-		// RULES
+		// REGLES
 	private Group groupRules;
 	private VBox vbRulesCenter;
 
@@ -132,7 +145,6 @@ public class Mainjavafx extends Application {
 	private ProgressBar pgbLoadingScene;
 	private Timeline tlLoadingScene;
 	private Timeline tlPgbBarLoadingScene;
-	private HBox hbLoadingScene;
 	private Label lblLoadingScene;
 	private Label lblPoint1;
 	private Label lblPoint2;
@@ -140,27 +152,24 @@ public class Mainjavafx extends Application {
 	private Label lblLaticeLoadingScene;
 	private Label lblSimpleGameLoadingScene;
 	
+		// SCENE FIN DE JEU
+	private Button btnQuitEndingScene;
+	private Label lblWinner;
+	
 		// JEU
-	private Group gpPlate;
-	private GridPane gpGame;
-	private HBox hbRacks;
-	private GridPane gpRackOfPlayer1;
-	private GridPane gpRackOfPlayer2;
 	private Timeline tlPlaySceneChange;
-	private HBox hbButtons;
 	private Button btnChangeRack;
 	private Button btnEndTurn;
 	private Button btnReturnToMenu;
-	private VBox vbInfoPlayer1;
-	private VBox vbInfoPlayer2;
 	private Label nameOfPlayer1;
 	private Label nameOfPlayer2;
 	public static Label nbrTilesInStack1;
 	public static Label nbrTilesInStack2;
 	public static Label nbrBonusPoint1;
 	public static Label nbrBonusPoint2;
-	public static String theme;
-	
+	public static Label lblNumberOfTurn;
+	public static String theme;	
+	public static DropShadow yellowShadow;
 
 	// REGLES
 	private Text txtRulesTitle;
@@ -176,14 +185,12 @@ public class Mainjavafx extends Application {
 		
 		// GENERAL
 	private Label lblTopGeneralParameters;
-	private GridPane gpThemeParameters;
 	private Label lblUnderLeague;
 	private Label lblUnderBeach;
 	private Label lblUnderIndian;
 	private Label lblUnderHp;
 	
 		// AUDIO
-	private GridPane gpAudioParameters;
 	private ProgressBar pgbMusic;
 	private Label lblProgressBarMusic;
 	private MediaPlayer mediaMusic;
@@ -266,7 +273,7 @@ public class Mainjavafx extends Application {
 		vbTop.getChildren().addAll(lblTopText1,lblTopText2);
 		vbTop.setAlignment(Pos.CENTER);
 		
-		// Impl�mentation du CENTRE
+		// Implémentation du CENTRE
 		buttonPlay = new Button("JOUER");
 		buttonPlay.setPadding(new Insets(7,300,7,300));
 		buttonPlay.setStyle("-fx-background-color: #FFF; ");
@@ -312,7 +319,7 @@ public class Mainjavafx extends Application {
 		                vbPlateGame = new VBox();
 		                gpPlate = new Group();
 		                
-		                DropShadow yellowShadow = new DropShadow();
+		                yellowShadow = new DropShadow();
 		                yellowShadow.setRadius(40);
 		                yellowShadow.setSpread(0.5);
 		                yellowShadow.setColor(Color.YELLOW);
@@ -322,6 +329,11 @@ public class Mainjavafx extends Application {
 		                
 		                vbInfoPlayer2 = new VBox(30);
 		                vbInfoPlayer2.setAlignment(Pos.CENTER);
+		                
+		                lblNumberOfTurn = new Label("Nombre de tour(s) restant(s) : 10");
+		                lblNumberOfTurn.setFont(new Font("Calibri", 40));
+		                lblNumberOfTurn.setTextFill(Color.WHITESMOKE);
+		                lblNumberOfTurn.setEffect(yellowShadow);
 		                
 		                nameOfPlayer1 = new Label("Player 1");
 		                nameOfPlayer1.setFont(new Font("Calibri", 40));
@@ -369,6 +381,13 @@ public class Mainjavafx extends Application {
 		                btnEndTurn.setPadding(new Insets(7,100,7,100));
 		                btnEndTurn.setStyle("-fx-background-color: #FFF; ");
 		                
+		                // Implémentation du bouton pour la scène de fin de jeu
+		                
+		                btnQuitEndingScene = new Button("Revenir au menu principal");
+		                btnQuitEndingScene.setPadding(new Insets(7,100,7,100));
+		                btnQuitEndingScene.setStyle("-fx-background-color: #FFF; ");
+		                btnQuitEndingScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
+		                
 		                // On vide le plateau JAVAFX à chaque lancement de partie
 		                if (gpGame.getChildren().size() > 0) {
 		                	for (int i=gpGame.getChildren().size()-1;i>=0;i--) {
@@ -392,9 +411,10 @@ public class Mainjavafx extends Application {
 		                
 		                hbButtons.getChildren().addAll(btnChangeRack,btnEndTurn);
 		                
-		                vbPlateGame.getChildren().addAll(gpPlate,hbRacks, hbButtons);
+		                vbPlateGame.getChildren().addAll(lblNumberOfTurn,gpPlate,hbRacks,hbButtons);
 		                vbPlateGame.setAlignment(Pos.CENTER);
 		                vbPlateGame.setSpacing(50);
+		                
 		            	
 		            	// Lancement de la Partie
 		                Game game = new Game(new Player("Joueur 1"), new Player("Joueur 2"));
@@ -437,18 +457,14 @@ public class Mainjavafx extends Application {
 		                
 		                // Le player 1 commence à chaque fois
 		                game.getPlayer1().startTurn();
-		                
-		                DropShadow shadow = new DropShadow();
-		        		shadow.setRadius(40);
-		        		shadow.setColor(Color.YELLOW);
 		        		
-		        		gpRackOfPlayer1.setEffect(shadow);
+		        		gpRackOfPlayer1.setEffect(yellowShadow);
 		        		
 		        		// Action des trois boutons
 		                btnReturnToMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerReturnToMenu(root, vbCenter, vbTop));
-		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
-		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame));
-		            	
+		                btnEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerEndTurn(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame, btnQuitEndingScene, root));
+		                btnChangeRack.addEventHandler(MouseEvent.MOUSE_CLICKED, new ButtonControllerChangeRack(game, gpRackOfPlayer1, gpRackOfPlayer2, gpGame, btnQuitEndingScene, root));
+		                
 		            	// Timeline pour les 3 petits points
 		            	tlLoadingScene = new Timeline(new KeyFrame(Duration.seconds(1), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint1,true)),
 		            			new KeyFrame(Duration.seconds(1.25), e -> AnimationPoint.PointAnimationLoadingScene(lblPoint2,true)),
@@ -516,50 +532,56 @@ public class Mainjavafx extends Application {
         imgVRulesPlate.setFitHeight(150);
         imgVRulesPlate.setFitWidth(150);
         imgVRulesPlate.setX(312);
-        imgVRulesPlate.setY(220);
+        imgVRulesPlate.setY(260);
         
-        txtRulesTitle = new Text("R�gles du jeu :");
+        txtRulesTitle = new Text("Règles du jeu :");
         txtRulesTitle.setStyle("-fx-font-weight: bold;");
         txtRulesTitle.setX(100);
         txtRulesTitle.setY(50);
         txtRulesTitle.setUnderline(true);
         
-        txtRulesBodyPage1 = new Text("Le jeu d�bute lorsqu'un des deux joueurs (choisi al�atoirement) pose"
-        		+ "\nsa premi�re tuile sur la lune au centre du plateau de jeu."
-        		+ "\n\nEn effet, tout au long de la partie, chaque joueur poss�de un rack avec"
+        txtRulesBodyPage1 = new Text("Le jeu débute lorsqu'un des deux joueurs (choisi aléatoirement) pose"
+        		+ "\nsa première tuile sur la lune au centre du plateau de jeu."
+        		+ "\n\nEn effet, tout au long de la partie, chaque joueur possède un rack avec"
         		+ "\nun maximumde 5 tuiles qui devront vider le plus vite possible."
-        		+ "\n\nLa suite se d�roule en posant une tuile poss�dant la m�me couleur"
-        		+ "\nou le m�me dessin que la tuile d�j� en place."
+        		+ "\n\nLa suite se déroule en posant une tuile possédant la même couleur"
+        		+ "\nou le même dessin que la tuile déjà en place."
+        		+ "\n\nDe plus, vous ne pouvez jouer une "
+        		+ "\nautre tuile uniquement si vous avez au"
+        		+ "\nmoins deux points pour un maximum"
+        		+ "\nde 6 points au total."
+        		+ "\n\nVous pouvez également changer"
+        		+ "\nl'entièreté de votre rack au début de"
+        		+ "\nvotre tour gratuitement, mais cela"
+        		+ "\npassera également le tour, ou alors"
+        		+ "\nsi vous avez déjà joué, cela vous"
+        		+ "\ncoûtera 2 points." 
         		+ "\n\nVous ne pourrez en aucun cas jouer"
-        		+ "\nen diagonal, le jeu s�effectue toujours"
-        		+ "\nde haut en bas ou de droite � gauche."
-        		+ "\n\nIl y a tout de m�me quelques "
-        		+ "\nsubtilit�s, sinon cela serait trop facile,"
-        		+ "\nsi sur le plateau vous avez par"
-        		+ "\nexemple un dauphin vert, vous ne"
-        		+ "\npouvez accoler une tortue bleu ou"
-        		+ "\nun oiseau rouge. "
-        		+ "\n\nEn revanche, toujours avec notre"
-        		+ "\ndauphin vert, vous pourrez tout �"
-        		+ "\nfait accoler une tortue vert ou un"
-        		+ "\ndauphin bleu, je m�explique, la tortue poss�de la bonne couleur, et le"
-        		+ "\ndauphin le bon dessin."
-        		+ "\n\nUne fois toutes les tuiles d'un joueur pos�es sur le plateau, ce dernier"
-        		+ "\nsera d�sign� vainqueur !");
+        		+ "\nen diagonal, le jeu s'effectue toujours"
+        		+ "\nde haut en bas ou de droite à gauche."
+        		+ "\n\nIl y a tout de même quelques subtilités, sinon cela serait trop facile,"
+        		+ "\nsi sur le plateau vous avez par exemple un dauphin vert, vous ne"
+        		+ "\npouvez accoler une tortue bleu ou un oiseau rouge.");
         txtRulesBodyPage1.setX(100);
         txtRulesBodyPage1.setY(90);
         
-        txtRulesBodyPage2 = new Text("Ce jeu Latice allie la strat�gie et le hasard, ce qui vous permettra de"
-        		+ "\npasser d�excellent moment entre strat�ges avertis ou au sein de votre"
+        txtRulesBodyPage2 = new Text("En revanche, toujours avec notre dauphin vert, vous pourrez tout à"
+        		+ "\nfait accoler une tortue vert ou un dauphin bleu, je m'explique,"
+        		+ "\nla tortue possède la bonne couleur, et le dauphin le bon dessin."
+        		+ "\n\nUne fois toutes les tuiles d'un joueur posées sur le plateau, ce dernier"
+        		+ "\nsera désigné vainqueur !"
+        		+ "\n\nCe jeu Latice allie la stratégie et le hasard, ce qui vous permettra de"
+        		+ "\npasser d'excellent moment entre stratèges avertis ou au sein de votre"
         		+ "\nfamille."
-        		+ "\n\nLes enfants encadr�s pouvant jouer ais�ment."
-        		+ "\n\nIl vous sera n�cessaire de faire une partie ou deux pour assimiler"
-        		+ "\ntoutes les petites subtilit�s des r�gles du jeu."
-        		+ "\n\nLes parties peuvent �tre assez rapide, ce qui est un avantage car"
-        		+ "\ncontrairement � beaucoup de jeu, il ne n�cessite pas un long moment"
-        		+ "\nde disponibilit�, ce qui �vited�abandonner une partie en cours de jeu"
+        		+ "\n\nLes enfants encadrés pouvant jouer aisément."
+        		+ "\n\nIl vous sera nécessaire de faire une partie ou deux pour assimiler"
+        		+ "\ntoutes les petites subtilités des règles du jeu."
+        		+ "\n\nLes parties peuvent être assez rapide, car il y a un maximum de dix "
+        		+ "\ntours par joueur, ce qui est un avantage car contrairement à"
+        		+ "\nbeaucoup de jeu, il ne nécessite pas un long moment"
+        		+ "\nde disponibilité, ce qui évite d'abandonner une partie en cours de jeu"
         		+ "\npar manque de temps."
-        		+ "\n\nEn conclusion, c�est un jeu ludique, toutes les finitions sont parfaites"
+        		+ "\n\nEn conclusion, c'est un jeu ludique, toutes les finitions sont parfaites"
         		+ "\net il vous octroiera des heures de rigolade, ou de crises de nerfs"
         		+ "\npour trouver la bonne combinaison !");
         txtRulesBodyPage2.setX(510);

@@ -12,6 +12,7 @@ public class Game {
 	private Board board;
 	private List<Tile> gameTileList;
 	private int turn;
+	public static String winner;
 	
 	public Game(Player p1, Player p2) {
 
@@ -19,7 +20,11 @@ public class Game {
 		this.player2 = p2;
 		this.turn = 10;
 		this.board = new Board();
+<<<<<<< HEAD
 		this.player1.startTurn();
+=======
+		winner = "";
+>>>>>>> refs/remotes/origin/master
 		
 		generateNewGameTileList();
 		
@@ -79,6 +84,10 @@ public class Game {
 		return this.board;
 	}
 	
+	public int getNumberOfTurn() {
+		return this.turn;
+	}
+	
 	public void nextTurn(Player p1, Player p2) {
 		if (p1.getTurn()) {
 			p1.endTurn();
@@ -95,23 +104,23 @@ public class Game {
 	
 	public boolean playerWon(Player p1, Player p2) {
 		if (p1.getStack().isEmpty() && p1.getRack().getTiles().isEmpty() || (!player1.canPlay(board) && !player2.canPlay(board))) {
-			System.out.println(p1.getUsername() + " won !");
+			winner = p1.getUsername() + " won !";
 			return true;
 		} else if (p2.getStack().isEmpty() && p2.getRack().getTiles().isEmpty() || (!player1.canPlay(board) && !player2.canPlay(board))) {
-			System.out.println(p2.getUsername() + " won !");
+			winner = p2.getUsername() + " won !";
 			return true;
 		}
 		else if(this.turn == 0) {
 			if(p1.countTilesInStack() < p2.countTilesInStack()) {
-				System.out.println(p1.getUsername() + " won !");
+				winner = p1.getUsername() + " won !";
 				return true;
 			}
 			else if(p1.countTilesInStack() == p2.countTilesInStack()) {
-				System.out.println("It's a draw ! ");
+				winner = "It's a draw ! ";
 				return true;
 			}
 			else {
-				System.out.println(p1.getUsername() + " won !");
+				winner = p2.getUsername() + " won !";
 				return true;
 			}
 		}

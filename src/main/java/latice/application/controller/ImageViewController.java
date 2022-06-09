@@ -53,7 +53,6 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		this.pgb = pgb;
 		this.mdp = mdp;
 		this.newtheme = newtheme;
-		this.theme = theme;
 		this.gpGame = gpGame;
 	}
 
@@ -95,6 +94,7 @@ public class ImageViewController implements EventHandler<MouseEvent> {
 		mdpIndependante = new MediaPlayer(new Media(uriStringMusic));
 		mdpIndependante.volumeProperty().bind(pgb.progressProperty());
 		mdpIndependante.play();
+		mdpIndependante.setCycleCount(Integer.MAX_VALUE);
 		
 	}
 }

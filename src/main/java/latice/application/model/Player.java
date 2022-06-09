@@ -28,7 +28,7 @@ public class Player {
 	
 	
 	public boolean changeRack() {
-		if(bonus >= 2) {
+		if(bonus >= 2 && rack.getTiles().size() == 5 && getTurn()) {
 			for(Tile tile : rack.getTiles()) {
 				stack.add(tile);
 			}
@@ -63,18 +63,21 @@ public class Player {
 	
 	private boolean checkIfATileIsPlayable(Board board) {
 		boolean playable = false;
-		for(Position key : board.getTiles().keySet()) {
-			for (Tile tile : rack.getTiles()) {
-				for(Position pos : board.getNearbyPositions(key)) {	
-					boolean isAboveTheMinPos = pos.x() >= 1 && pos.y() >=1;
-					boolean isBelowTheMaxPos = pos.x() <= Constants.BOARD_SIZE.value() && pos.y() < Constants.BOARD_SIZE.value();
-					if(isAboveTheMinPos && isBelowTheMaxPos) {
-						playable = playable || board.isPlaceable(pos, tile);
+		if (!board.getTiles().isEmpty() && (!stack.isEmpty() && getBonus() < 2) || stack.isEmpty()) {
+			for(Position key : board.getTiles().keySet()) {
+				for (Tile tile : rack.getTiles()) {
+					for(Position pos : board.getNearbyPositions(key)) {	
+						boolean isAboveTheMinPos = pos.x() >= 1 && pos.y() >=1;
+						boolean isBelowTheMaxPos = pos.x() <= Constants.BOARD_SIZE.value() && pos.y() < Constants.BOARD_SIZE.value();
+						if(isAboveTheMinPos && isBelowTheMaxPos) {
+							playable = playable || board.isPlaceable(pos, tile);
+						}
 					}
 				}
 			}
 		}
 		return playable;
+		
 	}
 	
 	
