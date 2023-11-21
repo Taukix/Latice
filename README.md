@@ -1,4 +1,4 @@
-# Latice Game
+# Latice
 
 Voici l'application Latice, une implémentation du jeu de plateau du même nom, développée en Java avec JavaFX, lors de ma 1ère année de BUT Informatique. Cette version inclut des règles étendues, notamment la restriction de 10 tours maximum par partie.
 
@@ -21,6 +21,18 @@ Latice est un jeu de société stratégique où l'objectif est de placer astucie
 3. Mode Multijoueur
 
 - Profitez du jeu avec un ami car ce jeu n'est jouable qu'en multijoueur local !
+
+---
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/Taukix/Latice/blob/master/ReadMe_Images/Menu.png" width="49%">
+    <img src="https://github.com/Taukix/Latice/blob/master/ReadMe_Images/Plateau.png" width="49%">
+</div>
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/Taukix/Latice/blob/master/ReadMe_Images/Audio.png" width="49%">
+    <img src="https://github.com/Taukix/Latice/blob/master/ReadMe_Images/Theme.png" width="49%">
+</div>
 
 ---
 
